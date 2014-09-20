@@ -59,57 +59,160 @@ module biOShock {
                     {
                         // 0 -> )
                         case 48:
-                            keyCode = 41;
+                            chr = ")";
                             break;
 
                         // 1 -> !
                         case 49:
-                            keyCode = 33;
+                            chr = "!";
                             break;
 
                         // 2 -> @
                         case 50:
-                            keyCode = 64;
+                            chr = "@";
                             break;
 
                         // 3 -> #
                         case 51:
-                            keyCode = 35;
+                            chr = "#";
                             break;
 
                         // 4 -> $
                         case 52:
-                            keyCode = 36;
+                            chr = "$";
                             break;
 
-                        //5 -> %
+                        // 5 -> %
                         case 53:
-                            keyCode = 37;
+                            chr = "%";
                             break;
 
-                        //6 -> ^
+                        // 6 -> ^
                         case 54:
-                            keyCode = 94;
+                            chr = "^";
                             break;
 
-                        //7 -> &
+                        // 7 -> &
                         case 55:
-                            keyCode = 38;
+                            chr = "&";
                             break;
 
-                        //8 -> *
+                        // 8 -> *
                         case 56:
-                            keyCode = 42;
+                            chr = "*";
                             break;
 
-                        //9 -> (
-                            keyCode = 40;
+                        //  9 -> (
+                        case 57:
+                            chr = "(";
                             break;
                     }
                 }
 
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
+            }
+            else if ((keyCode >= 186) && (keyCode <= 192) ||
+                    ((keyCode >= 219) && (keyCode <= 222)))
+            {
+                if(isShifted && ((keyCode >= 186) && (keyCode <= 222)))
+                {
+                    switch(keyCode)
+                    {
+                        case 186:
+                            chr = ":";
+                            break;
+
+                        case 187:
+                            chr = "+";
+                            break;
+
+                        case 188:
+                            chr = "<";
+                            break;
+
+                        case 189:
+                            chr = "_";
+                            break;
+
+                        case 190:
+                            chr = ">";
+                            break;
+
+                        case 191:
+                            chr = "?";
+                            break;
+
+                        case 192:
+                            chr = "~";
+                            break;
+
+                        case 219:
+                            chr = "{";
+                            break;
+
+                        case 220:
+                            chr = "|";
+                            break;
+
+                        case 221:
+                            chr = "}";
+                            break;
+
+                        case 222:
+                            chr = "\"";
+                            break;
+                    }
+                }
+                else
+                {
+                    switch(keyCode)
+                    {
+                        case 186:
+                            chr = ";";
+                            break;
+
+                        case 187:
+                            chr = "=";
+                            break;
+
+                        case 188:
+                            chr = ",";
+                            break;
+
+                        case 189:
+                            chr = "-";
+                            break;
+
+                        case 190:
+                            chr = ".";
+                            break;
+
+                        case 191:
+                            chr = "/";
+                            break;
+
+                        case 192:
+                            chr = "`";
+                            break;
+
+                        case 219:
+                            chr = "[";
+                            break;
+
+                        case 220:
+                            chr = "\\";
+                            break;
+
+                        case 221:
+                            chr = "]";
+                            break;
+
+                        case 222:
+                            chr = "'";
+                            break;
+                    }
+                }
             }
         }
     }

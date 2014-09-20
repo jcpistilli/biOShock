@@ -55,49 +55,143 @@ var biOShock;
                 if (isShifted && ((keyCode >= 48) && (keyCode <= 57))) {
                     switch (keyCode) {
                         case 48:
-                            keyCode = 41;
+                            chr = ")";
                             break;
 
                         case 49:
-                            keyCode = 33;
+                            chr = "!";
                             break;
 
                         case 50:
-                            keyCode = 64;
+                            chr = "@";
                             break;
 
                         case 51:
-                            keyCode = 35;
+                            chr = "#";
                             break;
 
                         case 52:
-                            keyCode = 36;
+                            chr = "$";
                             break;
 
                         case 53:
-                            keyCode = 37;
+                            chr = "%";
                             break;
 
                         case 54:
-                            keyCode = 94;
+                            chr = "^";
                             break;
 
                         case 55:
-                            keyCode = 38;
+                            chr = "&";
                             break;
 
                         case 56:
-                            keyCode = 42;
+                            chr = "*";
                             break;
 
-                            //9 -> (
-                            keyCode = 40;
+                        case 57:
+                            chr = "(";
                             break;
                     }
                 }
 
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
+            } else if ((keyCode >= 186) && (keyCode <= 192) || ((keyCode >= 219) && (keyCode <= 222))) {
+                if (isShifted && ((keyCode >= 186) && (keyCode <= 222))) {
+                    switch (keyCode) {
+                        case 186:
+                            chr = ":";
+                            break;
+
+                        case 187:
+                            chr = "+";
+                            break;
+
+                        case 188:
+                            chr = "<";
+                            break;
+
+                        case 189:
+                            chr = "_";
+                            break;
+
+                        case 190:
+                            chr = ">";
+                            break;
+
+                        case 191:
+                            chr = "?";
+                            break;
+
+                        case 192:
+                            chr = "~";
+                            break;
+
+                        case 219:
+                            chr = "{";
+                            break;
+
+                        case 220:
+                            chr = "|";
+                            break;
+
+                        case 221:
+                            chr = "}";
+                            break;
+
+                        case 222:
+                            chr = "\"";
+                            break;
+                    }
+                } else {
+                    switch (keyCode) {
+                        case 186:
+                            chr = ";";
+                            break;
+
+                        case 187:
+                            chr = "=";
+                            break;
+
+                        case 188:
+                            chr = ",";
+                            break;
+
+                        case 189:
+                            chr = "-";
+                            break;
+
+                        case 190:
+                            chr = ".";
+                            break;
+
+                        case 191:
+                            chr = "/";
+                            break;
+
+                        case 192:
+                            chr = "`";
+                            break;
+
+                        case 219:
+                            chr = "[";
+                            break;
+
+                        case 220:
+                            chr = "\\";
+                            break;
+
+                        case 221:
+                            chr = "]";
+                            break;
+
+                        case 222:
+                            chr = "'";
+                            break;
+                    }
+                }
             }
         };
         return DeviceDriverKeyboard;
