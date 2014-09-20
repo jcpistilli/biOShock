@@ -31,6 +31,14 @@ module biOShock {
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
             // Check to see if we even want to deal with the key that was pressed.
+
+            //for tabs and backspaces
+            if(keyCode == 8 || keyCode == 9)
+            {
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            }
+
             if (((keyCode >= 65) && (keyCode <= 90)) ||   // A..Z
                 ((keyCode >= 97) && (keyCode <= 123))) {  // a..z {
                 // Determine the character we want to display.
@@ -45,6 +53,61 @@ module biOShock {
             } else if (((keyCode >= 48) && (keyCode <= 57)) ||   // digits
                         (keyCode == 32)                     ||   // space
                         (keyCode == 13)) {                       // enter
+                if(isShifted && ((keyCode >= 48) && (keyCode <= 57)))
+                {
+                    switch(keyCode)
+                    {
+                        // 0 -> )
+                        case 48:
+                            keyCode = 41;
+                            break;
+
+                        // 1 -> !
+                        case 49:
+                            keyCode = 33;
+                            break;
+
+                        // 2 -> @
+                        case 50:
+                            keyCode = 64;
+                            break;
+
+                        // 3 -> #
+                        case 51:
+                            keyCode = 35;
+                            break;
+
+                        // 4 -> $
+                        case 52:
+                            keyCode = 36;
+                            break;
+
+                        //5 -> %
+                        case 53:
+                            keyCode = 37;
+                            break;
+
+                        //6 -> ^
+                        case 54:
+                            keyCode = 94;
+                            break;
+
+                        //7 -> &
+                        case 55:
+                            keyCode = 38;
+                            break;
+
+                        //8 -> *
+                        case 56:
+                            keyCode = 42;
+                            break;
+
+                        //9 -> (
+                            keyCode = 40;
+                            break;
+                    }
+                }
+
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
