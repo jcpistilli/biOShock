@@ -171,6 +171,8 @@ module biOShock {
             Control.hostLog("OS ERROR - TRAP: " + msg);
             // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
             this.krnShutdown();
+            var shut = document.getElementById("bsod");
+            _DrawingContext.drawImage(shut, 0, 0, 500, 500);
         }
     }
 }

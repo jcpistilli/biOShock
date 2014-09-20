@@ -78,8 +78,21 @@ module biOShock {
             // date
             sc = new ShellCommand(this.shellDate,
                                   "date",
-                                  "<date> - Displays the date");
+                                  "- Displays the date");
             this.commandList[this.commandList.length] = sc;
+
+            // whereami
+            sc = new ShellCommand(this.shellWhereAmI,
+                                  "WhereAmI",
+                                  "- Displays current location");
+            this.commandList[this.commandList.length] = sc;
+
+            // BSOD
+            sc = new ShellCommand(this.shellBSOD,
+                                  "BSOD",
+                                  "- Causes a BSOD message");
+            this.commandList[this.commandList.length] = sc;
+
 
 
             // processes - list the running processes and their IDs
@@ -286,8 +299,29 @@ module biOShock {
             }
         }
 
-        //put the damn date here
+        public shellDate(args)
+        {
+            var theDate = new Date();
+            var dateTime = (theDate.getMonth() + 1) + "/" + //plus 1 to the month cause it returns 0-11
+                            theDate.getDay() + "/" +
+                            theDate.getFullYear() + " " +
+                            theDate.getHours() + ":" +
+                            theDate.getMinutes() + ":" +
+                            theDate.getSeconds();
 
+            _StdOut.putText(dateTime);
+        }
 
+        public shellWhereAmI(args)
+        {
+            _StdOut.putText("Rapture.");
+        }
+
+        public shellBSOD(args)
+        {
+            _StdOut.putText("WHAT HAPPENED")
+            //kernel trap
+            _Kernel.krnTrapError("i r dedz")
+        }
     }
 }

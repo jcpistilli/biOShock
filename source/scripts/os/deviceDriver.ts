@@ -6,7 +6,7 @@
 
 module biOShock {
     export class DeviceDriver {
-        public version = '0.07';
+        public version = '21.12';
         public status = 'unloaded';
         public preemptable = false;
 

@@ -54,7 +54,15 @@ var biOShock;
             this.commandList[this.commandList.length] = sc;
 
             // date
-            sc = new biOShock.ShellCommand(this.shellDate, "date", "<date> - Displays the date");
+            sc = new biOShock.ShellCommand(this.shellDate, "date", "- Displays the date");
+            this.commandList[this.commandList.length] = sc;
+
+            // whereami
+            sc = new biOShock.ShellCommand(this.shellWhereAmI, "WhereAmI", "- Displays current location");
+            this.commandList[this.commandList.length] = sc;
+
+            // BSOD
+            sc = new biOShock.ShellCommand(this.shellBSOD, "BSOD", "- Causes a BSOD message");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -266,6 +274,24 @@ var biOShock;
             } else {
                 _StdOut.putText("Usage: prompt <string>  Please supply a string.");
             }
+        };
+
+        Shell.prototype.shellDate = function (args) {
+            var theDate = new Date();
+            var dateTime = (theDate.getMonth() + 1) + "/" + theDate.getDay() + "/" + theDate.getFullYear() + " " + theDate.getHours() + ":" + theDate.getMinutes() + ":" + theDate.getSeconds();
+
+            _StdOut.putText(dateTime);
+        };
+
+        Shell.prototype.shellWhereAmI = function (args) {
+            _StdOut.putText("Rapture.");
+        };
+
+        Shell.prototype.shellBSOD = function (args) {
+            _StdOut.putText("Would you kindly.....");
+
+            //kernel trap
+            _Kernel.krnTrapError("i r dedz");
         };
         return Shell;
     })();

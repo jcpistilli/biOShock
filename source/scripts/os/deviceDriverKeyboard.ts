@@ -31,14 +31,6 @@ module biOShock {
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
             // Check to see if we even want to deal with the key that was pressed.
-
-            //for tabs and backspaces
-            if(keyCode == 8 || keyCode == 9)
-            {
-                chr = String.fromCharCode(keyCode);
-                _KernelInputQueue.enqueue(chr);
-            }
-
             if (((keyCode >= 65) && (keyCode <= 90)) ||   // A..Z
                 ((keyCode >= 97) && (keyCode <= 123))) {  // a..z {
                 // Determine the character we want to display.
@@ -50,9 +42,15 @@ module biOShock {
                 }
                 // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
-            } else if (((keyCode >= 48) && (keyCode <= 57)) ||   // digits
-                        (keyCode == 32)                     ||   // space
-                        (keyCode == 13)) {                       // enter
+            }
+            else if (((keyCode >= 48) && (keyCode <= 57)) ||    // digits
+                        (keyCode == 32)                   ||    // space
+                        (keyCode == 13)                   ||    // enter
+                        (keyCode == 8)                    ||    //backspace
+                        (keyCode == 9)                    ||    //tab
+                        (keyCode == 38 &&!isShifted)      ||    //arrow up
+                        (keyCode == 40 &&!isShifted))           //arrow down
+            {
                 if(isShifted && ((keyCode >= 48) && (keyCode <= 57)))
                 {
                     switch(keyCode)
