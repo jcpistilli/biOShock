@@ -280,25 +280,25 @@ var biOShock;
             }
         };
 
-        Shell.prototype.shellDate = function (args) {
+        Shell.prototype.shellDate = function () {
             var theDate = new Date();
             var dateTime = (theDate.getMonth() + 1) + "/" + theDate.getDay() + "/" + theDate.getFullYear() + " " + theDate.getHours() + ":" + theDate.getMinutes() + ":" + theDate.getSeconds();
 
             _StdOut.putText(dateTime);
         };
 
-        Shell.prototype.shellWhereAmI = function (args) {
+        Shell.prototype.shellWhereAmI = function () {
             _StdOut.putText("Rapture.");
         };
 
-        Shell.prototype.shellBSOD = function (args) {
+        Shell.prototype.shellBSOD = function () {
             _StdOut.putText("WHAT HAPPENED");
 
             //kernel trap
             _Kernel.krnTrapError("i r dedz");
         };
 
-        Shell.prototype.shellMind = function (args) {
+        Shell.prototype.shellMind = function () {
             _StdOut.putText("The mind of the subject will desperately struggle to create memories where none exist...");
         };
         return Shell;

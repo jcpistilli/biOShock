@@ -46,3 +46,14 @@ h3 {
   font-size: 8pt;
   text-align: center;
 }
+
+
+/*i know i'll need this... but i need a break...*/
+#clockDisplay{
+    display: inline-block;
+    float: left;
+}
+#statusDisplay{
+    display: inline-block;
+    float: right;
+}
