@@ -65,6 +65,10 @@ var biOShock;
             sc = new biOShock.ShellCommand(this.shellBSOD, "BSOD", "- Causes a BSOD message");
             this.commandList[this.commandList.length] = sc;
 
+            //still hope you know about bioshock...
+            sc = new biOShock.ShellCommand(this.shellMind, "Mind", "- Think about it...");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -288,10 +292,14 @@ var biOShock;
         };
 
         Shell.prototype.shellBSOD = function (args) {
-            _StdOut.putText("Would you kindly.....");
+            _StdOut.putText("WHAT HAPPENED");
 
             //kernel trap
             _Kernel.krnTrapError("i r dedz");
+        };
+
+        Shell.prototype.shellMind = function (args) {
+            _StdOut.putText("The mind of the subject will desperately struggle to create memories where none exist...");
         };
         return Shell;
     })();

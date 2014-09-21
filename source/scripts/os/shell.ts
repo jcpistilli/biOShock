@@ -93,6 +93,12 @@ module biOShock {
                                   "- Causes a BSOD message");
             this.commandList[this.commandList.length] = sc;
 
+            //still hope you know about bioshock...
+            sc = new ShellCommand(this.shellMind,
+                                  "Mind",
+                                  "- Think about it...");
+            this.commandList[this.commandList.length] = sc;
+
 
 
             // processes - list the running processes and their IDs
@@ -322,6 +328,11 @@ module biOShock {
             _StdOut.putText("WHAT HAPPENED")
             //kernel trap
             _Kernel.krnTrapError("i r dedz")
+        }
+
+        public shellMind(args)
+        {
+            _StdOut.putText("The mind of the subject will desperately struggle to create memories where none exist...");
         }
     }
 }
