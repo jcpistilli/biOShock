@@ -45,7 +45,7 @@ module biOShock {
             }
             else if (((keyCode >= 48) && (keyCode <= 57)) ||    // digits
                         (keyCode == 32)                   ||    // space
-                        (keyCode == 13)                         // enter
+                        (keyCode == 13))                        // enter
             {
                 chr = String.fromCharCode(keyCode);
                 if (isShifted && ((keyCode >= 48) && (keyCode <= 57))) {

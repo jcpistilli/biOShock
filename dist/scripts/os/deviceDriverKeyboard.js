@@ -45,7 +45,7 @@ var biOShock;
 
                 // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
-            } else if (((keyCode >= 48) && (keyCode <= 57)) || (keyCode == 32) || (keyCode == 13) || (keyCode == 8) || (keyCode == 9)) {
+            } else if (((keyCode >= 48) && (keyCode <= 57)) || (keyCode == 32) || (keyCode == 13)) {
                 chr = String.fromCharCode(keyCode);
                 if (isShifted && ((keyCode >= 48) && (keyCode <= 57))) {
                     switch (keyCode) {
@@ -192,7 +192,10 @@ var biOShock;
             } else if ((keyCode == 40) && !isShifted) {
                 chr = "downArrow";
                 _KernelInputQueue.enqueue(chr);
-            } else if (keyCode = 9) {
+            } else if (keyCode == 9) {
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            } else if (keyCode == 8) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
