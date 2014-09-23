@@ -50,7 +50,6 @@ module biOShock {
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
 
-                    debugger;
                     this.cmdHist.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
