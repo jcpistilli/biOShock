@@ -109,6 +109,22 @@ var biOShock;
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         };
+
+        Control.scrollCanvas = function () {
+            this.saveCanvas();
+            _Canvas.height += 50;
+            this.restoreCanvas();
+        };
+
+        Control.saveCanvas = function () {
+            _DrawingContext.save();
+            console.log("save happened");
+        };
+
+        Control.restoreCanvas = function () {
+            _DrawingContext.restore();
+            console.log("restore happened");
+        };
         return Control;
     })();
     biOShock.Control = Control;

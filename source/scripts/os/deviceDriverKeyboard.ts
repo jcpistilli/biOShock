@@ -51,6 +51,7 @@ module biOShock {
                         (keyCode == 38 &&!isShifted)      ||    //arrow up
                         (keyCode == 40 &&!isShifted))           //arrow down
             {
+                chr = String.fromCharCode(keyCode);
                 if(isShifted && ((keyCode >= 48) && (keyCode <= 57)))
                 {
                     switch(keyCode)
@@ -106,8 +107,6 @@ module biOShock {
                             break;
                     }
                 }
-
-                chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             }
             else if ((keyCode >= 186) && (keyCode <= 192) ||

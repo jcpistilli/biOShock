@@ -111,5 +111,21 @@ module biOShock {
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         }
+
+        public static scrollCanvas(): void {
+            this.saveCanvas();
+            _Canvas.height += 50;
+            this.restoreCanvas();
+        }
+
+        public static saveCanvas(): void {
+            _DrawingContext.save();
+            console.log("save happened");
+            }
+
+        public static restoreCanvas(): void {
+            _DrawingContext.restore();
+            console.log("restore happened");
+            }
     }
 }
