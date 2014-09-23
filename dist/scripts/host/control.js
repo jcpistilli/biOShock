@@ -111,19 +111,21 @@ var biOShock;
         };
 
         Control.scrollCanvas = function () {
-            this.saveCanvas();
-            _Canvas.height += 50;
-            this.restoreCanvas();
+            var canvasNow = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
+
+            _Canvas.height += _DefaultFontSize + _FontHeightMargin + 5;
+
+            _DrawingContext.putImageData(canvasNow, 0, 0);
+
+            var btmPos = document.getElementById("divConsole");
+            btmPos.scrollTop = btmPos.scrollHeight;
         };
 
-        Control.saveCanvas = function () {
-            _DrawingContext.save();
-            console.log("save happened");
-        };
+        Control.grabHex = function () {
+            var progIn = document.getElementById("taProgramInput");
+            var progIn2 = progIn.value.trim().split("");
 
-        Control.restoreCanvas = function () {
-            _DrawingContext.restore();
-            console.log("restore happened");
+            return progIn2;
         };
         return Control;
     })();

@@ -17,7 +17,10 @@ module biOShock {
                     public currentFontSize = _DefaultFontSize,
                     public currentXPosition = 0,
                     public currentYPosition = _DefaultFontSize,
-                    public buffer = "") {
+                    public buffer = "",
+                    public cmdHist = [],
+                    public count = 0)
+        {
 
         }
 
@@ -35,18 +38,43 @@ module biOShock {
             this.currentYPosition = this.currentFontSize;
         }
 
+
         public handleInput(): void {
             while (_KernelInputQueue.getSize() > 0) {
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
-                if (chr === String.fromCharCode(13)) { //     Enter key
+                if (chr === String.fromCharCode(13)) //enter key
+                {   //     Enter key
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+
+                    debugger;
+                    this.cmdHist.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
-                } else {
+                }
+
+                else if (chr === "upArrow")
+                {
+                    this.buffer = "";
+
+                }
+
+                else if (chr === "downArrow")
+                {
+                    this.buffer = "";
+                }
+
+                else if (chr === String.fromCharCode(9))   //tab key
+                {
+                    this.buffer = ""
+                }
+
+
+                else
+                {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -64,6 +92,12 @@ module biOShock {
             // do the same thing, thereby encouraging confusion and decreasing readability, I
             // decided to write one function and use the term "text" to connote string or char.
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
+
+            if(_Canvas.height < this.currentYPosition)
+            {
+                Control.scrollCanvas();
+            }
+
             if (text !== "") {
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
@@ -71,6 +105,7 @@ module biOShock {
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
                 this.currentXPosition = this.currentXPosition + offset;
             }
+
          }
 
         public advanceLine(): void {
@@ -80,7 +115,6 @@ module biOShock {
              * Font descent measures from the baseline to the lowest point in the font.
              * Font height margin is extra spacing between the lines.
              */
-            Control.scrollCanvas();
 
             this.currentYPosition += _DefaultFontSize +
                                      _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +

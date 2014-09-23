@@ -47,15 +47,11 @@ module biOShock {
                         (keyCode == 32)                   ||    // space
                         (keyCode == 13)                   ||    // enter
                         (keyCode == 8)                    ||    //backspace
-                        (keyCode == 9)                    ||    //tab
-                        (keyCode == 38 &&!isShifted)      ||    //arrow up
-                        (keyCode == 40 &&!isShifted))           //arrow down
+                        (keyCode == 9))                         //tab
             {
                 chr = String.fromCharCode(keyCode);
-                if(isShifted && ((keyCode >= 48) && (keyCode <= 57)))
-                {
-                    switch(keyCode)
-                    {
+                if (isShifted && ((keyCode >= 48) && (keyCode <= 57))) {
+                    switch (keyCode) {
                         // 0 -> )
                         case 48:
                             chr = ")";
@@ -109,6 +105,8 @@ module biOShock {
                 }
                 _KernelInputQueue.enqueue(chr);
             }
+
+
             else if ((keyCode >= 186) && (keyCode <= 192) ||
                     ((keyCode >= 219) && (keyCode <= 222)))
             {
@@ -210,6 +208,24 @@ module biOShock {
                             break;
                     }
                 }
+                _KernelInputQueue.enqueue(chr);
+            }
+            else if ((keyCode == 38) && !isShifted)
+            {
+                chr = "upArrow";
+                _KernelInputQueue.enqueue(chr);
+            }
+
+            else if ((keyCode == 40) && !isShifted)
+            {
+                chr = "downArrow";
+                _KernelInputQueue.enqueue(chr);
+            }
+            //tab
+            else if (keyCode = 9)
+            {
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
             }
         }
     }

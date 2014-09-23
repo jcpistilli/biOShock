@@ -83,20 +83,26 @@ module biOShock {
 
             // whereami
             sc = new ShellCommand(this.shellWhereAmI,
-                "WhereAmI",
+                "whereami",
                 "- Displays current location");
             this.commandList[this.commandList.length] = sc;
 
             // BSOD
             sc = new ShellCommand(this.shellBSOD,
-                "BSOD",
+                "bsod",
                 "- Causes a BSOD message");
             this.commandList[this.commandList.length] = sc;
 
             //still hope you know about bioshock...
             sc = new ShellCommand(this.shellMind,
-                "Mind",
+                "mind",
                 "- Think about it...");
+            this.commandList[this.commandList.length] = sc;
+
+            //HexValidator
+            sc = new ShellCommand(this.shellLoad,
+                "load",
+                "- Validates Hex Codes");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -316,18 +322,51 @@ module biOShock {
         }
 
         public shellWhereAmI() {
-            _StdOut.putText("Rapture.");
+            var loc = "Rapture.";
+            _StdOut.putText(loc);
         }
 
         public shellBSOD() {
-            _StdOut.putText("WHAT HAPPENED")
+            _StdOut.putText("WHAT HAPPENED");
             //kernel trap
-            _Kernel.krnTrapError("i r dedz")
+            _Kernel.krnTrapError("i r dedz");
         }
 
         public shellMind() {
             _StdOut.putText("The mind of the subject will desperately struggle to create memories where none exist...");
         }
 
+        public shellLoad(args)
+        {
+            var regEx = new RegExp("^[A-Fa-f0-9\s]$");
+            var retrieveHex = Control.grabHex();
+            var flag = true;
+
+            var removeSpace = retrieveHex.join("").replace(/\s*/gi, "");
+
+            var even = removeSpace.length % 2 == 0;
+
+            for (var i = 0; i<removeSpace.length; i++)
+            {
+                if (!(regEx.test(removeSpace[i])))
+                {
+                    flag = false;
+                }
+            }
+
+            //still comes out to congrats for 0 and wrong if I put whitespace. Gotta fix that
+
+            if(flag && even)
+            {
+                _StdOut.putText("Congratulations butthead.");
+            }
+
+            else
+            {
+                _StdOut.putText("You're an ass and you're wrong.");
+            }
+        }
+
     }
+
 }

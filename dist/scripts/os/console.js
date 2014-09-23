@@ -8,17 +8,21 @@ Note: This is not the Shell.  The Shell is the "command line interface" (CLI) or
 var biOShock;
 (function (biOShock) {
     var Console = (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, cmdHist, count) {
             if (typeof currentFont === "undefined") { currentFont = _DefaultFontFamily; }
             if (typeof currentFontSize === "undefined") { currentFontSize = _DefaultFontSize; }
             if (typeof currentXPosition === "undefined") { currentXPosition = 0; }
             if (typeof currentYPosition === "undefined") { currentYPosition = _DefaultFontSize; }
             if (typeof buffer === "undefined") { buffer = ""; }
+            if (typeof cmdHist === "undefined") { cmdHist = []; }
+            if (typeof count === "undefined") { count = 0; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
+            this.cmdHist = cmdHist;
+            this.count = count;
         }
         Console.prototype.init = function () {
             this.clearScreen();
@@ -45,7 +49,16 @@ var biOShock;
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
 
+                    debugger;
+                    this.cmdHist.push(this.buffer);
+
                     // ... and reset our buffer.
+                    this.buffer = "";
+                } else if (chr === "upArrow") {
+                    this.buffer = "";
+                } else if (chr === "downArrow") {
+                    this.buffer = "";
+                } else if (chr === String.fromCharCode(9)) {
                     this.buffer = "";
                 } else {
                     // This is a "normal" character, so ...
@@ -66,6 +79,10 @@ var biOShock;
             // do the same thing, thereby encouraging confusion and decreasing readability, I
             // decided to write one function and use the term "text" to connote string or char.
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
+            if (_Canvas.height < this.currentYPosition) {
+                biOShock.Control.scrollCanvas();
+            }
+
             if (text !== "") {
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
@@ -84,8 +101,6 @@ var biOShock;
             * Font descent measures from the baseline to the lowest point in the font.
             * Font height margin is extra spacing between the lines.
             */
-            biOShock.Control.scrollCanvas();
-
             this.currentYPosition += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
             // TODO: Handle scrolling. (Project 1)
         };

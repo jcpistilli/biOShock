@@ -113,19 +113,24 @@ module biOShock {
         }
 
         public static scrollCanvas(): void {
-            this.saveCanvas();
-            _Canvas.height += 50;
-            this.restoreCanvas();
+            var canvasNow = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
+
+            _Canvas.height += _DefaultFontSize + _FontHeightMargin + 5;
+
+            _DrawingContext.putImageData(canvasNow, 0, 0);
+
+
+            var btmPos = document.getElementById("divConsole");
+            btmPos.scrollTop = btmPos.scrollHeight;
         }
 
-        public static saveCanvas(): void {
-            _DrawingContext.save();
-            console.log("save happened");
-            }
+        public static grabHex(): string[] {
+            var progIn = <HTMLInputElement> document.getElementById("taProgramInput");
+            var progIn2 = progIn.value.trim().split("");
 
-        public static restoreCanvas(): void {
-            _DrawingContext.restore();
-            console.log("restore happened");
-            }
+            return progIn2;
+        }
+
+        //FIGURE OUT SAVE AND RESTORE BITCH
     }
 }

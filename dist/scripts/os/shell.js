@@ -58,15 +58,19 @@ var biOShock;
             this.commandList[this.commandList.length] = sc;
 
             // whereami
-            sc = new biOShock.ShellCommand(this.shellWhereAmI, "WhereAmI", "- Displays current location");
+            sc = new biOShock.ShellCommand(this.shellWhereAmI, "whereami", "- Displays current location");
             this.commandList[this.commandList.length] = sc;
 
             // BSOD
-            sc = new biOShock.ShellCommand(this.shellBSOD, "BSOD", "- Causes a BSOD message");
+            sc = new biOShock.ShellCommand(this.shellBSOD, "bsod", "- Causes a BSOD message");
             this.commandList[this.commandList.length] = sc;
 
             //still hope you know about bioshock...
-            sc = new biOShock.ShellCommand(this.shellMind, "Mind", "- Think about it...");
+            sc = new biOShock.ShellCommand(this.shellMind, "mind", "- Think about it...");
+            this.commandList[this.commandList.length] = sc;
+
+            //HexValidator
+            sc = new biOShock.ShellCommand(this.shellLoad, "load", "- Validates Hex Codes");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -288,7 +292,8 @@ var biOShock;
         };
 
         Shell.prototype.shellWhereAmI = function () {
-            _StdOut.putText("Rapture.");
+            var loc = "Rapture.";
+            _StdOut.putText(loc);
         };
 
         Shell.prototype.shellBSOD = function () {
@@ -300,6 +305,29 @@ var biOShock;
 
         Shell.prototype.shellMind = function () {
             _StdOut.putText("The mind of the subject will desperately struggle to create memories where none exist...");
+        };
+
+        Shell.prototype.shellLoad = function (args) {
+            var regEx = new RegExp("^[A-Fa-f0-9\s]$");
+            var retrieveHex = biOShock.Control.grabHex();
+            var flag = true;
+
+            var removeSpace = retrieveHex.join("").replace(/\s*/gi, "");
+
+            var even = removeSpace.length % 2 == 0;
+
+            for (var i = 0; i < removeSpace.length; i++) {
+                if (!(regEx.test(removeSpace[i]))) {
+                    flag = false;
+                }
+            }
+
+            //still comes out to congrats for 0 and wrong if I put whitespace. Gotta fix that
+            if (flag && even) {
+                _StdOut.putText("Congratulations butthead.");
+            } else {
+                _StdOut.putText("You're an ass and you're wrong.");
+            }
         };
         return Shell;
     })();
