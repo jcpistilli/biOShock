@@ -308,16 +308,22 @@ var biOShock;
             _StdOut.putText("The mind of the subject will desperately struggle to create memories where none exist...");
         };
 
-        //must type status followed by the message on the same line without hitting enter
-        //also doesn't accept anything after a space
-        //I CANT THINK OF WAY TO DO THIS BETTER WITH SPACES AHHHHH
+        //after strong basic javascript research and though
+        // i have come up with this
+        //it seems to work
         Shell.prototype.shellStatus = function (args) {
             if (args.length > 0) {
-                var status = args;
+                var status = " ";
+                var i;
+
+                for (i = 0; i < args.length; i++) {
+                    status += args[i] + " "; //so there will be a space between the words
+                }
+
                 _StdOut.putText("Status: " + status);
                 document.getElementById("message").innerHTML = status;
             } else {
-                _StdOut.putText("Please supply a string."); //only one word works for now
+                _StdOut.putText("Please supply a string.");
             }
         };
 

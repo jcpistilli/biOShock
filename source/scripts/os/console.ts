@@ -55,6 +55,11 @@ module biOShock {
                     this.buffer = "";
                 }
 
+                else if (chr === String.fromCharCode(8))
+                {
+                    this.buffer = ""
+                }
+
                 else if (chr === "upArrow")
                 {
                     this.buffer = "";
