@@ -14,7 +14,7 @@ var biOShock;
             if (typeof currentXPosition === "undefined") { currentXPosition = 0; }
             if (typeof currentYPosition === "undefined") { currentYPosition = _DefaultFontSize; }
             if (typeof buffer === "undefined") { buffer = ""; }
-            if (typeof cmdHist === "undefined") { cmdHist = []; }
+            if (typeof cmdHist === "undefined") { cmdHist = [""]; }
             if (typeof count === "undefined") { count = 0; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
@@ -44,23 +44,79 @@ var biOShock;
                 var chr = _KernelInputQueue.dequeue();
 
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
+                var histCount = this.count;
+                var buffSize = this.cmdHist.length;
+
                 if (chr === String.fromCharCode(13)) {
                     // The enter key marks the end of a console command, so ...
+                    //storing command
+                    if (this.buffer !== "") {
+                        this.cmdHist[this.cmdHist.length] = this.buffer;
+                        this.count = this.cmdHist.length;
+                    }
+
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
 
-                    this.cmdHist.push(this.buffer);
-
                     // ... and reset our buffer.
                     this.buffer = "";
+                } else if (chr === "upArrow" || chr === "downArrow") {
+                    if (chr === "upArrow" && histCount >= 0) {
+                        //go back in the history by one
+                        this.count -= 1;
+
+                        //perpares fill the line with the history where the count is
+                        this.buffer = this.cmdHist[this.count];
+
+                        //erases the line if previously had been typed in or moving up or down
+                        this.eraseLine();
+
+                        this.putText("");
+
+                        //outputs the text of where the count is
+                        this.putText(this.buffer);
+                    } else if (chr === "upArrow" && histCount < 0) {
+                        this.buffer = this.cmdHist[this.count];
+
+                        this.putText("");
+
+                        this.putText(this.buffer);
+                    } else if (chr === "downArrow" && histCount < buffSize) {
+                        this.count += 1;
+
+                        this.buffer = this.cmdHist[this.count];
+
+                        this.eraseLine();
+
+                        this.putText("");
+
+                        this.putText(this.buffer);
+                    } else if (chr === "downArrow" && histCount > buffSize) {
+                        this.buffer = this.cmdHist[this.count];
+
+                        this.eraseLine();
+
+                        this.putText("");
+
+                        this.putText(this.buffer);
+                    }
                 } else if (chr === String.fromCharCode(8)) {
                     this.erasePrevChar();
-                } else if (chr === "upArrow") {
-                    this.buffer = "";
-                } else if (chr === "downArrow") {
-                    this.buffer = "";
                 } else if (chr === String.fromCharCode(9)) {
-                    this.buffer = "";
+                    //puts whats already in the type box into this variable
+                    //for regex check
+                    var typed = this.buffer;
+                    var lettersNums = new RegExp("^" + typed + "[A-Za-z0-9]+");
+                    var list = _OsShell.commandList;
+                    var i;
+                    for (i in list) {
+                        var check = list[i].command;
+                        if (lettersNums.test(check)) {
+                            this.buffer = check;
+                        }
+                        this.eraseLine();
+                        this.putText(this.buffer);
+                    }
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
@@ -111,6 +167,7 @@ var biOShock;
             //remove from buffer
             //set offset from width of the last char.. look at offset up there ^
             //put current x pos in front of the last char... - the offset
+            _DrawingContext.fillStyle = "#DFDBC3"; //this lets me delete cleanly down at the bottom
             var lastChar = this.buffer.charAt(this.buffer.length - 1);
             this.buffer = this.buffer.slice(0, -1);
             var offsetX = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastChar);
@@ -120,6 +177,14 @@ var biOShock;
             //fill a rect... pad      pad             width       height
             //currx  ypos-fontsize      offx     fontsize
             _DrawingContext.fillRect(this.currentXPosition, this.currentYPosition - this.currentFontSize, offsetX, this.currentFontSize + 7);
+        };
+
+        Console.prototype.eraseLine = function () {
+            //draw over the line from 0 of x to the end of the canvas width-wise
+            //make the currx 0
+            _DrawingContext.fillRect(0, this.currentYPosition - this.currentFontSize, _Canvas.width, this.currentFontSize + 7);
+            this.currentXPosition = 0;
+            _OsShell.putPrompt();
         };
         return Console;
     })();

@@ -18,7 +18,7 @@ module biOShock {
                     public currentXPosition = 0,
                     public currentYPosition = _DefaultFontSize,
                     public buffer = "",
-                    public cmdHist = [],
+                    public cmdHist = [""],
                     public count = 0)
         {
 
@@ -44,38 +44,111 @@ module biOShock {
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
+
+                var histCount = this.count;
+                var buffSize = this.cmdHist.length;
+
                 if (chr === String.fromCharCode(13)) //enter key
-                {   //     Enter key
+                {
                     // The enter key marks the end of a console command, so ...
+
+                    //storing command
+                    if(this.buffer !== "")
+                    {
+                        this.cmdHist[this.cmdHist.length] = this.buffer;
+                        this.count = this.cmdHist.length;
+                    }
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
-
-                    this.cmdHist.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
 
-                else if (chr === String.fromCharCode(8))
+                //preparing for both up and down
+                else if(chr === "upArrow" || chr === "downArrow")
+                {
+
+                    if (chr === "upArrow" && histCount >= 0)
+                    {
+                        //go back in the history by one
+                        this.count -= 1;
+
+                        //perpares fill the line with the history where the count is
+                        this.buffer = this.cmdHist[this.count];
+
+                        //erases the line if previously had been typed in or moving up or down
+                        this.eraseLine();
+
+                        this.putText("");
+
+                        //outputs the text of where the count is
+                        this.putText(this.buffer);
+                    }
+
+                    //thought this would stop it from going over the last history
+                    else if (chr ==="upArrow" && histCount < 0 )
+                    {
+                        this.buffer = this.cmdHist[this.count];
+
+                        this.putText("");
+
+                        this.putText(this.buffer);
+
+                    }
+
+                    //recalls where the count is at and comes back towards most recent
+                    else if (chr === "downArrow" && histCount < buffSize)
+                    {
+                        this.count += 1;
+
+                        this.buffer = this.cmdHist[this.count];
+
+                        this.eraseLine();
+
+                        this.putText("");
+
+                        this.putText(this.buffer);
+                    }
+
+                    //clears the line when coming back towards the most recent history and back to blank
+                    else if (chr === "downArrow" && histCount > buffSize)
+                    {
+                        this.buffer = this.cmdHist[this.count];
+
+                        this.eraseLine();
+
+                        this.putText("");
+
+                        this.putText(this.buffer);
+                    }
+                }
+
+
+
+                else if (chr === String.fromCharCode(8)) //backspace
                 {
                     this.erasePrevChar();
                 }
 
-                else if (chr === "upArrow")
+                else if (chr === String.fromCharCode(9)) //tab completion
                 {
-                    this.buffer = "";
-
+                    //puts whats already in the type box into this variable
+                    //for regex check
+                    var typed = this.buffer;
+                    var lettersNums = new RegExp("^" + typed + "[A-Za-z0-9]+"); //commands with nums and letter upper and lower
+                    var list = _OsShell.commandList;
+                    var i;
+                    for (i in list)
+                    {
+                        var check = list[i].command;
+                        if (lettersNums.test(check))
+                        {
+                            this.buffer = check;
+                        }
+                        this.eraseLine();
+                        this.putText(this.buffer)
+                    }
                 }
-
-                else if (chr === "downArrow")
-                {
-                    this.buffer = "";
-                }
-
-                else if (chr === String.fromCharCode(9))   //tab key
-                {
-                    this.buffer = ""
-                }
-
 
                 else
                 {
@@ -86,8 +159,8 @@ module biOShock {
                     this.buffer += chr;
                 }
                 // TODO: Write a case for Ctrl-C.
+                }
             }
-        }
 
         public putText(text): void {
             // My first inclination here was to write two functions: putChar() and putString().
@@ -135,6 +208,7 @@ module biOShock {
             //set offset from width of the last char.. look at offset up there ^
             //put current x pos in front of the last char... - the offset
 
+            _DrawingContext.fillStyle = "#DFDBC3";//this lets me delete cleanly down at the bottom
             var lastChar = this.buffer.charAt(this.buffer.length - 1);
             this.buffer = this.buffer.slice(0, -1);
             var offsetX = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastChar);
@@ -146,6 +220,16 @@ module biOShock {
 
             _DrawingContext.fillRect(this.currentXPosition,this.currentYPosition - this.currentFontSize,
                                         offsetX,this.currentFontSize + 7);
+        }
+
+        public eraseLine(): void
+        {
+            //draw over the line from 0 of x to the end of the canvas width-wise
+            //make the currx 0
+            _DrawingContext.fillRect(0, this.currentYPosition - this.currentFontSize,
+                                                 _Canvas.width, this.currentFontSize + 7);
+            this.currentXPosition = 0;
+            _OsShell.putPrompt();
 
         }
     }
