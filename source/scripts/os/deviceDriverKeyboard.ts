@@ -45,9 +45,7 @@ module biOShock {
             }
             else if (((keyCode >= 48) && (keyCode <= 57)) ||    // digits
                         (keyCode == 32)                   ||    // space
-                        (keyCode == 13)                   ||    // enter
-                        (keyCode == 8)                    ||    //backspace
-                        (keyCode == 9))                         //tab
+                        (keyCode == 13)                         // enter
             {
                 chr = String.fromCharCode(keyCode);
                 if (isShifted && ((keyCode >= 48) && (keyCode <= 57))) {
@@ -222,7 +220,13 @@ module biOShock {
                 _KernelInputQueue.enqueue(chr);
             }
             //tab
-            else if (keyCode = 9)
+            else if (keyCode == 9)
+            {
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            }
+            //backspace
+            else if (keyCode == 8)
             {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
