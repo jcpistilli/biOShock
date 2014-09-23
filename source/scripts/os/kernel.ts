@@ -70,7 +70,8 @@ module biOShock {
         }
 
 
-        public krnOnCPUClockPulse() {
+        public krnOnCPUClockPulse()
+        {
             /* This gets called from the host hardware sim every time there is a hardware clock pulse.
                This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
                This, on the other hand, is the clock pulse from the hardware (or host) that tells the kernel
@@ -87,7 +88,11 @@ module biOShock {
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
             }
+
+            document.getElementById("spanDaT").innerHTML = Control.dateTime();
         }
+
+
 
 
         //

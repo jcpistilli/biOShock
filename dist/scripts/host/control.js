@@ -127,6 +127,34 @@ var biOShock;
 
             return progIn2;
         };
+
+        Control.dateTime = function () {
+            var theDate = new Date();
+            var month = (theDate.getMonth() + 1).toString();
+            var day = theDate.getDay().toString();
+            var year = theDate.getFullYear().toString();
+            var hrs = theDate.getHours().toString();
+            var min = theDate.getMinutes().toString();
+            var sec = theDate.getSeconds().toString();
+
+            if (month.length == 1) {
+                month = '0' + month;
+            }
+            if (day.length == 1) {
+                day = '0' + day;
+            }
+            if (hrs.length == 1) {
+                hrs = '0' + hrs;
+            }
+            if (min.length == 1) {
+                min = '0' + min;
+            }
+            if (sec.length == 1) {
+                sec = '0' + sec;
+            }
+
+            return month + "/" + day + "/" + year + " " + hrs + ":" + min + ":" + sec;
+        };
         return Control;
     })();
     biOShock.Control = Control;

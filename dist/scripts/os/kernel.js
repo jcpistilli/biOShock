@@ -84,6 +84,8 @@ var biOShock;
             } else {
                 this.krnTrace("Idle");
             }
+
+            document.getElementById("spanDaT").innerHTML = biOShock.Control.dateTime();
         };
 
         //

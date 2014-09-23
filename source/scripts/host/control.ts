@@ -131,6 +131,41 @@ module biOShock {
             return progIn2;
         }
 
+        public static dateTime(): string
+        {
+            var theDate = new Date();
+            var month   = (theDate.getMonth() + 1).toString(); //plus 1 to the month cause it returns 0-11
+            var day     = theDate.getDay().toString();
+            var year    = theDate.getFullYear().toString();
+            var hrs     = theDate.getHours().toString();
+            var min     = theDate.getMinutes().toString();
+            var sec     = theDate.getSeconds().toString();
+
+
+            if(month.length == 1)
+            {
+                month = '0' + month;
+            }
+            if(day.length == 1)
+            {
+                day = '0' + day;
+            }
+            if(hrs.length == 1)
+            {
+                hrs = '0' + hrs;
+            }
+            if(min.length == 1)
+            {
+                min = '0' + min;
+            }
+            if(sec.length == 1)
+            {
+                sec = '0' + sec;
+            }
+
+            return month + "/" + day + "/" + year + " " + hrs + ":" + min + ":" + sec;
+        }
+
         //FIGURE OUT SAVE AND RESTORE BITCH
     }
 }

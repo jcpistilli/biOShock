@@ -66,7 +66,13 @@
              onclick="biOShock.Control.hostBtnReset_click(this);">
    </div>
 
-   <div id="divConsole" style="margin:4px; width:518px; height:500px; float:left; overflow-y: auto">
+    <div id="divStatusBar" style="margin: 4px; width: 500px; height: 15px; margin-top: 5px;">
+        <label>
+        Date and Time: <span id="spanDaT"></span>, Status: <span id="message"></span>
+        </label>
+    </div>
+
+   <div id="divConsole" style="margin:4px; width:519px; height:500px; float:left; overflow-y: auto">
       <canvas id="display"
               width="500px"
               height="500px"
@@ -109,6 +115,7 @@
 </p>
 
 
-<img id ="bsod" src="dist/images/wouldYouKindly.png" height="500" width="500">
+<!--<img id ="bsod" src="dist/images/wouldYouKindly.png" height="500" width="519">-->
+
 </body>
 </html>

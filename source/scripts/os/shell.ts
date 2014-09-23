@@ -99,6 +99,12 @@ module biOShock {
                 "- Think about it...");
             this.commandList[this.commandList.length] = sc;
 
+            // status <string>
+            sc = new ShellCommand(this.shellStatus,
+                "status",
+                "<string> - Displays a status to the console and status bar.");
+            this.commandList[this.commandList.length] = sc;
+
             //HexValidator
             sc = new ShellCommand(this.shellLoad,
                 "load",
@@ -310,15 +316,9 @@ module biOShock {
         }
 
         public shellDate() {
-            var theDate = new Date();
-            var dateTime = (theDate.getMonth() + 1) + "/" + //plus 1 to the month cause it returns 0-11
-                theDate.getDay() + "/" +
-                theDate.getFullYear() + " " +
-                theDate.getHours() + ":" +
-                theDate.getMinutes() + ":" +
-                theDate.getSeconds();
 
-            _StdOut.putText(dateTime);
+            _StdOut.putText(Control.dateTime());
+
         }
 
         public shellWhereAmI() {
@@ -336,7 +336,25 @@ module biOShock {
             _StdOut.putText("The mind of the subject will desperately struggle to create memories where none exist...");
         }
 
-        public shellLoad(args)
+
+        //must type status followed by the message on the same line without hitting enter
+        //also doesn't accept anything after a space
+        //I CANT THINK OF WAY TO DO THIS BETTER WITH SPACES AHHHHH
+        public shellStatus(args)
+        {
+            if (args.length > 0)
+            {
+                var status = args;
+                _StdOut.putText("Status: " + status);
+                document.getElementById("message").innerHTML = status;
+            }
+            else
+            {
+                _StdOut.putText("Please supply a string."); //only one word works for now
+            }
+        }
+
+        public shellLoad()
         {
             var regEx = new RegExp("^[A-Fa-f0-9\s]$");
             var retrieveHex = Control.grabHex();

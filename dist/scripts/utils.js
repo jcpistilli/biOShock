@@ -20,7 +20,6 @@ var biOShock;
             */
         };
 
-        //HEX VALIDATOR
         Utils.rot13 = function (str) {
             /*
             This is an easy-to understand implementation of the famous and common Rot13 obfuscator.

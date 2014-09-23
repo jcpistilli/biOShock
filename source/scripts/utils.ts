@@ -21,8 +21,6 @@ module biOShock {
             */
         }
 
-        //HEX VALIDATOR
-
         public static rot13(str: string): string {
             /*
                This is an easy-to understand implementation of the famous and common Rot13 obfuscator.
@@ -45,5 +43,7 @@ module biOShock {
             }
             return retVal;
         }
+
+
     }
 }
