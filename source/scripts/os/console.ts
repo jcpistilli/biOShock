@@ -57,7 +57,7 @@ module biOShock {
 
                 else if (chr === String.fromCharCode(8))
                 {
-                    this.buffer = ""
+                    this.erasePrevChar();
                 }
 
                 else if (chr === "upArrow")
@@ -125,6 +125,28 @@ module biOShock {
                                      _FontHeightMargin;
 
             // TODO: Handle scrolling. (Project 1)
+        }
+
+
+        public erasePrevChar(): void
+        {
+            //get to the most recent char... use charAt maybe... gonna be length of the buffer -1
+            //remove from buffer
+            //set offset from width of the last char.. look at offset up there ^
+            //put current x pos in front of the last char... - the offset
+
+            var lastChar = this.buffer.charAt(this.buffer.length - 1);
+            this.buffer = this.buffer.slice(0, -1);
+            var offsetX = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastChar);
+            this.currentXPosition = this.currentXPosition - offsetX;
+
+            //create rectangle to erase from the canvas
+            //fill a rect... pad      pad             width       height
+                           //currx  ypos-fontsize      offx     fontsize
+
+            _DrawingContext.fillRect(this.currentXPosition,this.currentYPosition - this.currentFontSize,
+                                        offsetX,this.currentFontSize + 7);
+
         }
     }
  }

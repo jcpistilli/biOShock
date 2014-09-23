@@ -28,11 +28,13 @@ module biOShock {
             // Parse the params.    TODO: Check that they are valid and osTrapError if not.
             var keyCode = params[0];
             var isShifted = params[1];
+
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
             // Check to see if we even want to deal with the key that was pressed.
             if (((keyCode >= 65) && (keyCode <= 90)) ||   // A..Z
-                ((keyCode >= 97) && (keyCode <= 123))) {  // a..z {
+                ((keyCode >= 97) && (keyCode <= 123)))
+            {  // a..z {
                 // Determine the character we want to display.
                 // Assume it's lowercase...
                 chr = String.fromCharCode(keyCode + 32);
@@ -43,6 +45,14 @@ module biOShock {
                 // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
             }
+
+            /*else if (keyCode == 20 && ((keyCode >= 65) && (keyCode <= 90)))
+            {
+                chr = String.fromCharCode(keyCode + 32)
+
+                _KernelInputQueue.enqueue(chr);
+            }*/
+
             else if (((keyCode >= 48) && (keyCode <= 57)) ||    // digits
                         (keyCode == 32)                   ||    // space
                         (keyCode == 13))                        // enter

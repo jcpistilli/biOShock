@@ -34,6 +34,9 @@ module biOShock {
             // Get a global reference to the drawing context.
             _DrawingContext = _Canvas.getContext('2d');
 
+            //changing the color so i can fillRect
+            _DrawingContext.fillStyle = "#DFDBC3"; //grabbed this from the .css file. Color of the canvas
+
             // Enable the added-in canvas text functions (see canvastext.ts for provenance and details).
             CanvasTextFunctions.enable(_DrawingContext);   // Text functionality is now built in to the HTML5 canvas. But this is old-school, and fun.
 
@@ -165,7 +168,5 @@ module biOShock {
 
             return month + "/" + day + "/" + year + " " + hrs + ":" + min + ":" + sec;
         }
-
-        //FIGURE OUT SAVE AND RESTORE BITCH
     }
 }
