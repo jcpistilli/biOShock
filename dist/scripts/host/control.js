@@ -124,7 +124,7 @@ var biOShock;
             btmPos.scrollTop = btmPos.scrollHeight;
         };
 
-        Control.grabHex = function () {
+        Control.grabInput = function () {
             var progIn = document.getElementById("taProgramInput");
             var progIn2 = progIn.value.trim().split("");
 

@@ -115,6 +115,7 @@ var biOShock;
                             this.buffer = check;
                         }
                         this.eraseLine();
+                        _DrawingContext.fillStyle = "#DFDBC3"; //this lets me delete cleanly down at the bottom
                         this.putText(this.buffer);
                     }
                 } else {

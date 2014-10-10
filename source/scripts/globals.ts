@@ -50,6 +50,9 @@ var _KernelInputQueue = null;
 var _StdIn  = null;
 var _StdOut = null;
 
+//Global stuff I need
+var _GlobPid = 0;
+
 // UI
 var _Console: biOShock.Console;
 var _OsShell: biOShock.Shell;

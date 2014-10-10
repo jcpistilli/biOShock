@@ -77,6 +77,10 @@ var biOShock;
             sc = new biOShock.ShellCommand(this.shellLoad, "load", "- Validates Hex Codes");
             this.commandList[this.commandList.length] = sc;
 
+            //Run <pid>
+            sc = new biOShock.ShellCommand(this.shellRun, "run", "<PID> - Runs a program from memory");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -329,7 +333,7 @@ var biOShock;
 
         Shell.prototype.shellLoad = function () {
             var regEx = new RegExp("^[A-Fa-f0-9\s]$");
-            var retrieveHex = biOShock.Control.grabHex();
+            var retrieveHex = biOShock.Control.grabInput();
             var flag = true;
 
             var removeSpace = retrieveHex.join("").replace(/\s*/gi, "");
@@ -346,7 +350,16 @@ var biOShock;
             if (flag && even) {
                 _StdOut.putText("Congratulations butthead.");
             } else {
-                _StdOut.putText("You're an ass and you're wrong.");
+                _StdOut.putText("This no right input.");
+            }
+        };
+
+        //Run
+        Shell.prototype.shellRun = function (args) {
+            if (args.length <= 0) {
+                _StdOut.putText("Nope.");
+            } else {
+                _StdOut.putText("Usage: run <PID>  Please input a valid PID number.");
             }
         };
         return Shell;

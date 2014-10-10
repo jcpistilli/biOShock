@@ -111,6 +111,12 @@ module biOShock {
                 "- Validates Hex Codes");
             this.commandList[this.commandList.length] = sc;
 
+            //Run <pid>
+            sc = new ShellCommand(this.shellRun,
+                "run",
+                "<PID> - Runs a program from memory");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -340,58 +346,61 @@ module biOShock {
         //after strong basic javascript research and though
         // i have come up with this
         //it seems to work
-        public shellStatus(args)
-        {
-            if (args.length > 0)
-            {
+        public shellStatus(args) {
+            if (args.length > 0) {
                 var status = " "; //make the status a string
                 var i;
 
-                for(i = 0; i < args.length; i++)
-                {
+                for (i = 0; i < args.length; i++) {
                     status += args[i] + " "; //so there will be a space between the words
                 }
 
                 _StdOut.putText("Status: " + status);
                 document.getElementById("message").innerHTML = status;
             }
-            else
-            {
+            else {
                 _StdOut.putText("Please supply a string.");
             }
         }
 
-        public shellLoad()
-        {
+        public shellLoad() {
             var regEx = new RegExp("^[A-Fa-f0-9\s]$");
-            var retrieveHex = Control.grabHex();
+            var retrieveHex = Control.grabInput();
             var flag = true;
 
             var removeSpace = retrieveHex.join("").replace(/\s*/gi, "");
 
             var even = removeSpace.length % 2 == 0;
 
-            for (var i = 0; i<removeSpace.length; i++)
-            {
-                if (!(regEx.test(removeSpace[i])))
-                {
+            for (var i = 0; i < removeSpace.length; i++) {
+                if (!(regEx.test(removeSpace[i]))) {
                     flag = false;
                 }
             }
 
             //still comes out to congrats for 0 and wrong if I put whitespace. Gotta fix that
 
-            if(flag && even)
-            {
+            if (flag && even) {
                 _StdOut.putText("Congratulations butthead.");
             }
 
-            else
-            {
-                _StdOut.putText("You're an ass and you're wrong.");
+            else {
+                _StdOut.putText("This no right input.");
             }
         }
 
-    }
+        //Run
+        public shellRun(args) {
+            if (args.length <= 0) {
+                _StdOut.putText("Nope.");
+            }
+            else {
+                _StdOut.putText("Usage: run <PID>  Please input a valid PID number.");
 
+
+            }
+
+        }
+
+    }
 }
