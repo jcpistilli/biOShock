@@ -48,6 +48,14 @@ var _StdOut = null;
 
 //Global stuff I need
 var _GlobPid = 0;
+var _MemMan = null;
+
+var _progSize = 256;
+var _progNum = 3;
+var _memSize = _progSize * _progNum;
+var _cycleCounter = 0;
+
+var _ResidentQueue = null;
 
 // UI
 var _Console;

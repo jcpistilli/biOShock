@@ -20,6 +20,15 @@ var biOShock;
             */
         };
 
+        //if needed to convert between hex and dec
+        Utils.hexToDec = function (hexStr) {
+            return parseInt(hexStr, 16);
+        };
+
+        Utils.decToHex = function (decNum) {
+            return decNum.toString(16);
+        };
+
         Utils.rot13 = function (str) {
             /*
             This is an easy-to understand implementation of the famous and common Rot13 obfuscator.

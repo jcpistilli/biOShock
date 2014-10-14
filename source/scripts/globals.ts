@@ -51,7 +51,16 @@ var _StdIn  = null;
 var _StdOut = null;
 
 //Global stuff I need
-var _GlobPid = 0;
+var _GlobPid: number = 0;
+var _MemMan: any = null;
+
+var _progSize: number = 256;
+var _progNum: number = 3;
+var _memSize: number = _progSize * _progNum;
+var _cycleCounter: number = 0;
+
+var _ResidentQueue: any = null;
+
 
 // UI
 var _Console: biOShock.Console;

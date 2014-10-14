@@ -28,13 +28,18 @@ module biOShock {
 
         }
 
-        public init(): void {
+        public resetCPU(): void {
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
+        }
+
+        public init(): void
+        {
+            this.resetCPU();
         }
 
         public cycle(): void {

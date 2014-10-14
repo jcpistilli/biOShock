@@ -343,7 +343,11 @@ var biOShock;
                 if ((regEx.test(removeSpace[i])) && even) {
                     _StdOut.putText("Loading program.");
                     _StdOut.advanceLine();
-                    _StdOut.putText("PID: " + thePid);
+
+                    var thisPID = _MemMan.loadProg(removeSpace);
+                    if (thisPID !== null) {
+                        _StdOut.putText("PID: " + thisPID);
+                    }
                     break;
                 }
             }
