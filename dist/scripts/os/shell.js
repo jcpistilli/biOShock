@@ -334,23 +334,26 @@ var biOShock;
         Shell.prototype.shellLoad = function () {
             var regEx = new RegExp("^[A-Fa-f0-9\s]$");
             var retrieveHex = biOShock.Control.grabInput();
-            var flag = true;
 
             var removeSpace = retrieveHex.join("").replace(/\s*/gi, "");
 
             var even = removeSpace.length % 2 == 0;
 
             for (var i = 0; i < removeSpace.length; i++) {
-                if (!(regEx.test(removeSpace[i]))) {
-                    flag = false;
+                if ((regEx.test(removeSpace[i])) && even) {
+                    _StdOut.putText("Loading program.");
+                    _StdOut.advanceLine();
+                    _StdOut.putText("PID: " + thePid);
+                    break;
                 }
             }
 
-            //still comes out to congrats for 0 and wrong if I put whitespace. Gotta fix that
-            if (flag && even) {
-                _StdOut.putText("Congratulations butthead.");
-            } else {
-                _StdOut.putText("This no right input.");
+            if (removeSpace == 0) {
+                _StdOut.putText("There is no input.");
+            } else if (!even) {
+                _StdOut.putText("Please input an even amount of characters.");
+                _StdOut.advanceLine(); //just until I complete word wrapping
+                _StdOut.putText("Whitespaces will not affect your input.");
             }
         };
 
