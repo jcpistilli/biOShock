@@ -24,7 +24,7 @@ module biOShock
             }
         }
 
-            //print memory array out to the screen
+            //print memory array out to the screen??
 
         public openProgLoc(): any
         {
@@ -45,7 +45,6 @@ module biOShock
                 this.memory.data[i + offsetLocation] = "00";
             }
 
-            // Set this location to inactive
             this.loc[location].active = false;
         }
 
@@ -64,7 +63,7 @@ module biOShock
             this.loc[location].active = true;
         }
 
-        public loadProg (prog): void
+        public loadProg (prog, pri): any
         {
             var progLoc = this.openProgLoc;
             if (progLoc !== null)
@@ -75,6 +74,26 @@ module biOShock
 
                 this.loadProgIntoMemory(prog, progLoc)
             }
+            return thisPCB.pid
+        }
+
+        public getMemFromLoc (blockNum, loc): any
+        {
+            var mem = _Memory.memBlock(blockNum)[loc];
+
+            return mem;
+        }
+
+        public updateMemory(blockNum, loc, updateCode): void
+        {
+            var newCodeHex = Utils.decToHex(updateCode);
+
+            var blockNow = _Memory.memBlock(blockNum);
+
+            if (newCodeHex.length < 2)
+                newCodeHex = "0" + newCodeHex;
+            blockNow[loc] = newCodeHex;
+            Control.updateTable(Math.floor(loc / 8), loc % 8, newCodeHex);
         }
 
     }

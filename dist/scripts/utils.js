@@ -21,12 +21,12 @@ var biOShock;
         };
 
         //if needed to convert between hex and dec
-        Utils.hexToDec = function (hexStr) {
-            return parseInt(hexStr, 16);
+        Utils.hexToDec = function (hex) {
+            return parseInt(hex, 16);
         };
 
-        Utils.decToHex = function (decNum) {
-            return decNum.toString(16);
+        Utils.decToHex = function (dec) {
+            return dec.toString(16);
         };
 
         Utils.rot13 = function (str) {

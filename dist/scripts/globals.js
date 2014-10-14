@@ -19,6 +19,8 @@ var TIMER_IRQ = 0;
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ = 1;
 
+var SYSopcodeIRQ = 2;
+
 //
 // Global Variables
 //
@@ -54,8 +56,11 @@ var _progSize = 256;
 var _progNum = 3;
 var _memSize = _progSize * _progNum;
 var _cycleCounter = 0;
-
+var _Memory = null;
+var _currMemSpot = -1;
 var _ResidentQueue = null;
+var _currPCB = null;
+var _runningPID = -1;
 
 // UI
 var _Console;

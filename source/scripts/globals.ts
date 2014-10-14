@@ -21,6 +21,8 @@ var TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interr
                             // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ: number = 1;
 
+var SYSopcodeIRQ: number = 2;
+
 
 //
 // Global Variables
@@ -58,8 +60,11 @@ var _progSize: number = 256;
 var _progNum: number = 3;
 var _memSize: number = _progSize * _progNum;
 var _cycleCounter: number = 0;
-
-var _ResidentQueue: any = null;
+var _Memory = null;
+var _currMemSpot: number = -1;
+var _ResidentQueue = null;
+var _currPCB = null;
+var _runningPID: number = -1;
 
 
 // UI

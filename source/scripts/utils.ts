@@ -23,14 +23,13 @@ module biOShock {
 
 
         //if needed to convert between hex and dec
-        public static hexToDec(hexStr): number {
-            return parseInt(hexStr, 16);
+        public static hexToDec(hex): number {
+            return parseInt(hex, 16);
         }
 
-        public static decToHex(decNum): string {
-            return decNum.toString(16);
+        public static decToHex(dec): string {
+            return dec.toString(16);
         }
-
 
         public static rot13(str: string): string {
             /*

@@ -341,13 +341,16 @@ var biOShock;
 
             for (var i = 0; i < removeSpace.length; i++) {
                 if ((regEx.test(removeSpace[i])) && even) {
+                    biOShock.Control.resetMemory();
+                    _CPU.resetCPU();
                     _StdOut.putText("Loading program.");
                     _StdOut.advanceLine();
 
-                    var thisPID = _MemMan.loadProg(removeSpace);
+                    var thisPID = _MemMan.loadProg(0, removeSpace);
                     if (thisPID !== null) {
                         _StdOut.putText("PID: " + thisPID);
                     }
+                } else {
                     break;
                 }
             }
@@ -363,10 +366,18 @@ var biOShock;
 
         //Run
         Shell.prototype.shellRun = function (args) {
-            if (args.length <= 0) {
-                _StdOut.putText("Nope.");
+            //var runningPID: number = -1;
+            //don't know why this isn't working...
+            //guess i'll make it global
+            if (args.length > 0) {
+                if (_Memory.isEmpty()) {
+                    _StdOut.putText("Memory is empty. Try the 'load' command and run again.");
+                } else {
+                    _CPU.isExecuting = true;
+                    _runningPID = parseInt(args[0]);
+                }
             } else {
-                _StdOut.putText("Usage: run <PID>  Please input a valid PID number.");
+                _StdOut.putText("Usage: run <PID>  Please supply a PID number.");
             }
         };
         return Shell;

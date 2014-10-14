@@ -91,6 +91,12 @@ var biOShock;
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new biOShock.Kernel();
             _Kernel.krnBootstrap();
+
+            //Init mem man
+            _MemMan = new biOShock.memoryManager();
+
+            this.CPUtoHTML();
+            this.memTable(1);
         };
 
         Control.hostBtnHaltOS_click = function (btn) {
@@ -157,6 +163,60 @@ var biOShock;
             }
 
             return month + "/" + day + "/" + year + " " + hrs + ":" + min + ":" + sec;
+        };
+
+        //HTML stuff
+        //resets HTML elements of the CPU
+        Control.CPUtoHTML = function () {
+            document.getElementById("tdPC").innerHTML = "0";
+            document.getElementById("tdAccum").innerHTML = "0";
+            document.getElementById("tdXReg").innerHTML = "0";
+            document.getElementById("tdYReg").innerHTML = "0";
+            document.getElementById("tdZFlag").innerHTML = "0";
+        };
+
+        //actually sets the mem to 0
+        Control.resetMemory = function () {
+            _Memory.clearMem();
+        };
+
+        //sets up a table for the memory
+        //table will be 8 columns wide (x)
+        //and 20 rows (y) for obvious axis reasons
+        Control.memTable = function (parts) {
+            var table = document.getElementById("divMemory");
+
+            for (var i = 0; i < parts; i++) {
+                for (var y = 0; y < 20; x++) {
+                    var tr = document.createElement("tr");
+                    table.appendChild(tr);
+
+                    for (var x = 0; x < 8; y++) {
+                        var td = document.createElement("td");
+
+                        td.innerHTML = "00";
+                        tr.appendChild(td);
+                    }
+                }
+            }
+        };
+        Control.updateTable = function (tableRow, tableCel, updateCode) {
+            var memTable = null;
+            memTable.rows[tableRow].cells[tableCel].innerHTML = updateCode;
+        };
+
+        Control.clearMemTable = function (parts) {
+            for (var i = 0; i < parts; i++) {
+                for (var x = 0; x < 32; x++) {
+                    for (var y = 0; y < 8; y++) {
+                        this.updateTable(x, y, "00");
+                    }
+                }
+            }
+        };
+
+        Control.CPUid = function (id, value) {
+            document.getElementById(id).innerHTML = value;
         };
         return Control;
     })();

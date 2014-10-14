@@ -17,7 +17,7 @@ var biOShock;
                 };
             }
         }
-        //print memory array out to the screen
+        //print memory array out to the screen??
         memoryManager.prototype.openProgLoc = function () {
             for (var i = 0; i < this.loc.length; i++) {
                 if (this.loc[i].active === false) {
@@ -34,7 +34,6 @@ var biOShock;
                 this.memory.data[i + offsetLocation] = "00";
             }
 
-            // Set this location to inactive
             this.loc[location].active = false;
         };
 
@@ -50,7 +49,7 @@ var biOShock;
             this.loc[location].active = true;
         };
 
-        memoryManager.prototype.loadProg = function (prog) {
+        memoryManager.prototype.loadProg = function (prog, pri) {
             var progLoc = this.openProgLoc;
             if (progLoc !== null) {
                 var thisPCB = new biOShock.pcb();
@@ -59,6 +58,24 @@ var biOShock;
 
                 this.loadProgIntoMemory(prog, progLoc);
             }
+            return thisPCB.pid;
+        };
+
+        memoryManager.prototype.getMemFromLoc = function (blockNum, loc) {
+            var mem = _Memory.memBlock(blockNum)[loc];
+
+            return mem;
+        };
+
+        memoryManager.prototype.updateMemory = function (blockNum, loc, updateCode) {
+            var newCodeHex = biOShock.Utils.decToHex(updateCode);
+
+            var blockNow = _Memory.memBlock(blockNum);
+
+            if (newCodeHex.length < 2)
+                newCodeHex = "0" + newCodeHex;
+            blockNow[loc] = newCodeHex;
+            biOShock.Control.updateTable(Math.floor(loc / 8), loc % 8, newCodeHex);
         };
         return memoryManager;
     })();
