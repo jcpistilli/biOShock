@@ -136,78 +136,14 @@ module biOShock {
         //returns the location of the next time bytes
         private nextTwoBytes(): number
         {
-            var one = _MemMan.getMemFromLoc(_currMemSpot, this.PC + 1);
-            var two = _MemMan.getMemFromLoc(_currMemSpot, this.PC + 2);
+            var one = _MemMan.getMemFromLoc(_currMemSpot, this.PC++);
+            var two = _MemMan.getMemFromLoc(_currMemSpot, this.PC++);
 
-            return Utils.hexToDec(two + one);
-        }
+            var hex = (two + one);
 
-        // LDA
-        // Load constant into the accumulator
-        private constToAcc(): void
-        {
-            this.Acc = Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC + 1));
-        }
+            var decimal = Utils.hexToDec(hex);
 
-        // LDA
-        // Load accumulator from the memory
-        private loadAccFromMem(): void
-        {
-            var loc = this.nextTwoBytes();
-            this.Acc = _MemMan.getMemFromLoc(_currMemSpot, loc);
-            this.PC += 2;
-        }
-
-        // STA
-        // Store accumulator into the memory
-        private storeAccToMem(): void
-        {
-            var loc = this.nextTwoBytes();
-            _MemMan.updateMemory(_currMemSpot, loc, this.Acc);
-            this.PC += 2;
-        }
-
-        // ADC
-        // Add memory location to accumulator then store into accumulator
-        private addStoreIntoAcc(): void
-        {
-            var loc = this.nextTwoBytes();
-            this.Acc += _MemMan.getMemFromLoc(_currMemSpot, loc);
-            this.PC += 2;
-        }
-
-        // LDX
-        // Load constant into xreg
-        private constToX(): void
-        {
-            this.Xreg = Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
-        }
-
-        // LDX
-        // Load xreg from memory
-        private loadXMem(): void
-        {
-            this.Xreg = this.dataNextTwoBytes();
-        }
-
-        // LDY
-        // Load constant into y-reg
-        private loadConstToY(): void
-        {
-            this.Yreg = Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
-        }
-
-        // LDY
-        // Load yreg from memory
-        private loadYMem(): void
-        {
-            this.Yreg = this.nextTwoBytes();
-        }
-
-        // NOP
-        private noOperation(): void
-        {
-            // There ain't be nothin round here
+            return decimal;
         }
 
         public dataNextTwoBytes(): any
@@ -215,8 +151,106 @@ module biOShock {
             return _MemMan.getMemFromLoc(_currMemSpot, this.nextTwoBytes());
         }
 
-        // CPX
-        // Compare xreg to contents of memory
+        /*
+            LDA
+            Load constant into the accumulator
+            A9
+        */
+        private constToAcc(): void
+        {
+            this.Acc = Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC + 1));
+        }
+
+        /*
+            LDA
+            Load accumulator from the memory
+            AD
+        */
+        private loadAccFromMem(): void
+        {
+            var loc = this.nextTwoBytes();
+            this.Acc = _MemMan.getMemFromLoc(_currMemSpot, loc);
+            this.PC += 2;
+        }
+
+        /*
+            STA
+            Store accumulator into the memory
+            8D
+        */
+        private storeAccToMem(): void
+        {
+            var loc = this.nextTwoBytes();
+            _MemMan.updateMemory(_currMemSpot, loc, this.Acc.toString(16));
+        }
+
+        /*
+            ADC
+            Add memory location to accumulator then store into accumulator
+            6D
+        */
+        private addStoreIntoAcc(): void
+        {
+            var loc = this.nextTwoBytes();
+            this.Acc += _MemMan.getMemFromLoc(_currMemSpot, loc);
+            this.PC += 2;
+        }
+
+        /*
+            LDX
+            Load constant into xreg
+            A2
+        */
+        private constToX(): void
+        {
+            this.Xreg = Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+        }
+
+        /*
+            LDX
+            Load xreg from memory
+            AE
+        */
+        private loadXMem(): void
+        {
+            this.Xreg = this.dataNextTwoBytes();
+        }
+
+        /*
+            LDY
+            Load constant into y-reg
+            A0
+        */
+        private loadConstToY(): void
+        {
+            this.Yreg = Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+        }
+
+        /*
+            LDY
+            Load yreg from memory
+            AC
+        */
+        private loadYMem(): void
+        {
+            this.Yreg = this.nextTwoBytes();
+        }
+
+        /*
+            NOP
+            No operation
+            EA
+        */
+        private noOperation(): void
+        {
+            // There ain't be nothin round here
+        }
+
+        /*
+            CPX
+            Compare xreg to contents of memory
+            EC
+        */
         private compareToX(): void
         {
             var loc = this.dataNextTwoBytes();
@@ -230,7 +264,10 @@ module biOShock {
             }
         }
 
-        // BNE
+        /*
+            BNE
+            D0
+        */
         private branchNotEqual(): void
         {
             if (this.Zflag == 0)
@@ -247,8 +284,11 @@ module biOShock {
             }
         }
 
-        // INC
-        // Increment the next value by one
+        /*
+            INC
+            Increment the next value by one
+            EE
+        */
         private incr(): void
         {
             var loc = this.nextTwoBytes();
@@ -257,9 +297,11 @@ module biOShock {
             this.PC += 2;
         }
 
-        // SYS
-        // System call:
-
+        /*
+            SYS
+            System call:
+            FF
+        */
         private sysCall(): void
         {
             var params = new Array(this.Xreg, this.Yreg);
@@ -279,8 +321,11 @@ module biOShock {
             _currMemSpot = -1;
         }
 
-        // BRK
-        // Break
+        /*
+            BRK
+            Break
+            00
+        */
         private breakCall(): void {
             this.isExecuting = false;
             this.progDone();

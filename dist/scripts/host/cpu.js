@@ -125,77 +125,111 @@ var biOShock;
 
         //returns the location of the next time bytes
         Cpu.prototype.nextTwoBytes = function () {
-            var one = _MemMan.getMemFromLoc(_currMemSpot, this.PC + 1);
-            var two = _MemMan.getMemFromLoc(_currMemSpot, this.PC + 2);
+            var one = _MemMan.getMemFromLoc(_currMemSpot, this.PC++);
+            var two = _MemMan.getMemFromLoc(_currMemSpot, this.PC++);
 
-            return biOShock.Utils.hexToDec(two + one);
-        };
+            var hex = (two + one);
 
-        // LDA
-        // Load constant into the accumulator
-        Cpu.prototype.constToAcc = function () {
-            this.Acc = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC + 1));
-        };
+            var decimal = biOShock.Utils.hexToDec(hex);
 
-        // LDA
-        // Load accumulator from the memory
-        Cpu.prototype.loadAccFromMem = function () {
-            var loc = this.nextTwoBytes();
-            this.Acc = _MemMan.getMemFromLoc(_currMemSpot, loc);
-            this.PC += 2;
-        };
-
-        // STA
-        // Store accumulator into the memory
-        Cpu.prototype.storeAccToMem = function () {
-            var loc = this.nextTwoBytes();
-            _MemMan.updateMemory(_currMemSpot, loc, this.Acc);
-            this.PC += 2;
-        };
-
-        // ADC
-        // Add memory location to accumulator then store into accumulator
-        Cpu.prototype.addStoreIntoAcc = function () {
-            var loc = this.nextTwoBytes();
-            this.Acc += _MemMan.getMemFromLoc(_currMemSpot, loc);
-            this.PC += 2;
-        };
-
-        // LDX
-        // Load constant into xreg
-        Cpu.prototype.constToX = function () {
-            this.Xreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
-        };
-
-        // LDX
-        // Load xreg from memory
-        Cpu.prototype.loadXMem = function () {
-            this.Xreg = this.dataNextTwoBytes();
-        };
-
-        // LDY
-        // Load constant into y-reg
-        Cpu.prototype.loadConstToY = function () {
-            this.Yreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
-        };
-
-        // LDY
-        // Load yreg from memory
-        Cpu.prototype.loadYMem = function () {
-            this.Yreg = this.nextTwoBytes();
-        };
-
-        // NOP
-        Cpu.prototype.noOperation = function () {
-            // There ain't be nothin round here
+            return decimal;
         };
 
         Cpu.prototype.dataNextTwoBytes = function () {
             return _MemMan.getMemFromLoc(_currMemSpot, this.nextTwoBytes());
         };
 
-        // CPX
-        // Compare xreg to contents of memory
+        /*
+        LDA
+        Load constant into the accumulator
+        A9
+        */
+        Cpu.prototype.constToAcc = function () {
+            this.Acc = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC + 1));
+        };
+
+        /*
+        LDA
+        Load accumulator from the memory
+        AD
+        */
+        Cpu.prototype.loadAccFromMem = function () {
+            var loc = this.nextTwoBytes();
+            this.Acc = _MemMan.getMemFromLoc(_currMemSpot, loc);
+            this.PC += 2;
+        };
+
+        /*
+        STA
+        Store accumulator into the memory
+        8D
+        */
+        Cpu.prototype.storeAccToMem = function () {
+            var loc = this.nextTwoBytes();
+            _MemMan.updateMemory(_currMemSpot, loc, this.Acc.toString(16));
+        };
+
+        /*
+        ADC
+        Add memory location to accumulator then store into accumulator
+        6D
+        */
+        Cpu.prototype.addStoreIntoAcc = function () {
+            var loc = this.nextTwoBytes();
+            this.Acc += _MemMan.getMemFromLoc(_currMemSpot, loc);
+            this.PC += 2;
+        };
+
+        /*
+        LDX
+        Load constant into xreg
+        A2
+        */
+        Cpu.prototype.constToX = function () {
+            this.Xreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+        };
+
+        /*
+        LDX
+        Load xreg from memory
+        AE
+        */
+        Cpu.prototype.loadXMem = function () {
+            this.Xreg = this.dataNextTwoBytes();
+        };
+
+        /*
+        LDY
+        Load constant into y-reg
+        A0
+        */
+        Cpu.prototype.loadConstToY = function () {
+            this.Yreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+        };
+
+        /*
+        LDY
+        Load yreg from memory
+        AC
+        */
+        Cpu.prototype.loadYMem = function () {
+            this.Yreg = this.nextTwoBytes();
+        };
+
+        /*
+        NOP
+        No operation
+        EA
+        */
+        Cpu.prototype.noOperation = function () {
+            // There ain't be nothin round here
+        };
+
+        /*
+        CPX
+        Compare xreg to contents of memory
+        EC
+        */
         Cpu.prototype.compareToX = function () {
             var loc = this.dataNextTwoBytes();
             if (parseInt(this.Xreg) === parseInt(loc)) {
@@ -205,7 +239,10 @@ var biOShock;
             }
         };
 
-        // BNE
+        /*
+        BNE
+        D0
+        */
         Cpu.prototype.branchNotEqual = function () {
             if (this.Zflag == 0) {
                 this.PC += biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
@@ -217,8 +254,11 @@ var biOShock;
             }
         };
 
-        // INC
-        // Increment the next value by one
+        /*
+        INC
+        Increment the next value by one
+        EE
+        */
         Cpu.prototype.incr = function () {
             var loc = this.nextTwoBytes();
             var val = 1 + _MemMan.getMemFromLoc(_currMemSpot, loc);
@@ -226,8 +266,11 @@ var biOShock;
             this.PC += 2;
         };
 
-        // SYS
-        // System call:
+        /*
+        SYS
+        System call:
+        FF
+        */
         Cpu.prototype.sysCall = function () {
             var params = new Array(this.Xreg, this.Yreg);
             _KernelInterruptQueue.enqueue(new biOShock.Interrupt(SYSopcodeIRQ, params));
@@ -245,8 +288,11 @@ var biOShock;
             _currMemSpot = -1;
         };
 
-        // BRK
-        // Break
+        /*
+        BRK
+        Break
+        00
+        */
         Cpu.prototype.breakCall = function () {
             this.isExecuting = false;
             this.progDone();

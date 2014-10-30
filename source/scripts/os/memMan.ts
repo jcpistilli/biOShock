@@ -59,7 +59,7 @@ module biOShock
                 this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
             }
 
-            // Set this location as active
+            // Set this.loc to active
             this.loc[location].active = true;
         }
 
