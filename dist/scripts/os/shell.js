@@ -348,15 +348,14 @@ var biOShock;
                     _StdOut.advanceLine();
                     _StdOut.putText("of characters.");
                     return;
-                } else {
-                    debugger;
-                    _StdOut.putText("Loading program.");
-                    _StdOut.advanceLine();
-                    var thisPID = _MemMan.loadProg(removeSpace);
-                    if (thisPID !== null) {
-                        _StdOut.putText("PID: " + thisPID);
-                    }
                 }
+            }
+
+            _StdOut.putText("Loading program.");
+            _StdOut.advanceLine();
+            var thisPID = _MemMan.loadProg(removeSpace);
+            if (thisPID !== null) {
+                _StdOut.putText("PID: " + thisPID);
             }
             //            _MemMan.displayMem();     //for displaying the memory
         };

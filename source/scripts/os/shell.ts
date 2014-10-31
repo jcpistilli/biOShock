@@ -371,33 +371,34 @@ module biOShock {
 
             var even = removeSpace.length % 2 == 0;
 
-            if (removeSpace.length == 0) {
+            if (removeSpace.length == 0)
+            {
                 _StdOut.putText("There is no input.");
             }
 
             for (var i = 0; i < removeSpace.length; i++)
             {
-                if (!(removeSpace[i].match(/^[0-9A-F\s]/i)&& even))
+                if (!(removeSpace[i].match(/^[0-9A-F\s]/i) && even))
                 {
                     _StdOut.putText("Please enter valid hex codes and an even amount");
                     _StdOut.advanceLine();
                     _StdOut.putText("of characters.");
                     return;
                 }
-                else
-                {
-                    debugger;
-                    _StdOut.putText("Loading program.");
-                    _StdOut.advanceLine();
-                    var thisPID = _MemMan.loadProg(removeSpace);
-                    if (thisPID !== null)
-                    {
-                        _StdOut.putText("PID: " + thisPID);
-                    }
-                }
             }
+
+            _StdOut.putText("Loading program.");
+            _StdOut.advanceLine();
+            var thisPID = _MemMan.loadProg(removeSpace);
+            if (thisPID !== null)
+            {
+                _StdOut.putText("PID: " + thisPID);
+            }
+
 //            _MemMan.displayMem();     //for displaying the memory
+
         }
+
 
 
         //Run
