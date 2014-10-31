@@ -44,10 +44,11 @@ module biOShock {
             this.resetCPU();
         }
 
+//        For the screen
         public updateCPU(): void
         {
             biOShock.Control.CPUid("tdPC", this.PC);
-            biOShock.Control.CPUid("tdAccum", this.Acc);
+            biOShock.Control.CPUid("tdAcc", this.Acc);
             biOShock.Control.CPUid("tdXReg", this.Xreg);
             biOShock.Control.CPUid("tdYReg", this.Yreg);
             biOShock.Control.CPUid("tdZFlag", this.Zflag);
@@ -61,7 +62,7 @@ module biOShock {
 
             _cycleCounter++;
 
-            var cmd = _MemMan.getMemFromLoc(_currMemSpot, this.PC);
+            var cmd = _MemMan.getMemFromLoc(this.PC);
 
             //similar to the way we did keyboard symbols
             switch (cmd)
@@ -136,8 +137,8 @@ module biOShock {
         //returns the location of the next time bytes
         private nextTwoBytes(): number
         {
-            var one = _MemMan.getMemFromLoc(_currMemSpot, this.PC++);
-            var two = _MemMan.getMemFromLoc(_currMemSpot, this.PC++);
+            var one = _MemMan.getMemFromLoc(this.PC++);
+            var two = _MemMan.getMemFromLoc(this.PC++);
 
             var hex = (two + one);
 
@@ -148,7 +149,7 @@ module biOShock {
 
         public dataNextTwoBytes(): any
         {
-            return _MemMan.getMemFromLoc(_currMemSpot, this.nextTwoBytes());
+            return _MemMan.getMemFromLoc(this.nextTwoBytes());
         }
 
         /*
@@ -158,7 +159,7 @@ module biOShock {
         */
         private constToAcc(): void
         {
-            this.Acc = Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC + 1));
+            this.Acc = Utils.hexToDec(_MemMan.getMemFromLoc(this.PC++));
         }
 
         /*
@@ -168,9 +169,7 @@ module biOShock {
         */
         private loadAccFromMem(): void
         {
-            var loc = this.nextTwoBytes();
-            this.Acc = _MemMan.getMemFromLoc(_currMemSpot, loc);
-            this.PC += 2;
+            this.Acc = this.dataNextTwoBytes();
         }
 
         /*
@@ -180,8 +179,7 @@ module biOShock {
         */
         private storeAccToMem(): void
         {
-            var loc = this.nextTwoBytes();
-            _MemMan.updateMemory(_currMemSpot, loc, this.Acc.toString(16));
+            _MemMan.updateMemoryAt(this.Acc.toString(16), this.nextTwoBytes());
         }
 
         /*
@@ -191,9 +189,7 @@ module biOShock {
         */
         private addStoreIntoAcc(): void
         {
-            var loc = this.nextTwoBytes();
-            this.Acc += _MemMan.getMemFromLoc(_currMemSpot, loc);
-            this.PC += 2;
+            this.Acc += Utils.hexToDec(this.dataNextTwoBytes());
         }
 
         /*
@@ -203,7 +199,7 @@ module biOShock {
         */
         private constToX(): void
         {
-            this.Xreg = Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+            this.Xreg = Utils.hexToDec(_MemMan.getMemFromLoc(++this.PC));
         }
 
         /*
@@ -223,7 +219,7 @@ module biOShock {
         */
         private loadConstToY(): void
         {
-            this.Yreg = Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+            this.Yreg = Utils.hexToDec(_MemMan.getMemFromLoc(++this.PC))
         }
 
         /*
@@ -233,7 +229,7 @@ module biOShock {
         */
         private loadYMem(): void
         {
-            this.Yreg = this.nextTwoBytes();
+            this.Yreg = this.dataNextTwoBytes();
         }
 
         /*
@@ -254,7 +250,7 @@ module biOShock {
         private compareToX(): void
         {
             var loc = this.dataNextTwoBytes();
-            if (parseInt(this.Xreg) === parseInt(loc))
+            if (parseInt(String(this.Xreg)) === parseInt(loc)) //String() stops it from being mad
             {
                 this.Zflag = 1;
             }
@@ -272,7 +268,7 @@ module biOShock {
         {
             if (this.Zflag == 0)
             {
-                this.PC += Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+                this.PC += Utils.hexToDec(_MemMan.getMemFromLoc(this.PC++)) + 1;
                 if (this.PC >= _progSize)
                 {
                     this.PC -= _progSize
@@ -292,9 +288,12 @@ module biOShock {
         private incr(): void
         {
             var loc = this.nextTwoBytes();
-            var val = 1 + _MemMan.getMemFromLoc(_currMemSpot, loc);
-            _MemMan.updateMemory(_currMemSpot, loc, val);
-            this.PC += 2;
+            var data = _MemMan.getMemFromLoc(loc);
+
+            data = parseInt(data, 16);
+            data++;
+
+            _MemMan.updateMemoryAt(data.toString(16), loc);
         }
 
         /*
@@ -305,30 +304,25 @@ module biOShock {
         private sysCall(): void
         {
             var params = new Array(this.Xreg, this.Yreg);
-            _KernelInterruptQueue.enqueue(new Interrupt(SYSopcodeIRQ, params));
+            _KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ, params));
 
         }
-
-        //to finish a program
-        public progDone(): void {
-            _currPCB.pcb.pc = this.PC;
-            _currPCB.pcb.acc = this.Acc;
-            _currPCB.pcb.Xreg = this.Xreg;
-            _currPCB.pcb.Yreg = this.Yreg;
-            _currPCB.pcb.Zflag = this.Zflag;
-            _currPCB.printPCB();
-            _runningPID = -1;
-            _currMemSpot = -1;
-        }
-
         /*
             BRK
             Break
             00
         */
-        private breakCall(): void {
-            this.isExecuting = false;
-            this.progDone();
+        private breakCall(): void
+        {
+            _currProgram.pcb.pc = this.PC;
+            _currProgram.pcb.acc = this.Acc;
+            _currProgram.pcb.xReg = this.Xreg;
+            _currProgram.pcb.yReg = this.Yreg;
+            _currProgram.pcb.zFlag = this.Zflag;
+            _KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ, params));
         }
+        /*
+            Print CPU to the screen
+        */
     }
 }

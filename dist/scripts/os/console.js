@@ -115,7 +115,7 @@ var biOShock;
                             this.buffer = check;
                         }
                         this.eraseLine();
-                        _DrawingContext.fillStyle = "#DFDBC3"; //this lets me delete cleanly down at the bottom
+                        this.correctColor();
                         this.putText(this.buffer);
                     }
                 } else {
@@ -168,7 +168,7 @@ var biOShock;
             //remove from buffer
             //set offset from width of the last char.. look at offset up there ^
             //put current x pos in front of the last char... - the offset
-            _DrawingContext.fillStyle = "#DFDBC3"; //this lets me delete cleanly down at the bottom
+            this.correctColor();
             var lastChar = this.buffer.charAt(this.buffer.length - 1);
             this.buffer = this.buffer.slice(0, -1);
             var offsetX = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastChar);
@@ -186,6 +186,35 @@ var biOShock;
             _DrawingContext.fillRect(0, this.currentYPosition - this.currentFontSize, _Canvas.width, this.currentFontSize + 7);
             this.currentXPosition = 0;
             _OsShell.putPrompt();
+        };
+
+        Console.prototype.correctColor = function () {
+            _DrawingContext.fillStyle = "#DFDBC3";
+        };
+
+        //        Handle the sysOpCodes
+        //        Software interrupt for FF during CPU exec
+        Console.prototype.handleSysOp = function () {
+            if (_CPU.Xreg === 1) {
+                //convert to string and print
+                var intParsed = parseInt(String(_CPU.Yreg)).toString();
+                this.putText(intParsed);
+                this.advanceLine();
+                _OsShell.putPrompt();
+            } else if (_CPU.Xreg === 2) {
+                var output = "";
+                var currPointer = _CPU.Yreg;
+                var currData = _MemMan.getMemFromLoc(currPointer);
+
+                while (currData !== "00") {
+                    output += String.fromCharCode(biOShock.Utils.hexToDec(currData));
+                    currData = _MemMan.getMemFromLoc(++currPointer);
+                }
+
+                this.putText(output);
+                this.advanceLine();
+                _OsShell.putPrompt();
+            }
         };
         return Console;
     })();

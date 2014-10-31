@@ -21,7 +21,11 @@ var TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interr
                             // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ: number = 1;
 
-var SYSopcodeIRQ: number = 2;
+var SYS_OPCODE_IRQ: number = 2;
+
+var MEM_ACCESS_VIOLATION: number = 3;
+
+var CPU_BREAK_IRQ: number = 4;
 
 
 //
@@ -62,9 +66,10 @@ var _memSize: number = _progSize * _progNum;
 var _cycleCounter: number = 0;
 var _Memory = null;
 var _currMemSpot: number = -1;
-var _ResidentQueue = null;
+var _ResidentList = null;
 var _currPCB = null;
 var _runningPID: number = -1;
+var _currProgram = null;
 
 
 // UI

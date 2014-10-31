@@ -52,7 +52,7 @@ module biOShock
         {
             var splitProgram = program.split(' '),
                 offsetLocation = location * _progSize;
-            this.clearProgSect(location);
+//            this.clearProgSect(location);
 
             for (var i = 0; i < splitProgram.length; i++)
             {
@@ -63,38 +63,66 @@ module biOShock
             this.loc[location].active = true;
         }
 
-        public loadProg (prog, pri): any
+        public loadProg (prog)
         {
-            var progLoc = this.openProgLoc;
+            var progLoc = this.openProgLoc();
             if (progLoc !== null)
             {
                 var thisPCB = new pcb();
-                thisPCB.base = ((progLoc + 1) * _progSize) - _progSize;
-                thisPCB.limit= ((progLoc + 1) * _progSize) - 1;
+                thisPCB.base  = ((progLoc + 1) * _progSize) - _progSize;
+                thisPCB.limit = ((progLoc + 1) * _progSize) - 1;
 
-                this.loadProgIntoMemory(prog, progLoc)
+                thisPCB.loc = progLoc;
+
+                this.loadProgIntoMemory(prog, progLoc);
+
+                _ResidentList[thisPCB.pid] =
+                {
+                    pcb: thisPCB,
+                    state: "NEW"
+                }
+
             }
             return thisPCB.pid
         }
 
-        public getMemFromLoc (blockNum, loc): any
+        public getMemFromLoc (address): any
         {
-            var mem = _Memory.memBlock(blockNum)[loc];
-
-            return mem;
+            address += _currProgram.pcb.base;
+            if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base) {
+                _KernelInterruptQueue.enqueue(new Interrupt(MEM_ACCESS_VIOLATION, address));
+            }
+            return this.memory.data[address];
         }
 
-        public updateMemory(blockNum, loc, updateCode): void
+        public removeFromList (): any
         {
-            var newCodeHex = Utils.decToHex(updateCode);
+            this.loc[_currProgram.pcb.location].active = false;
+            this.clearProgSect(_currProgram.pcb.location);
+        }
 
-            var blockNow = _Memory.memBlock(blockNum);
+        public updateMemoryAt(data, address): void
+        {
+            address += _currProgram.pcb.base;
+            if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base)
+            {
+                _KernelInterruptQueue.enqueue(new Interrupt(MEM_ACCESS_VIOLATION, address));
+            }
+            if (data.length <= 1) {
+                data = ("00" + data).slice(-2);
+            }
 
-            if (newCodeHex.length < 2)
-                newCodeHex = "0" + newCodeHex;
-            blockNow[loc] = newCodeHex;
-            Control.updateTable(Math.floor(loc / 8), loc % 8, newCodeHex);
+            this.memory.data[address] = data.toUpperCase();
+//            this.updateScreen(address);       Use this for printing to the screen
         }
 
     }
+
+        //Going to have to display memory at some point
+
+/*        public displayMem(): void
+        {
+
+        }
+*/
 }

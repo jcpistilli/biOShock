@@ -40,9 +40,10 @@ var biOShock;
             this.resetCPU();
         };
 
+        //        For the screen
         Cpu.prototype.updateCPU = function () {
             biOShock.Control.CPUid("tdPC", this.PC);
-            biOShock.Control.CPUid("tdAccum", this.Acc);
+            biOShock.Control.CPUid("tdAcc", this.Acc);
             biOShock.Control.CPUid("tdXReg", this.Xreg);
             biOShock.Control.CPUid("tdYReg", this.Yreg);
             biOShock.Control.CPUid("tdZFlag", this.Zflag);
@@ -55,7 +56,7 @@ var biOShock;
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             _cycleCounter++;
 
-            var cmd = _MemMan.getMemFromLoc(_currMemSpot, this.PC);
+            var cmd = _MemMan.getMemFromLoc(this.PC);
 
             switch (cmd) {
                 case "A9":
@@ -125,8 +126,8 @@ var biOShock;
 
         //returns the location of the next time bytes
         Cpu.prototype.nextTwoBytes = function () {
-            var one = _MemMan.getMemFromLoc(_currMemSpot, this.PC++);
-            var two = _MemMan.getMemFromLoc(_currMemSpot, this.PC++);
+            var one = _MemMan.getMemFromLoc(this.PC++);
+            var two = _MemMan.getMemFromLoc(this.PC++);
 
             var hex = (two + one);
 
@@ -136,7 +137,7 @@ var biOShock;
         };
 
         Cpu.prototype.dataNextTwoBytes = function () {
-            return _MemMan.getMemFromLoc(_currMemSpot, this.nextTwoBytes());
+            return _MemMan.getMemFromLoc(this.nextTwoBytes());
         };
 
         /*
@@ -145,7 +146,7 @@ var biOShock;
         A9
         */
         Cpu.prototype.constToAcc = function () {
-            this.Acc = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC + 1));
+            this.Acc = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(this.PC++));
         };
 
         /*
@@ -154,9 +155,7 @@ var biOShock;
         AD
         */
         Cpu.prototype.loadAccFromMem = function () {
-            var loc = this.nextTwoBytes();
-            this.Acc = _MemMan.getMemFromLoc(_currMemSpot, loc);
-            this.PC += 2;
+            this.Acc = this.dataNextTwoBytes();
         };
 
         /*
@@ -165,8 +164,7 @@ var biOShock;
         8D
         */
         Cpu.prototype.storeAccToMem = function () {
-            var loc = this.nextTwoBytes();
-            _MemMan.updateMemory(_currMemSpot, loc, this.Acc.toString(16));
+            _MemMan.updateMemoryAt(this.Acc.toString(16), this.nextTwoBytes());
         };
 
         /*
@@ -175,9 +173,7 @@ var biOShock;
         6D
         */
         Cpu.prototype.addStoreIntoAcc = function () {
-            var loc = this.nextTwoBytes();
-            this.Acc += _MemMan.getMemFromLoc(_currMemSpot, loc);
-            this.PC += 2;
+            this.Acc += biOShock.Utils.hexToDec(this.dataNextTwoBytes());
         };
 
         /*
@@ -186,7 +182,7 @@ var biOShock;
         A2
         */
         Cpu.prototype.constToX = function () {
-            this.Xreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+            this.Xreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(++this.PC));
         };
 
         /*
@@ -204,7 +200,7 @@ var biOShock;
         A0
         */
         Cpu.prototype.loadConstToY = function () {
-            this.Yreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+            this.Yreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(++this.PC));
         };
 
         /*
@@ -213,7 +209,7 @@ var biOShock;
         AC
         */
         Cpu.prototype.loadYMem = function () {
-            this.Yreg = this.nextTwoBytes();
+            this.Yreg = this.dataNextTwoBytes();
         };
 
         /*
@@ -232,7 +228,7 @@ var biOShock;
         */
         Cpu.prototype.compareToX = function () {
             var loc = this.dataNextTwoBytes();
-            if (parseInt(this.Xreg) === parseInt(loc)) {
+            if (parseInt(String(this.Xreg)) === parseInt(loc)) {
                 this.Zflag = 1;
             } else {
                 this.Zflag = 0;
@@ -245,7 +241,7 @@ var biOShock;
         */
         Cpu.prototype.branchNotEqual = function () {
             if (this.Zflag == 0) {
-                this.PC += biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(_currMemSpot, this.PC += 1));
+                this.PC += biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(this.PC++)) + 1;
                 if (this.PC >= _progSize) {
                     this.PC -= _progSize;
                 }
@@ -261,9 +257,12 @@ var biOShock;
         */
         Cpu.prototype.incr = function () {
             var loc = this.nextTwoBytes();
-            var val = 1 + _MemMan.getMemFromLoc(_currMemSpot, loc);
-            _MemMan.updateMemory(_currMemSpot, loc, val);
-            this.PC += 2;
+            var data = _MemMan.getMemFromLoc(loc);
+
+            data = parseInt(data, 16);
+            data++;
+
+            _MemMan.updateMemoryAt(data.toString(16), loc);
         };
 
         /*
@@ -273,19 +272,7 @@ var biOShock;
         */
         Cpu.prototype.sysCall = function () {
             var params = new Array(this.Xreg, this.Yreg);
-            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(SYSopcodeIRQ, params));
-        };
-
-        //to finish a program
-        Cpu.prototype.progDone = function () {
-            _currPCB.pcb.pc = this.PC;
-            _currPCB.pcb.acc = this.Acc;
-            _currPCB.pcb.Xreg = this.Xreg;
-            _currPCB.pcb.Yreg = this.Yreg;
-            _currPCB.pcb.Zflag = this.Zflag;
-            _currPCB.printPCB();
-            _runningPID = -1;
-            _currMemSpot = -1;
+            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(SYS_OPCODE_IRQ, params));
         };
 
         /*
@@ -294,8 +281,12 @@ var biOShock;
         00
         */
         Cpu.prototype.breakCall = function () {
-            this.isExecuting = false;
-            this.progDone();
+            _currProgram.pcb.pc = this.PC;
+            _currProgram.pcb.acc = this.Acc;
+            _currProgram.pcb.xReg = this.Xreg;
+            _currProgram.pcb.yReg = this.Yreg;
+            _currProgram.pcb.zFlag = this.Zflag;
+            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(SYS_OPCODE_IRQ, params));
         };
         return Cpu;
     })();

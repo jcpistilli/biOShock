@@ -374,12 +374,12 @@ module biOShock {
             for (var i = 0; i < removeSpace.length; i++) {
                 if ((regEx.test(removeSpace[i])) && even)
                 {
-                    Control.resetMemory();
-                    _CPU.resetCPU();
+//                    Control.resetMemory();
+//                    _CPU.resetCPU();
                     _StdOut.putText("Loading program.");
                     _StdOut.advanceLine();
 
-                    var thisPID  = _MemMan.loadProg(0, removeSpace);
+                    var thisPID  = _MemMan.loadProg(removeSpace);
                     if (thisPID !== null)
                     {
                         _StdOut.putText("PID: " + thisPID);
@@ -400,6 +400,7 @@ module biOShock {
                 _StdOut.advanceLine();//just until I complete word wrapping
                 _StdOut.putText("Whitespaces will not affect your input.");
             }
+//            _MemMan.displayMem();     //for displaying the memory
         }
 
         //Run

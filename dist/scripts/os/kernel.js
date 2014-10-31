@@ -112,10 +112,25 @@ var biOShock;
                 case TIMER_IRQ:
                     this.krnTimerISR(); // Kernel built-in routine for timers (not the clock).
                     break;
+
                 case KEYBOARD_IRQ:
                     _krnKeyboardDriver.isr(params); // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
+
+                case SYS_OPCODE_IRQ:
+                    _StdIn.handleSysOp();
+                    break;
+
+                case MEM_ACCESS_VIOLATION:
+                    _currProgram.pcb.state = "Terminated.";
+                    _MemMan.removeFromList();
+                    this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");
+                    this.krnTrace("PID " + _currProgram.pcb.pid + " attempted to access memory location." + params[0]);
+
+                    _CPU.init();
+                    break;
+
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }

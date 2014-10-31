@@ -39,7 +39,6 @@ var biOShock;
 
         memoryManager.prototype.loadProgIntoMemory = function (program, location) {
             var splitProgram = program.split(' '), offsetLocation = location * _progSize;
-            this.clearProgSect(location);
 
             for (var i = 0; i < splitProgram.length; i++) {
                 this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
@@ -49,33 +48,49 @@ var biOShock;
             this.loc[location].active = true;
         };
 
-        memoryManager.prototype.loadProg = function (prog, pri) {
-            var progLoc = this.openProgLoc;
+        memoryManager.prototype.loadProg = function (prog) {
+            var progLoc = this.openProgLoc();
             if (progLoc !== null) {
                 var thisPCB = new biOShock.pcb();
                 thisPCB.base = ((progLoc + 1) * _progSize) - _progSize;
                 thisPCB.limit = ((progLoc + 1) * _progSize) - 1;
 
+                thisPCB.loc = progLoc;
+
                 this.loadProgIntoMemory(prog, progLoc);
+
+                _ResidentList[thisPCB.pid] = {
+                    pcb: thisPCB,
+                    state: "NEW"
+                };
             }
             return thisPCB.pid;
         };
 
-        memoryManager.prototype.getMemFromLoc = function (blockNum, loc) {
-            var mem = _Memory.memBlock(blockNum)[loc];
-
-            return mem;
+        memoryManager.prototype.getMemFromLoc = function (address) {
+            address += _currProgram.pcb.base;
+            if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base) {
+                _KernelInterruptQueue.enqueue(new biOShock.Interrupt(MEM_ACCESS_VIOLATION, address));
+            }
+            return this.memory.data[address];
         };
 
-        memoryManager.prototype.updateMemory = function (blockNum, loc, updateCode) {
-            var newCodeHex = biOShock.Utils.decToHex(updateCode);
+        memoryManager.prototype.removeFromList = function () {
+            this.loc[_currProgram.pcb.location].active = false;
+            this.clearProgSect(_currProgram.pcb.location);
+        };
 
-            var blockNow = _Memory.memBlock(blockNum);
+        memoryManager.prototype.updateMemoryAt = function (data, address) {
+            address += _currProgram.pcb.base;
+            if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base) {
+                _KernelInterruptQueue.enqueue(new biOShock.Interrupt(MEM_ACCESS_VIOLATION, address));
+            }
+            if (data.length <= 1) {
+                data = ("00" + data).slice(-2);
+            }
 
-            if (newCodeHex.length < 2)
-                newCodeHex = "0" + newCodeHex;
-            blockNow[loc] = newCodeHex;
-            biOShock.Control.updateTable(Math.floor(loc / 8), loc % 8, newCodeHex);
+            this.memory.data[address] = data.toUpperCase();
+            //            this.updateScreen(address);       Use this for printing to the screen
         };
         return memoryManager;
     })();

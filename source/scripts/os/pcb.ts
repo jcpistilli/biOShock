@@ -16,6 +16,8 @@ module biOShock {
         zFlag: number;
         base: number;
         limit: number;
+        loc: number;
+        state: number;
 
 
         constructor()
@@ -32,10 +34,13 @@ module biOShock {
             this.base  = 0;
             this.limit = 0;
 
+            this.loc   = 0;
+            this.state = 0;
+
         }
 
         //to print what is put on the PCB
-        public printPCB(): void
+        /*public printPCB(): void
         {
             _StdOut.putText("PCB");
             _StdOut.advanceLine();
@@ -52,7 +57,7 @@ module biOShock {
             _StdOut.putText("Z-Flag = " + this.zFlag);
             _StdOut.advanceLine();
             _OsShell.putPrompt();
-        }
+        }*/
 
     }
 }
