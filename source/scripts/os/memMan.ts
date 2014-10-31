@@ -9,14 +9,16 @@ module biOShock
     export class memoryManager
     {
         //creating memory
-        public memory = new Memory(_memSize);
-        public loc = new Array(_progNum);
+
+        public memory: any = new Memory(_progSize);
+        public loc: any = new Array(_progNum);
 
 
         constructor () {
             for (var i = 0; i < this.loc.length; i++)
             {
-                this.loc[i] = {
+                this.loc[i] =
+                {
                     active: false,
                     base: i * _progSize,
                     limit: (i + 1) * _progSize
@@ -26,10 +28,25 @@ module biOShock
 
             //print memory array out to the screen??
 
+        public eraseSegment(location): void
+        {
+            for (var x = this.loc[location].base; x < this.loc[location].limit; x++)
+            {
+
+                this.memory.data[x] = "00";
+            }
+        }
+
         public openProgLoc(): any
         {
-            for (var i = 0; i < this.loc.length; i++) {
-                if (this.loc[i].active == false) {
+            for (var i = 0; i < this.loc.length; i++)
+            {
+                if (this.loc[i].active == false)
+                {
+
+                    debugger;
+
+                    this.eraseSegment(i);
                     return i;
                 }
             }
@@ -66,7 +83,12 @@ module biOShock
         public loadProg (prog)
         {
             var progLoc = this.openProgLoc();
-            if (progLoc !== null)
+            if (progLoc === null)
+            {
+                _StdOut.putText("Memory is full.");
+                return null;
+            }
+            else
             {
                 var thisPCB = new pcb();
                 thisPCB.base  = ((progLoc + 1) * _progSize) - _progSize;
@@ -81,7 +103,6 @@ module biOShock
                     pcb: thisPCB,
                     state: "NEW"
                 }
-
             }
             return thisPCB.pid
         }
@@ -89,7 +110,8 @@ module biOShock
         public getMemFromLoc (address): any
         {
             address += _currProgram.pcb.base;
-            if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base) {
+            if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base)
+            {
                 _KernelInterruptQueue.enqueue(new Interrupt(MEM_ACCESS_VIOLATION, address));
             }
             return this.memory.data[address];

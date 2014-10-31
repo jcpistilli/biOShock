@@ -7,7 +7,7 @@ var biOShock;
     var memoryManager = (function () {
         function memoryManager() {
             //creating memory
-            this.memory = new biOShock.Memory(_memSize);
+            this.memory = new biOShock.Memory(_progSize);
             this.loc = new Array(_progNum);
             for (var i = 0; i < this.loc.length; i++) {
                 this.loc[i] = {
@@ -18,9 +18,18 @@ var biOShock;
             }
         }
         //print memory array out to the screen??
+        memoryManager.prototype.eraseSegment = function (location) {
+            for (var x = this.loc[location].base; x < this.loc[location].limit; x++) {
+                this.memory.data[x] = "00";
+            }
+        };
+
         memoryManager.prototype.openProgLoc = function () {
             for (var i = 0; i < this.loc.length; i++) {
                 if (this.loc[i].active == false) {
+                    debugger;
+
+                    this.eraseSegment(i);
                     return i;
                 }
             }
@@ -50,7 +59,10 @@ var biOShock;
 
         memoryManager.prototype.loadProg = function (prog) {
             var progLoc = this.openProgLoc();
-            if (progLoc !== null) {
+            if (progLoc === null) {
+                _StdOut.putText("Memory is full.");
+                return null;
+            } else {
                 var thisPCB = new biOShock.pcb();
                 thisPCB.base = ((progLoc + 1) * _progSize) - _progSize;
                 thisPCB.limit = ((progLoc + 1) * _progSize) - 1;

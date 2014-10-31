@@ -59,6 +59,7 @@ var _MemMan = null;
 var _progSize = 256;
 var _progNum = 3;
 var _memSize = _progSize * _progNum;
+
 var _cycleCounter = 0;
 var _Memory = null;
 var _currMemSpot = -1;

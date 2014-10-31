@@ -386,9 +386,8 @@ module biOShock {
                 }
                 else
                 {
-                    _StdOut.putText("Loading program.");
-
                     debugger;
+                    _StdOut.putText("Loading program.");
                     _StdOut.advanceLine();
                     var thisPID = _MemMan.loadProg(removeSpace);
                     if (thisPID !== null)

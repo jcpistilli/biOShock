@@ -47,6 +47,8 @@ var biOShock;
             _OsShell = new biOShock.Shell();
             _OsShell.init();
 
+            _ResidentList = new Array();
+
             // Finally, initiate testing.
             if (_GLaDOS) {
                 _GLaDOS.afterStartup();

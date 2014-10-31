@@ -8,8 +8,8 @@ module biOShock
 {
     export class Memory
     {
-        public data = new Array();
-        public bytes = 0;
+        data: any = new Array();
+        bytes: number = 0;
 
         constructor(bytes)
         {
@@ -17,7 +17,7 @@ module biOShock
             this.init();
         }
 
-        public init():void
+        public init(): void
         {
             for (var i = 0; i < this.bytes; i++)
             {
