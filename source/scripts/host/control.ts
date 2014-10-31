@@ -99,8 +99,8 @@ module biOShock {
             //Init mem man
             _MemMan = new biOShock.memoryManager();
 
-            this.CPUtoHTML();
-            this.memTable(1);
+//            this.CPUtoHTML();
+//            this.memTable(1);
         }
 
         public static hostBtnHaltOS_click(btn): void {
@@ -174,7 +174,7 @@ module biOShock {
 
             return month + "/" + day + "/" + year + " " + hrs + ":" + min + ":" + sec;
         }
-
+        /*
         //HTML stuff
         //resets HTML elements of the CPU
         public static CPUtoHTML(): void
@@ -184,11 +184,6 @@ module biOShock {
             document.getElementById("tdXReg").innerHTML = "0";
             document.getElementById("tdYReg").innerHTML = "0";
             document.getElementById("tdZFlag").innerHTML = "0";
-        }
-
-        //actually sets the mem to 0
-        public static resetMemory(): void {
-            _Memory.clearMem();
         }
 
         //sets up a table for the memory
@@ -231,6 +226,7 @@ module biOShock {
                 }
             }
         }
+        */
 
         public static CPUid(id, value): void
         {

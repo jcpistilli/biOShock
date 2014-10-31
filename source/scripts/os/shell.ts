@@ -364,7 +364,7 @@ module biOShock {
         }
 
         public shellLoad() {
-            var regEx = new RegExp("^[A-Fa-f0-9\s]$");
+            var regEx = new RegExp("^[A-Fa-f0-9]$");
             var retrieveHex = Control.grabInput();
 
             var removeSpace = retrieveHex.join("").replace(/\s*/gi, "");
@@ -374,8 +374,8 @@ module biOShock {
             for (var i = 0; i < removeSpace.length; i++) {
                 if ((regEx.test(removeSpace[i])) && even)
                 {
-//                    Control.resetMemory();
-//                    _CPU.resetCPU();
+                    //Control.resetMemory();
+                    //_CPU.resetCPU();
                     _StdOut.putText("Loading program.");
                     _StdOut.advanceLine();
 
