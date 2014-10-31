@@ -363,49 +363,43 @@ module biOShock {
             }
         }
 
-        public shellLoad() {
-            var regEx = new RegExp("^[A-Fa-f0-9]$");
+        public shellLoad()
+        {
             var retrieveHex = Control.grabInput();
 
             var removeSpace = retrieveHex.join("").replace(/\s*/gi, "");
 
             var even = removeSpace.length % 2 == 0;
 
-            for (var i = 0; i < removeSpace.length; i++) {
-                if ((regEx.test(removeSpace[i])) && even)
-                {
-                    //_MemMan.resetMemory();
-                    //_CPU.resetCPU();
-                    //_currPCB = new pcb();
-                    //_currMemSpot = 0;
-                    _StdOut.putText("Loading program.");
-                    _StdOut.advanceLine();
+            if (removeSpace.length == 0) {
+                _StdOut.putText("There is no input.");
+            }
 
+            for (var i = 0; i < removeSpace.length; i++)
+            {
+                if (!(removeSpace[i].match(/^[0-9A-F\s]/i)&& even))
+                {
+                    _StdOut.putText("Please enter valid hex codes and an even amount");
+                    _StdOut.advanceLine();
+                    _StdOut.putText("of characters.");
+                    return;
+                }
+                else
+                {
+                    _StdOut.putText("Loading program.");
+
+                    debugger;
+                    _StdOut.advanceLine();
                     var thisPID = _MemMan.loadProg(removeSpace);
                     if (thisPID !== null)
                     {
                         _StdOut.putText("PID: " + thisPID);
                     }
                 }
-                else
-                {
-                   // _StdOut.putText("Please enter valid hex codes.");
-                    break;
-                }
-            }
-
-            if (removeSpace == 0) {
-                _StdOut.putText("There is no input.");
-            }
-
-            else if (!even){
-                _StdOut.advanceLine();
-                _StdOut.putText("Please input an even amount of characters.");
-                _StdOut.advanceLine();//just until I complete word wrapping
-                _StdOut.putText("Whitespaces will not affect your input.");
             }
 //            _MemMan.displayMem();     //for displaying the memory
         }
+
 
         //Run
         public shellRun(args)
