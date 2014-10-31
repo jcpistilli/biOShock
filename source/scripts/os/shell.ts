@@ -374,12 +374,14 @@ module biOShock {
             for (var i = 0; i < removeSpace.length; i++) {
                 if ((regEx.test(removeSpace[i])) && even)
                 {
-                    //Control.resetMemory();
+                    //_MemMan.resetMemory();
                     //_CPU.resetCPU();
+                    //_currPCB = new pcb();
+                    //_currMemSpot = 0;
                     _StdOut.putText("Loading program.");
                     _StdOut.advanceLine();
 
-                    var thisPID  = _MemMan.loadProg(removeSpace);
+                    var thisPID = _MemMan.loadProg(removeSpace);
                     if (thisPID !== null)
                     {
                         _StdOut.putText("PID: " + thisPID);
@@ -387,6 +389,7 @@ module biOShock {
                 }
                 else
                 {
+                   // _StdOut.putText("Please enter valid hex codes.");
                     break;
                 }
             }
@@ -396,6 +399,7 @@ module biOShock {
             }
 
             else if (!even){
+                _StdOut.advanceLine();
                 _StdOut.putText("Please input an even amount of characters.");
                 _StdOut.advanceLine();//just until I complete word wrapping
                 _StdOut.putText("Whitespaces will not affect your input.");
@@ -406,28 +410,28 @@ module biOShock {
         //Run
         public shellRun(args)
         {
-
-            //var runningPID: number = -1;
-            //don't know why this isn't working...
-            //guess i'll make it global
-
-            if (args.length > 0)
+            if (args.length <= 0)
             {
-                if (_Memory.isEmpty())
-                {
-                    _StdOut.putText("Memory is empty. Try the 'load' command and run again.");
-                }
+                _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
+                _StdIn.advanceLine();
 
-                else
-                {
-                    _CPU.isExecuting = true;
-                    _runningPID = parseInt(args[0]);
-                }
+            }
+            else if (!_ResidentList[args[0]])
+            {
+                _StdIn.putText("Please enter a valid PID.");
+                _StdIn.advanceLine();
 
             }
             else
             {
-                _StdOut.putText("Usage: run <PID>  Please supply a PID number.");
+                var requestedProgram = _ResidentList[args[0]];
+
+                if (requestedProgram.state !== "Terminated")
+                {
+                    _ReadyQueue.push(requestedProgram);
+                    requestedProgram.printToScreen();
+                    _KernelInterruptQueue.enqueue(new Interrupt(RUN_PROGRAM_IRQ));
+                }
             }
         }
     }

@@ -17,7 +17,7 @@ module biOShock
             this.init();
         }
 
-        private init():void
+        public init():void
         {
             for (var i = 0; i < this.bytes; i++)
             {

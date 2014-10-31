@@ -20,7 +20,7 @@ var biOShock;
         //print memory array out to the screen??
         memoryManager.prototype.openProgLoc = function () {
             for (var i = 0; i < this.loc.length; i++) {
-                if (this.loc[i].active === false) {
+                if (this.loc[i].active == false) {
                     return i;
                 }
             }
@@ -91,6 +91,10 @@ var biOShock;
 
             this.memory.data[address] = data.toUpperCase();
             //            this.updateScreen(address);       Use this for printing to the screen
+        };
+
+        memoryManager.prototype.resetMemory = function () {
+            _Memory.init();
         };
         return memoryManager;
     })();

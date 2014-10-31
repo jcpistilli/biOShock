@@ -29,7 +29,7 @@ module biOShock
         public openProgLoc(): any
         {
             for (var i = 0; i < this.loc.length; i++) {
-                if (this.loc[i].active === false) {
+                if (this.loc[i].active == false) {
                     return i;
                 }
             }
@@ -115,6 +115,12 @@ module biOShock
             this.memory.data[address] = data.toUpperCase();
 //            this.updateScreen(address);       Use this for printing to the screen
         }
+
+        public resetMemory ()
+        {
+            _Memory.init();
+        }
+
 
     }
 
