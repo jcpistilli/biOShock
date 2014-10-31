@@ -376,14 +376,6 @@ var biOShock;
             } else if (!_ResidentList[args[0]]) {
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
-            } else {
-                var requestedProgram = _ResidentList[args[0]];
-
-                if (requestedProgram.state !== "Terminated") {
-                    _ReadyQueue.push(requestedProgram);
-                    requestedProgram.printToScreen();
-                    _KernelInterruptQueue.enqueue(new biOShock.Interrupt(RUN_PROGRAM_IRQ));
-                }
             }
         };
         return Shell;

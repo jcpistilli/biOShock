@@ -422,17 +422,6 @@ module biOShock {
                 _StdIn.advanceLine();
 
             }
-            else
-            {
-                var requestedProgram = _ResidentList[args[0]];
-
-                if (requestedProgram.state !== "Terminated")
-                {
-                    _ReadyQueue.push(requestedProgram);
-                    requestedProgram.printToScreen();
-                    _KernelInterruptQueue.enqueue(new Interrupt(RUN_PROGRAM_IRQ));
-                }
-            }
         }
     }
 }
