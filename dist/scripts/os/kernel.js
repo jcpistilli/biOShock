@@ -48,6 +48,7 @@ var biOShock;
             _OsShell.init();
 
             _ResidentList = new Array();
+            _ReadyQueue = new Array();
 
             // Finally, initiate testing.
             if (_GLaDOS) {

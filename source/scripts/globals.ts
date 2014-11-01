@@ -68,6 +68,8 @@ var _cycleCounter: number = 0;
 var _Memory = null;
 var _currMemSpot: number = -1;
 var _ResidentList: any = null;
+var _ReadyQueue: any = null;
+
 var _currPCB = null;
 var _runningPID: number = -1;
 var _currProgram = null;

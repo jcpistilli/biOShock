@@ -51,6 +51,8 @@ module biOShock {
             _OsShell.init();
 
             _ResidentList = new Array();
+            _ReadyQueue = new Array();
+
 
             // Finally, initiate testing.
             if (_GLaDOS) {
@@ -135,6 +137,7 @@ module biOShock {
                 case SYS_OPCODE_IRQ:
                     _StdIn.handleSysOp();
                     break;
+
 
                 case MEM_ACCESS_VIOLATION:
                     _currProgram.pcb.state = "Terminated.";

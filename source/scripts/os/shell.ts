@@ -374,6 +374,7 @@ module biOShock {
             if (removeSpace.length == 0)
             {
                 _StdOut.putText("There is no input.");
+                return;
             }
 
             for (var i = 0; i < removeSpace.length; i++)
@@ -387,7 +388,7 @@ module biOShock {
                 }
             }
 
-            _StdOut.putText("Loading program.");
+            _StdOut.putText("Please be patient.");
             _StdOut.advanceLine();
             var thisPID = _MemMan.loadProg(removeSpace);
             if (thisPID !== null)
@@ -398,8 +399,6 @@ module biOShock {
 //            _MemMan.displayMem();     //for displaying the memory
 
         }
-
-
 
         //Run
         public shellRun(args)
@@ -414,7 +413,11 @@ module biOShock {
             {
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
-
+            }
+            else
+            {
+                _CPU.isExecuting = true;
+                _runningPID = parseInt(args[0]);
             }
         }
     }
