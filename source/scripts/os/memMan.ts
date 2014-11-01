@@ -43,9 +43,6 @@ module biOShock
             {
                 if (this.loc[i].active == false)
                 {
-
-                    debugger;
-
                     this.eraseSegment(i);
                     return i;
                 }

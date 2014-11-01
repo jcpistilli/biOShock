@@ -27,8 +27,6 @@ var biOShock;
         memoryManager.prototype.openProgLoc = function () {
             for (var i = 0; i < this.loc.length; i++) {
                 if (this.loc[i].active == false) {
-                    debugger;
-
                     this.eraseSegment(i);
                     return i;
                 }

@@ -142,7 +142,7 @@ module biOShock {
 
             var hex = (two + one);
 
-            var decimal = Utils.hexToDec(hex);
+            var decimal = parseInt(hex, 16); //hard coding it for look-ability
 
             return decimal;
         }
@@ -157,9 +157,10 @@ module biOShock {
             Load constant into the accumulator
             A9
         */
+
         private constToAcc(): void
         {
-            this.Acc = Utils.hexToDec(_MemMan.getMemFromLoc(this.PC++));
+            this.Acc = parseInt(_MemMan.getMemFromLoc(this.PC++), 16);
         }
 
         /*
@@ -189,7 +190,7 @@ module biOShock {
         */
         private addStoreIntoAcc(): void
         {
-            this.Acc += Utils.hexToDec(this.dataNextTwoBytes());
+            this.Acc += parseInt(this.dataNextTwoBytes(), 16);
         }
 
         /*
@@ -199,7 +200,7 @@ module biOShock {
         */
         private constToX(): void
         {
-            this.Xreg = Utils.hexToDec(_MemMan.getMemFromLoc(++this.PC));
+            this.Xreg = parseInt(_MemMan.getMemFromLoc(++this.PC), 16);
         }
 
         /*
@@ -219,7 +220,7 @@ module biOShock {
         */
         private loadConstToY(): void
         {
-            this.Yreg = Utils.hexToDec(_MemMan.getMemFromLoc(++this.PC))
+            this.Yreg = parseInt(_MemMan.getMemFromLoc(++this.PC), 16)
         }
 
         /*
@@ -268,7 +269,7 @@ module biOShock {
         {
             if (this.Zflag == 0)
             {
-                this.PC += Utils.hexToDec(_MemMan.getMemFromLoc(this.PC++)) + 1;
+                this.PC += parse(_MemMan.getMemFromLoc(this.PC++), 16) + 1;
                 if (this.PC >= _progSize)
                 {
                     this.PC -= _progSize
@@ -319,7 +320,7 @@ module biOShock {
             _currProgram.pcb.xReg = this.Xreg;
             _currProgram.pcb.yReg = this.Yreg;
             _currProgram.pcb.zFlag = this.Zflag;
-            _KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ, params));
+            //_KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ), params);
         }
         /*
             Print CPU to the screen

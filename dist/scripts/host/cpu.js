@@ -131,7 +131,7 @@ var biOShock;
 
             var hex = (two + one);
 
-            var decimal = biOShock.Utils.hexToDec(hex);
+            var decimal = parseInt(hex, 16);
 
             return decimal;
         };
@@ -146,7 +146,7 @@ var biOShock;
         A9
         */
         Cpu.prototype.constToAcc = function () {
-            this.Acc = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(this.PC++));
+            this.Acc = parseInt(_MemMan.getMemFromLoc(this.PC++), 16);
         };
 
         /*
@@ -173,7 +173,7 @@ var biOShock;
         6D
         */
         Cpu.prototype.addStoreIntoAcc = function () {
-            this.Acc += biOShock.Utils.hexToDec(this.dataNextTwoBytes());
+            this.Acc += parseInt(this.dataNextTwoBytes(), 16);
         };
 
         /*
@@ -182,7 +182,7 @@ var biOShock;
         A2
         */
         Cpu.prototype.constToX = function () {
-            this.Xreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(++this.PC));
+            this.Xreg = parseInt(_MemMan.getMemFromLoc(++this.PC), 16);
         };
 
         /*
@@ -200,7 +200,7 @@ var biOShock;
         A0
         */
         Cpu.prototype.loadConstToY = function () {
-            this.Yreg = biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(++this.PC));
+            this.Yreg = parseInt(_MemMan.getMemFromLoc(++this.PC), 16);
         };
 
         /*
@@ -241,7 +241,7 @@ var biOShock;
         */
         Cpu.prototype.branchNotEqual = function () {
             if (this.Zflag == 0) {
-                this.PC += biOShock.Utils.hexToDec(_MemMan.getMemFromLoc(this.PC++)) + 1;
+                this.PC += parse(_MemMan.getMemFromLoc(this.PC++), 16) + 1;
                 if (this.PC >= _progSize) {
                     this.PC -= _progSize;
                 }
@@ -286,7 +286,7 @@ var biOShock;
             _currProgram.pcb.xReg = this.Xreg;
             _currProgram.pcb.yReg = this.Yreg;
             _currProgram.pcb.zFlag = this.Zflag;
-            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(SYS_OPCODE_IRQ, params));
+            //_KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ), params);
         };
         return Cpu;
     })();
