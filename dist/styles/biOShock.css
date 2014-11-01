@@ -36,6 +36,14 @@ h3 {
   cursor: default;
 }
 
+#memTable {
+    display:block;
+    max-height: 250px;
+    height: 250px;
+    width: 350px;
+    overflow: auto;
+}
+
 .normal_button {
   width: 100px;
 }
