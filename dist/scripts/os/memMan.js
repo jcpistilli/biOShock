@@ -78,6 +78,7 @@ var biOShock;
         };
 
         memoryManager.prototype.getMemFromLoc = function (address) {
+            debugger;
             address += _currProgram.pcb.base;
             if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base) {
                 _KernelInterruptQueue.enqueue(new biOShock.Interrupt(MEM_ACCESS_VIOLATION, address));

@@ -72,7 +72,7 @@ var _ReadyQueue: any = null;
 
 var _currPCB = null;
 var _runningPID: number = -1;
-var _currProgram = null;
+var _currProgram: any = null;
 
 
 // UI

@@ -104,8 +104,9 @@ module biOShock
             return thisPCB.pid
         }
 
-        public getMemFromLoc (address): any
+        public getMemFromLoc (address)
         {
+            debugger;
             address += _currProgram.pcb.base;
             if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base)
             {

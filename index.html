@@ -69,9 +69,12 @@
              onclick="biOShock.Control.hostBtnReset_click(this);">
    </div>
 
-    <div id="divStatusBar" style="margin: 4px; width: 500px; height: 15px; margin-top: 5px;">
+    <div id="divStatusBar" style="margin: 4px; width: 100%; height: 15px; margin-top: 5px;">
         <label>
-        Date and Time: <span id="spanDaT"></span>, Status: <span id="message"></span>
+            date and time: <span id="spanDaT"></span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+            status: <span id="message"></span>
         </label>
     </div>
 
@@ -85,11 +88,11 @@
 
    <div id="divLog" style="margin-left:520px;">
       <label>
-         Host Log
+         host log
          <br>
          <textarea name="taHostLog"
                    id  ="taHostLog"
-                   rows="10"
+                   rows="9"
                    cols="48"
          ></textarea>
       </label>
@@ -97,7 +100,7 @@
 
    <div id="divUserProgramInput" style="margin-left:520px;">
       <label>
-         User Program Input
+         user program input
          <br>
          <textarea name="taProgramInput"
                    id  ="taProgramInput"
@@ -109,19 +112,21 @@
 
    <div id="divMemory" style="margin-left: 520px;">
        <label>
-           Memory
+           memory
            <br>
-           <textarea name="taMemoryOut"
-                     id  ="taMemoryOut"
-                     rows="7"
-                     cols="48"
-           ></textarea>
+           <table id ="memTable">
+                <tr>
+                    <td>
+
+                    </td>
+                </tr>
+           </table>
        </label>
    </div>
 
     <div id="divCPU" style="margin-left: 520px;">
         <label>
-            CPU Info
+            cpu info
             <br>
             <textarea name="taCPU"
                       id  ="taCPU"

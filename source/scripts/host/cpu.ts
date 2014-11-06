@@ -269,7 +269,7 @@ module biOShock {
         {
             if (this.Zflag == 0)
             {
-                this.PC += parse(_MemMan.getMemFromLoc(this.PC++), 16) + 1;
+                this.PC += parseInt(_MemMan.getMemFromLoc(this.PC++), 16) + 1;
                 if (this.PC >= _progSize)
                 {
                     this.PC -= _progSize
