@@ -396,7 +396,7 @@ module biOShock {
                 _StdOut.putText("PID: " + thisPID);
             }
 
-//            _MemMan.displayMem();     //for displaying the memory
+//           _MemMan.memoryTable();     //for displaying the memory
 
         }
 

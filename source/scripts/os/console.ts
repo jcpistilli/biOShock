@@ -236,7 +236,7 @@ module biOShock {
 
         public correctColor()
         {
-            _DrawingContext.fillStyle = "#DFDBC3";
+            _DrawingContext.fillStyle = "#FFFFFF";
         }
 
 

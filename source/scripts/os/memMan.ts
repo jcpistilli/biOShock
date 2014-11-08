@@ -136,6 +136,7 @@ module biOShock
 //            this.updateScreen(address);       Use this for printing to the screen
         }
 
+
         public resetMemory ()
         {
             _Memory.init();

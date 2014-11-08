@@ -189,7 +189,7 @@ var biOShock;
         };
 
         Console.prototype.correctColor = function () {
-            _DrawingContext.fillStyle = "#DFDBC3";
+            _DrawingContext.fillStyle = "#FFFFFF";
         };
 
         //        Handle the sysOpCodes

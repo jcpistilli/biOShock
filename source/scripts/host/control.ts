@@ -35,7 +35,7 @@ module biOShock {
             _DrawingContext = _Canvas.getContext('2d');
 
             //changing the color so i can fillRect
-            _DrawingContext.fillStyle = "#DFDBC3"; //grabbed this from the .css file. Color of the canvas
+            _DrawingContext.fillStyle = "#FFFFFF"; //grabbed this from the .css file. Color of the canvas
 
             // Enable the added-in canvas text functions (see canvastext.ts for provenance and details).
             CanvasTextFunctions.enable(_DrawingContext);   // Text functionality is now built in to the HTML5 canvas. But this is old-school, and fun.
@@ -174,7 +174,7 @@ module biOShock {
 
             return month + "/" + day + "/" + year + " " + hrs + ":" + min + ":" + sec;
         }
-        /*
+
         //HTML stuff
         //resets HTML elements of the CPU
         public static CPUtoHTML(): void
@@ -185,48 +185,6 @@ module biOShock {
             document.getElementById("tdYReg").innerHTML = "0";
             document.getElementById("tdZFlag").innerHTML = "0";
         }
-
-        //sets up a table for the memory
-        //table will be 8 columns wide (x)
-        //and 20 rows (y) for obvious axis reasons
-        public static memTable(parts): void
-        {
-            var table = <HTMLTableElement>document.getElementById("divMemory");
-
-            for (var i = 0; i < parts; i++)
-            {
-                for (var y = 0; y < 20; x++)
-                {
-                    var tr = document.createElement("tr");
-                    table.appendChild(tr);
-
-                    for (var x = 0; x < 8; y++)
-                    {
-                        var td = document.createElement("td");
-
-                        td.innerHTML = "00";
-                        tr.appendChild(td);
-                    }
-                }
-            }
-        }
-        public static updateTable(tableRow, tableCel, updateCode): void
-        {
-            var memTable: any = null;
-            memTable.rows[tableRow].cells[tableCel].innerHTML = updateCode;
-        }
-
-        public static clearMemTable(parts): void
-        {
-            for (var i = 0; i < parts; i++) {
-                for (var x = 0; x < 32; x++) {
-                    for (var y = 0; y < 8; y++) {
-                        this.updateTable(x, y, "00");
-                    }
-                }
-            }
-        }
-        */
 
         public static CPUid(id, value): void
         {
