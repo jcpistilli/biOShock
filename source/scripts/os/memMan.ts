@@ -106,7 +106,6 @@ module biOShock
 
         public getMemFromLoc (address)
         {
-            debugger;
             address += _currProgram.pcb.base;
             if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base)
             {
@@ -135,7 +134,6 @@ module biOShock
             this.memory.data[address] = data.toUpperCase();
 //            this.updateScreen(address);       Use this for printing to the screen
         }
-
 
         public resetMemory ()
         {

@@ -183,6 +183,7 @@ var biOShock;
         Console.prototype.eraseLine = function () {
             //draw over the line from 0 of x to the end of the canvas width-wise
             //make the currx 0
+            this.correctColor();
             _DrawingContext.fillRect(0, this.currentYPosition - this.currentFontSize, _Canvas.width, this.currentFontSize + 7);
             this.currentXPosition = 0;
             _OsShell.putPrompt();
