@@ -47,6 +47,10 @@ var biOShock;
         memoryManager.prototype.loadProgIntoMemory = function (program, location) {
             var splitProgram = program.split(' '), offsetLocation = location * _progSize;
 
+            debugger;
+
+            document.getElementById("memTable").value = splitProgram.join(" ");
+
             for (var i = 0; i < splitProgram.length; i++) {
                 this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
             }

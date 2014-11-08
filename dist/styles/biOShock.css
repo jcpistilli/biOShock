@@ -40,15 +40,15 @@ h3 {
   cursor: default;
 }
 
-#memTable {
-    display:block;
-    max-height: 250px;
-    height: 120px;
-    width: 356px;
-    overflow: auto;
-    border: 1px solid white;
-    color: white;
-}
+/*#memTable {*/
+    /*display:block;*/
+    /*max-height: 250px;*/
+    /*height: 120px;*/
+    /*width: 356px;*/
+    /*overflow: auto;*/
+    /*border: 1px solid white;*/
+    /*color: white;*/
+/*}*/
 
 p
 {

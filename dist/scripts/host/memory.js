@@ -15,6 +15,7 @@ var biOShock;
             for (var i = 0; i < this.bytes; i++) {
                 this.data[i] = "00";
             }
+            document.getElementById("memTable").value = this.data.join(" ");
         };
         return Memory;
     })();

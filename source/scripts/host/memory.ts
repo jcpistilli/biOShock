@@ -23,6 +23,7 @@ module biOShock
             {
                 this.data[i] = "00";
             }
+            (<HTMLInputElement>document.getElementById("memTable")).value = this.data.join(" ");
         }
     }
 }

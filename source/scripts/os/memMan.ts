@@ -68,6 +68,10 @@ module biOShock
                 offsetLocation = location * _progSize;
 //            this.clearProgSect(location);
 
+            debugger;
+
+            (<HTMLInputElement>document.getElementById("memTable")).value = splitProgram.join(" ");
+
             for (var i = 0; i < splitProgram.length; i++)
             {
                 this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
