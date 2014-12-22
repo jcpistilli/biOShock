@@ -55,14 +55,24 @@ module biOShock {
         }
 
 //        For the screen
-        /*public updateCPU(): void
+        public updatePCB(): void
         {
-            biOShock.Control.CPUid("tdPC", this.PC);
-            biOShock.Control.CPUid("tdAcc", this.Acc);
-            biOShock.Control.CPUid("tdXReg", this.Xreg);
-            biOShock.Control.CPUid("tdYReg", this.Yreg);
-            biOShock.Control.CPUid("tdZFlag", this.Zflag);
-        }*/
+            _currProgram.pcb.pc = this.PC;
+            _currProgram.pcb.acc = this.Acc;
+            _currProgram.pcb.xReg = this.Xreg;
+            _currProgram.pcb.yReg = this.Yreg;
+            _currProgram.pcb.zFlag = this.Zflag;
+        }
+
+        public updateCpu(): void {
+
+            if (this.isExecuting)
+            {
+                this.updatePCB();
+                (<HTMLInputElement>document.getElementById("pcb")).value = "PCB: " + _currProgram.pcb.pid + " PC: " + this.PC + " Acc: " + this.Acc + " Xreg: " + this.Xreg + " Yreg: " + this.Yreg + " Zflag: " + this.Zflag;
+            }
+
+        }
 
         public cycle(): void
         {
@@ -71,8 +81,8 @@ module biOShock {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
 
             _cycleCounter++;
-            this.perform(this.grab())
-
+            this.perform(this.grab());
+            this.updateCpu();
         }
 
         public grab(): any
@@ -84,71 +94,69 @@ module biOShock {
             cmd = String(cmd);
             debugger;
 
-            //similar to the way we did keyboard symbols
-            switch (cmd)
+            if (cmd === 'A9')
             {
-                case "A9":
-                    this.constToAcc();
-                    break;
-
-                case "AD":
-                    this.loadAccFromMem();
-                    break;
-
-                case "8D":
-                    this.storeAccToMem();
-                    break;
-
-                case "6D":
-                    this.addStoreIntoAcc();
-                    break;
-
-                case "A2":
-                    this.constToX();
-                    break;
-
-                case "AE":
-                    this.loadXMem();
-                    break;
-
-                case "A0":
-                    this.loadConstToY();
-                    break;
-
-                case "AC":
-                    this.loadYMem();
-                    break;
-
-                case "EA":
-                    this.noOperation();
-                    break;
-
-                case "EC":
-                    this.compareToX();
-                    break;
-
-                case "D0":
-                    this.branchNotEqual();
-                    break;
-
-                case "EE":
-                    this.incr();
-                    break;
-
-                case "FF":
-                    this.sysCall();
-                    break;
-
-                case "00" || 0:
-                    this.breakCall();
-                    break;
-
-                default:
-                    var num = Utils.hexToDec(cmd);
-                    var params = [num, 0];
-                    _KernelInterruptQueue.enqueue(new Interrupt(UNKNOWN_OPERATION_IRQ, params));
-                    break;
+                this.constToAcc();
             }
+            else if (cmd === 'AD')
+            {
+                this.loadAccFromMem();
+            }
+            else if (cmd === '8D')
+            {
+                this.storeAccToMem();
+            }
+            else if (cmd === '6D')
+            {
+                this.addStoreIntoAcc();
+            }
+            else if (cmd === 'A2')
+            {
+                this.constToX();
+            }
+            else if (cmd === 'AE')
+            {
+                this.loadXMem();
+            }
+            else if (cmd === 'A0')
+            {
+                this.loadConstToY();
+            }
+            else if (cmd === 'AC')
+            {
+                this.loadYMem();
+            }
+            else if (cmd === 'EA')
+            {
+                this.noOperation();
+            }
+            else if (cmd === 'EC')
+            {
+                this.compareToX();
+            }
+            else if (cmd === 'D0')
+            {
+                this.branchNotEqual();
+            }
+            else if (cmd === 'EE')
+            {
+                this.incr();
+            }
+            else if (cmd === 'FF')
+            {
+                this.sysCall();
+            }
+            else if (cmd === '00')
+            {
+                this.breakCall();
+            }
+            else
+            {
+                var num = Utils.hexToDec(cmd);
+                var params = [num, 0];
+                _KernelInterruptQueue.enqueue(new Interrupt(UNKNOWN_OPERATION_IRQ, params));
+            }
+
 
             this.PC++;
 
@@ -180,7 +188,7 @@ module biOShock {
 
         private constToAcc(): void
         {
-            this.Acc = parseInt(_MemMan.getMemFromLoc(this.PC++), 16);
+            this.Acc = parseInt(_MemMan.getMemFromLoc(++this.PC), 16);
         }
 
         /*

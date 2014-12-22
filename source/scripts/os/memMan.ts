@@ -73,6 +73,9 @@ module biOShock
                 this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
             }
 
+
+            (<HTMLInputElement>document.getElementById("memTable")).value = splitProgram.join(" " + " ");
+
             // Set this.loc to active
             this.loc[location].active = true;
         }
@@ -101,8 +104,10 @@ module biOShock
                     state: "NEW"
                 };
 
-                return thisPCB.pid
+                return thisPCB.pid;
+
             }
+
         }
 
         public getMemFromLoc (address)

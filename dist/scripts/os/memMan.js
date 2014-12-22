@@ -51,6 +51,8 @@ var biOShock;
                 this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
             }
 
+            document.getElementById("memTable").value = splitProgram.join(" " + " ");
+
             // Set this.loc to active
             this.loc[location].active = true;
         };

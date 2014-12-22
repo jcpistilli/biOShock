@@ -50,14 +50,21 @@ var biOShock;
         };
 
         //        For the screen
-        /*public updateCPU(): void
-        {
-        biOShock.Control.CPUid("tdPC", this.PC);
-        biOShock.Control.CPUid("tdAcc", this.Acc);
-        biOShock.Control.CPUid("tdXReg", this.Xreg);
-        biOShock.Control.CPUid("tdYReg", this.Yreg);
-        biOShock.Control.CPUid("tdZFlag", this.Zflag);
-        }*/
+        Cpu.prototype.updatePCB = function () {
+            _currProgram.pcb.pc = this.PC;
+            _currProgram.pcb.acc = this.Acc;
+            _currProgram.pcb.xReg = this.Xreg;
+            _currProgram.pcb.yReg = this.Yreg;
+            _currProgram.pcb.zFlag = this.Zflag;
+        };
+
+        Cpu.prototype.updateCpu = function () {
+            if (this.isExecuting) {
+                this.updatePCB();
+                document.getElementById("pcb").value = "PCB: " + _currProgram.pcb.pid + " PC: " + this.PC + " Acc: " + this.Acc + " Xreg: " + this.Xreg + " Yreg: " + this.Yreg + " Zflag: " + this.Zflag;
+            }
+        };
+
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
 
@@ -65,6 +72,7 @@ var biOShock;
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             _cycleCounter++;
             this.perform(this.grab());
+            this.updateCpu();
         };
 
         Cpu.prototype.grab = function () {
@@ -75,68 +83,38 @@ var biOShock;
             cmd = String(cmd);
             debugger;
 
-            switch (cmd) {
-                case "A9":
-                    this.constToAcc();
-                    break;
-
-                case "AD":
-                    this.loadAccFromMem();
-                    break;
-
-                case "8D":
-                    this.storeAccToMem();
-                    break;
-
-                case "6D":
-                    this.addStoreIntoAcc();
-                    break;
-
-                case "A2":
-                    this.constToX();
-                    break;
-
-                case "AE":
-                    this.loadXMem();
-                    break;
-
-                case "A0":
-                    this.loadConstToY();
-                    break;
-
-                case "AC":
-                    this.loadYMem();
-                    break;
-
-                case "EA":
-                    this.noOperation();
-                    break;
-
-                case "EC":
-                    this.compareToX();
-                    break;
-
-                case "D0":
-                    this.branchNotEqual();
-                    break;
-
-                case "EE":
-                    this.incr();
-                    break;
-
-                case "FF":
-                    this.sysCall();
-                    break;
-
-                case "00" || 0:
-                    this.breakCall();
-                    break;
-
-                default:
-                    var num = biOShock.Utils.hexToDec(cmd);
-                    var params = [num, 0];
-                    _KernelInterruptQueue.enqueue(new biOShock.Interrupt(UNKNOWN_OPERATION_IRQ, params));
-                    break;
+            if (cmd === 'A9') {
+                this.constToAcc();
+            } else if (cmd === 'AD') {
+                this.loadAccFromMem();
+            } else if (cmd === '8D') {
+                this.storeAccToMem();
+            } else if (cmd === '6D') {
+                this.addStoreIntoAcc();
+            } else if (cmd === 'A2') {
+                this.constToX();
+            } else if (cmd === 'AE') {
+                this.loadXMem();
+            } else if (cmd === 'A0') {
+                this.loadConstToY();
+            } else if (cmd === 'AC') {
+                this.loadYMem();
+            } else if (cmd === 'EA') {
+                this.noOperation();
+            } else if (cmd === 'EC') {
+                this.compareToX();
+            } else if (cmd === 'D0') {
+                this.branchNotEqual();
+            } else if (cmd === 'EE') {
+                this.incr();
+            } else if (cmd === 'FF') {
+                this.sysCall();
+            } else if (cmd === '00') {
+                this.breakCall();
+            } else {
+                var num = biOShock.Utils.hexToDec(cmd);
+                var params = [num, 0];
+                _KernelInterruptQueue.enqueue(new biOShock.Interrupt(UNKNOWN_OPERATION_IRQ, params));
             }
 
             this.PC++;
@@ -164,7 +142,7 @@ var biOShock;
         A9
         */
         Cpu.prototype.constToAcc = function () {
-            this.Acc = parseInt(_MemMan.getMemFromLoc(this.PC++), 16);
+            this.Acc = parseInt(_MemMan.getMemFromLoc(++this.PC), 16);
         };
 
         /*
