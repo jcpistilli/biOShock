@@ -43,7 +43,7 @@ module biOShock
             {
                 if (this.loc[i].active == false)
                 {
-                    this.eraseSegment(i);
+                    //this.eraseSegment(i);
                     return i;
                 }
             }
@@ -67,10 +67,6 @@ module biOShock
             var splitProgram = program.split(' '),
                 offsetLocation = location * _progSize;
 //            this.clearProgSect(location);
-
-            debugger;
-
-            (<HTMLInputElement>document.getElementById("memTable")).value = splitProgram.join(" ");
 
             for (var i = 0; i < splitProgram.length; i++)
             {
@@ -103,9 +99,10 @@ module biOShock
                 {
                     pcb: thisPCB,
                     state: "NEW"
-                }
+                };
+
+                return thisPCB.pid
             }
-            return thisPCB.pid
         }
 
         public getMemFromLoc (address)

@@ -163,20 +163,6 @@ var biOShock;
 
             return month + "/" + day + "/" + year + " " + hrs + ":" + min + ":" + sec;
         };
-
-        //HTML stuff
-        //resets HTML elements of the CPU
-        Control.CPUtoHTML = function () {
-            document.getElementById("tdPC").innerHTML = "0";
-            document.getElementById("tdAccum").innerHTML = "0";
-            document.getElementById("tdXReg").innerHTML = "0";
-            document.getElementById("tdYReg").innerHTML = "0";
-            document.getElementById("tdZFlag").innerHTML = "0";
-        };
-
-        Control.CPUid = function (id, value) {
-            document.getElementById(id).innerHTML = value;
-        };
         return Control;
     })();
     biOShock.Control = Control;

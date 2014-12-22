@@ -44,15 +44,25 @@ module biOShock {
             this.resetCPU();
         }
 
+        public setCPU(process): void
+        {
+            this.PC = process.pcb.pc;
+            this.Acc = process.pcb.acc;
+            this.Xreg = process.pcb.xReg;
+            this.Yreg = process.pcb.yReg;
+            this.Zflag = process.pcb.zFlag;
+            this.isExecuting = true;
+        }
+
 //        For the screen
-        public updateCPU(): void
+        /*public updateCPU(): void
         {
             biOShock.Control.CPUid("tdPC", this.PC);
             biOShock.Control.CPUid("tdAcc", this.Acc);
             biOShock.Control.CPUid("tdXReg", this.Xreg);
             biOShock.Control.CPUid("tdYReg", this.Yreg);
             biOShock.Control.CPUid("tdZFlag", this.Zflag);
-        }
+        }*/
 
         public cycle(): void
         {
@@ -61,8 +71,18 @@ module biOShock {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
 
             _cycleCounter++;
+            this.perform(this.grab())
 
-            var cmd = _MemMan.getMemFromLoc(this.PC);
+        }
+
+        public grab(): any
+        {
+            return _MemMan.getMemFromLoc(this.PC)
+        }
+
+        public perform(cmd): void {
+            cmd = String(cmd);
+            debugger;
 
             //similar to the way we did keyboard symbols
             switch (cmd)
@@ -122,16 +142,16 @@ module biOShock {
                 case "00" || 0:
                     this.breakCall();
                     break;
+
+                default:
+                    var num = Utils.hexToDec(cmd);
+                    var params = [num, 0];
+                    _KernelInterruptQueue.enqueue(new Interrupt(UNKNOWN_OPERATION_IRQ, params));
+                    break;
             }
 
+            this.PC++;
 
-            this.updateCPU();
-
-            // We don't want this to happen after we do an FF command
-            if (this.isExecuting)
-            {
-                this.PC++;
-            }
         }
 
         //returns the location of the next time bytes

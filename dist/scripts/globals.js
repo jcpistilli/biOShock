@@ -23,7 +23,11 @@ var SYS_OPCODE_IRQ = 2;
 
 var MEM_ACCESS_VIOLATION = 3;
 
-var CPU_BREAK_IRQ = 4;
+var EXECUTING_IRQ = 4;
+
+var UNKNOWN_OPERATION_IRQ = 5;
+
+var CPU_BREAK_IRQ = 6;
 
 //
 // Global Variables

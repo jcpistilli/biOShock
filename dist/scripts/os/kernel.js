@@ -125,13 +125,28 @@ var biOShock;
                     _StdIn.handleSysOp();
                     break;
 
+                case EXECUTING_IRQ:
+                    if (_CPU.isExecuting = true) {
+                        _currProgram = _ResidentList[params[0]];
+                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "RUNNING";
+                        _CPU.setCPU(_currProgram);
+                    } else {
+                        _StdOut.putText("Program already in execution.");
+                    }
+                    break;
+
                 case MEM_ACCESS_VIOLATION:
                     _currProgram.pcb.state = "Terminated.";
                     _MemMan.removeFromList();
                     this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");
-                    this.krnTrace("PID " + _currProgram.pcb.pid + " attempted to access memory location." + params[0]);
+                    this.krnTrace("PID " + _currProgram.pcb.pid + " attempted to access memory location" + params[0]);
 
                     _CPU.init();
+                    break;
+
+                case UNKNOWN_OPERATION_IRQ:
+                    this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
+                    _currProgram.state = "TERMINATED";
                     break;
 
                 default:

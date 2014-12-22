@@ -40,23 +40,40 @@ var biOShock;
             this.resetCPU();
         };
 
-        //        For the screen
-        Cpu.prototype.updateCPU = function () {
-            biOShock.Control.CPUid("tdPC", this.PC);
-            biOShock.Control.CPUid("tdAcc", this.Acc);
-            biOShock.Control.CPUid("tdXReg", this.Xreg);
-            biOShock.Control.CPUid("tdYReg", this.Yreg);
-            biOShock.Control.CPUid("tdZFlag", this.Zflag);
+        Cpu.prototype.setCPU = function (process) {
+            this.PC = process.pcb.pc;
+            this.Acc = process.pcb.acc;
+            this.Xreg = process.pcb.xReg;
+            this.Yreg = process.pcb.yReg;
+            this.Zflag = process.pcb.zFlag;
+            this.isExecuting = true;
         };
 
+        //        For the screen
+        /*public updateCPU(): void
+        {
+        biOShock.Control.CPUid("tdPC", this.PC);
+        biOShock.Control.CPUid("tdAcc", this.Acc);
+        biOShock.Control.CPUid("tdXReg", this.Xreg);
+        biOShock.Control.CPUid("tdYReg", this.Yreg);
+        biOShock.Control.CPUid("tdZFlag", this.Zflag);
+        }*/
         Cpu.prototype.cycle = function () {
             _Kernel.krnTrace('CPU cycle');
 
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             _cycleCounter++;
+            this.perform(this.grab());
+        };
 
-            var cmd = _MemMan.getMemFromLoc(this.PC);
+        Cpu.prototype.grab = function () {
+            return _MemMan.getMemFromLoc(this.PC);
+        };
+
+        Cpu.prototype.perform = function (cmd) {
+            cmd = String(cmd);
+            debugger;
 
             switch (cmd) {
                 case "A9":
@@ -114,14 +131,15 @@ var biOShock;
                 case "00" || 0:
                     this.breakCall();
                     break;
+
+                default:
+                    var num = biOShock.Utils.hexToDec(cmd);
+                    var params = [num, 0];
+                    _KernelInterruptQueue.enqueue(new biOShock.Interrupt(UNKNOWN_OPERATION_IRQ, params));
+                    break;
             }
 
-            this.updateCPU();
-
-            // We don't want this to happen after we do an FF command
-            if (this.isExecuting) {
-                this.PC++;
-            }
+            this.PC++;
         };
 
         //returns the location of the next time bytes

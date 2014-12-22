@@ -27,7 +27,7 @@ var biOShock;
         memoryManager.prototype.openProgLoc = function () {
             for (var i = 0; i < this.loc.length; i++) {
                 if (this.loc[i].active == false) {
-                    this.eraseSegment(i);
+                    //this.eraseSegment(i);
                     return i;
                 }
             }
@@ -46,10 +46,6 @@ var biOShock;
 
         memoryManager.prototype.loadProgIntoMemory = function (program, location) {
             var splitProgram = program.split(' '), offsetLocation = location * _progSize;
-
-            debugger;
-
-            document.getElementById("memTable").value = splitProgram.join(" ");
 
             for (var i = 0; i < splitProgram.length; i++) {
                 this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
@@ -77,8 +73,9 @@ var biOShock;
                     pcb: thisPCB,
                     state: "NEW"
                 };
+
+                return thisPCB.pid;
             }
-            return thisPCB.pid;
         };
 
         memoryManager.prototype.getMemFromLoc = function (address) {

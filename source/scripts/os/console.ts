@@ -262,7 +262,7 @@ module biOShock {
 
                 while (currData !== "00")
                 {
-                    output += String.fromCharCode(Utils.hexToDec(currData));
+                    output += String.fromCharCode(parseInt(currData, 16));
                     currData = _MemMan.getMemFromLoc(++currPointer);
                 }
 

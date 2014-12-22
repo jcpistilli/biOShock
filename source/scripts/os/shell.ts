@@ -416,8 +416,16 @@ module biOShock {
             }
             else
             {
-                _CPU.isExecuting = true;
-                _runningPID = parseInt(args[0]);
+                var requestedProgram = _ResidentList[args[0]];
+                if (requestedProgram.state !== "Terminated.")
+                {
+                    requestedProgram.state = "Ready.";
+                    _KernelInterruptQueue.enqueue(new Interrupt(EXECUTING_IRQ, args[0]));
+                }
+                else
+                {
+                    _StdOut.putText("Already being handled.");
+                }
             }
         }
     }

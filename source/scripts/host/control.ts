@@ -177,7 +177,7 @@ module biOShock {
 
         //HTML stuff
         //resets HTML elements of the CPU
-        public static CPUtoHTML(): void
+        /*public static CPUtoHTML(): void
         {
             document.getElementById("tdPC").innerHTML = "0";
             document.getElementById("tdAccum").innerHTML = "0";
@@ -189,6 +189,6 @@ module biOShock {
         public static CPUid(id, value): void
         {
             document.getElementById(id).innerHTML = value;
-        }
+        }*/
     }
 }

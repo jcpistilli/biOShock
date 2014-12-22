@@ -208,7 +208,7 @@ var biOShock;
                 var currData = _MemMan.getMemFromLoc(currPointer);
 
                 while (currData !== "00") {
-                    output += String.fromCharCode(biOShock.Utils.hexToDec(currData));
+                    output += String.fromCharCode(parseInt(currData, 16));
                     currData = _MemMan.getMemFromLoc(++currPointer);
                 }
 

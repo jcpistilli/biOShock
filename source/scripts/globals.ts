@@ -25,7 +25,11 @@ var SYS_OPCODE_IRQ: number = 2;
 
 var MEM_ACCESS_VIOLATION: number = 3;
 
-var CPU_BREAK_IRQ: number = 4;
+var EXECUTING_IRQ: number = 4;
+
+var UNKNOWN_OPERATION_IRQ: number = 5;
+
+var CPU_BREAK_IRQ: number = 6;
 
 
 //
@@ -73,7 +77,6 @@ var _ReadyQueue: any = null;
 var _currPCB = null;
 var _runningPID: number = -1;
 var _currProgram: any = null;
-
 
 // UI
 var _Console: biOShock.Console;
