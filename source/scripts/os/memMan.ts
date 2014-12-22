@@ -141,9 +141,20 @@ module biOShock
 //            this.updateScreen(address);       Use this for printing to the screen
         }
 
-        public resetMemory ()
+        public resetMemory (): void
         {
-            _Memory.init();
+            for (var i = 0; i < this.memory.bytes; i++)
+            {
+                this.memory.data[i] = "00";
+            }
+
+            for (var i = 0; i < this.loc.length; i++)
+            {
+                this.loc[i].active = false;
+            }
+
+            var mem = new biOShock.Memory(this.memory.bytes);
+            mem.init();
         }
 
 

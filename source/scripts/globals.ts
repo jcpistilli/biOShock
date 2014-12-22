@@ -69,7 +69,7 @@ var _progNum: number = 3;
 var _memSize: number = _progSize * _progNum;
 
 var _cycleCounter: number = 0;
-var _Memory = null;
+var _Memory: any = null;
 var _currMemSpot: number = -1;
 var _ResidentList: any = null;
 var _ReadyQueue: any = null;

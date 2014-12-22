@@ -436,19 +436,11 @@ module biOShock {
         }
 
         //Clear Memory
-        public shellClearMem(args)
+        public shellClearMem()
         {
-            for (var i = 0; i < _MemMan.memory.bytes; i++)
-            {
-                _MemMan.memory.data[i] = "00";
-            }
-
-            for (var i = 0; i < _MemMan.loc.length; i++)
-            {
-                _MemMan.loc[i].active = false;
-            }
+            debugger;
+            _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
-            _Memory.init();
         }
     }
 }
