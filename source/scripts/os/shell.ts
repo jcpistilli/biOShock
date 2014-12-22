@@ -123,6 +123,12 @@ module biOShock {
                 "- Clears Memory.");
             this.commandList[this.commandList.length] = sc;
 
+            //ClearMem
+            sc = new ShellCommand(this.shellRunAll,
+                "runall",
+                "- Runs all programs in memory.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -422,10 +428,11 @@ module biOShock {
             }
             else
             {
-                var requestedProgram = _ResidentList[args[0]];
-                if (requestedProgram.state !== "Terminated.")
+                var thisProgram = _ResidentList[args[0]];
+                debugger;
+                if (thisProgram.state !== "Terminated.")
                 {
-                    requestedProgram.state = "Ready.";
+                    thisProgram.state = "Ready.";
                     _KernelInterruptQueue.enqueue(new Interrupt(EXECUTING_IRQ, args[0]));
                 }
                 else
@@ -441,6 +448,20 @@ module biOShock {
             debugger;
             _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
+        }
+
+        //Run all
+        public shellRunAll(args)
+        {
+            for (var i = 0; i < _ResidentList.length; i++)
+            {
+                var thisProgram = _ResidentList[i];
+                if (thisProgram && thisProgram.state !== "Terminated.")
+                {
+                    _ReadyQueue.enqueue(thisProgram);
+                }
+            }
+            _KernelInterruptQueue.enqueue(new Interrupt(EXECUTING_IRQ, args[0]));
         }
     }
 }

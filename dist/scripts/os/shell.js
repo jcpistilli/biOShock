@@ -85,6 +85,10 @@ var biOShock;
             sc = new biOShock.ShellCommand(this.shellClearMem, "clearmem", "- Clears Memory.");
             this.commandList[this.commandList.length] = sc;
 
+            //ClearMem
+            sc = new biOShock.ShellCommand(this.shellRunAll, "runall", "- Runs all programs in memory.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -374,9 +378,10 @@ var biOShock;
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
             } else {
-                var requestedProgram = _ResidentList[args[0]];
-                if (requestedProgram.state !== "Terminated.") {
-                    requestedProgram.state = "Ready.";
+                var thisProgram = _ResidentList[args[0]];
+                debugger;
+                if (thisProgram.state !== "Terminated.") {
+                    thisProgram.state = "Ready.";
                     _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));
                 } else {
                     _StdOut.putText("Already being handled.");
@@ -389,6 +394,17 @@ var biOShock;
             debugger;
             _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
+        };
+
+        //Run all
+        Shell.prototype.shellRunAll = function (args) {
+            for (var i = 0; i < _ResidentList.length; i++) {
+                var thisProgram = _ResidentList[i];
+                if (thisProgram && thisProgram.state !== "Terminated.") {
+                    _ReadyQueue.enqueue(thisProgram);
+                }
+            }
+            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));
         };
         return Shell;
     })();
