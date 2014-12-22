@@ -81,7 +81,6 @@ var biOShock;
 
         Cpu.prototype.perform = function (cmd) {
             cmd = String(cmd);
-            debugger;
 
             if (cmd === 'A9') {
                 this.constToAcc();

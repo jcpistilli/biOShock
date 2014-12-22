@@ -92,7 +92,6 @@ module biOShock {
 
         public perform(cmd): void {
             cmd = String(cmd);
-            debugger;
 
             if (cmd === 'A9')
             {

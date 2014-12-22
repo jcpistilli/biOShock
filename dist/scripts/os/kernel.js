@@ -136,6 +136,7 @@ var biOShock;
                     break;
 
                 case MEM_ACCESS_VIOLATION:
+                    debugger;
                     _currProgram.pcb.state = "Terminated.";
                     _MemMan.removeFromList();
                     this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");

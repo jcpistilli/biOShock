@@ -81,6 +81,10 @@ var biOShock;
             sc = new biOShock.ShellCommand(this.shellRun, "run", "<PID> - Runs a program from memory");
             this.commandList[this.commandList.length] = sc;
 
+            //ClearMem
+            sc = new biOShock.ShellCommand(this.shellClearMem, "clearmem", "- Clears Memory.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -378,6 +382,19 @@ var biOShock;
                     _StdOut.putText("Already being handled.");
                 }
             }
+        };
+
+        //Clear Memory
+        Shell.prototype.shellClearMem = function (args) {
+            for (var i = 0; i < _MemMan.memory.bytes; i++) {
+                _MemMan.memory.data[i] = "00";
+            }
+
+            for (var i = 0; i < _MemMan.loc.length; i++) {
+                _MemMan.loc[i].active = false;
+            }
+            _StdOut.putText("All memory locations cleared.");
+            _Memory.init();
         };
         return Shell;
     })();
