@@ -133,12 +133,12 @@ module biOShock {
             btmPos.scrollTop = btmPos.scrollHeight;
         }
 
-        public static grabInput(): string[] {
+        /*public static grabInput(): string {
             var progIn = <HTMLInputElement> document.getElementById("taProgramInput");
-            var progIn2 = progIn.value.trim().split("");
+            var progIn2 = progIn.value;
 
             return progIn2;
-        }
+        }*/
 
         public static dateTime(): string
         {

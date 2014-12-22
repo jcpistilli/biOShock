@@ -332,9 +332,9 @@ var biOShock;
         };
 
         Shell.prototype.shellLoad = function () {
-            var retrieveHex = biOShock.Control.grabInput();
+            var retrieveHex = document.getElementById("taProgramInput").value;
 
-            var removeSpace = retrieveHex.join("").replace(/\s*/gi, "");
+            var removeSpace = retrieveHex.replace(/\s+/g, ' ').toUpperCase();
 
             var even = removeSpace.length % 2 == 0;
 

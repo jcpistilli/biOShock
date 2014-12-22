@@ -129,13 +129,12 @@ var biOShock;
             btmPos.scrollTop = btmPos.scrollHeight;
         };
 
-        Control.grabInput = function () {
-            var progIn = document.getElementById("taProgramInput");
-            var progIn2 = progIn.value.trim().split("");
-
-            return progIn2;
-        };
-
+        /*public static grabInput(): string {
+        var progIn = <HTMLInputElement> document.getElementById("taProgramInput");
+        var progIn2 = progIn.value;
+        
+        return progIn2;
+        }*/
         Control.dateTime = function () {
             var theDate = new Date();
             var month = (theDate.getMonth() + 1).toString();

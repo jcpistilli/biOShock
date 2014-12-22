@@ -365,9 +365,9 @@ module biOShock {
 
         public shellLoad()
         {
-            var retrieveHex = Control.grabInput();
+            var retrieveHex = (<HTMLInputElement> document.getElementById("taProgramInput")).value;
 
-            var removeSpace = retrieveHex.join("").replace(/\s*/gi, "");
+            var removeSpace = retrieveHex.replace(/\s+/g, ' ').toUpperCase();
 
             var even = removeSpace.length % 2 == 0;
 
