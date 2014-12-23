@@ -89,6 +89,10 @@ var biOShock;
             sc = new biOShock.ShellCommand(this.shellRunAll, "runall", "- Runs all programs in memory.");
             this.commandList[this.commandList.length] = sc;
 
+            //Quantum
+            sc = new biOShock.ShellCommand(this.shellQuantum, "quantum", "<INT> - Changes the value of the quantum.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -405,6 +409,17 @@ var biOShock;
                 }
             }
             _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));
+        };
+
+        //Quantum
+        Shell.prototype.shellQuantum = function (args) {
+            if (args.length > 0) {
+                _CpuScheduler.setQuantum(parseInt(args[0])); //gonna create the cpu scheduler after this
+                //just implementing the shell commands since
+                //i know how to do this stuff well... haha
+            } else {
+                _StdOut.putText("Please enter a valid integer.");
+            }
         };
         return Shell;
     })();
