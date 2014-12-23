@@ -126,6 +126,25 @@ module biOShock
             this.clearProgSect(_currProgram.pcb.location);
         }
 
+        public removeThisFromList(): any
+        {
+            var done = false;
+
+            for (var i = 0; i < _ResidentList.length; i++)
+            {
+                if(_ResidentList[i] && _ResidentList[i].pcb.pid === _currProgram.pcb.pid)
+                {
+                    if (_currProgram.pcb.loc !== -1)
+                    {
+                        this.loc[_currProgram.pcb.loc].active = false;
+                    }
+                    _ResidentList.splice(i, 1);
+                    done = true;
+                }
+            }
+            return done;
+        }
+
         public updateMemoryAt(data, address): void
         {
             address += _currProgram.pcb.base;

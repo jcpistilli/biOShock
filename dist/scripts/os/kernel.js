@@ -47,6 +47,7 @@ var biOShock;
             _OsShell = new biOShock.Shell();
             _OsShell.init();
 
+            _cpuScheduler = new biOShock.cpuScheduler();
             _ResidentList = new Array();
             _ReadyQueue = new Array();
 
@@ -83,6 +84,9 @@ var biOShock;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
+                if (_cpuScheduler.needToContextSwitchIf()) {
+                    _cpuScheduler.contextSwitch();
+                }
                 _CPU.cycle();
             } else {
                 this.krnTrace("Idle");

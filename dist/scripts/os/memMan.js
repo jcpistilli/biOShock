@@ -93,6 +93,21 @@ var biOShock;
             this.clearProgSect(_currProgram.pcb.location);
         };
 
+        memoryManager.prototype.removeThisFromList = function () {
+            var done = false;
+
+            for (var i = 0; i < _ResidentList.length; i++) {
+                if (_ResidentList[i] && _ResidentList[i].pcb.pid === _currProgram.pcb.pid) {
+                    if (_currProgram.pcb.loc !== -1) {
+                        this.loc[_currProgram.pcb.loc].active = false;
+                    }
+                    _ResidentList.splice(i, 1);
+                    done = true;
+                }
+            }
+            return done;
+        };
+
         memoryManager.prototype.updateMemoryAt = function (data, address) {
             address += _currProgram.pcb.base;
             if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base) {

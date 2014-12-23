@@ -414,7 +414,7 @@ var biOShock;
         //Quantum
         Shell.prototype.shellQuantum = function (args) {
             if (args.length > 0) {
-                _CpuScheduler.setQuantum(parseInt(args[0])); //gonna create the cpu scheduler after this
+                _cpuScheduler.setQuantum(parseInt(args[0])); //gonna create the cpu scheduler after this
                 //just implementing the shell commands since
                 //i know how to do this stuff well... haha
             } else {

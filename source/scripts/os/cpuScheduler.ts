@@ -39,7 +39,54 @@ module biOShock
             }
         }
 
+        public needToContextSwitchIf(): any
+        {
+            if (this.scheduleType === this.options[0])
+            {
+                if (_cycleCounter >= this.quantum)
+                {
+                    return true;
+                }
+            }
+            return true;
+        }
 
+        public contextSwitch(): any
+        {
+            var nextProc = this.nextProcess();
+            if (nextProc !== null && nextProc !== undefined)
+            {
+                if (this.scheduleType === this.options[0])
+                {
+                    this.roundRobinSwitch(nextProc);
+                }
+                else
+                {
+                    _Kernel.krnTrace("Unknown CPU scheduler.");
+                }
+            }
+
+            var lastProc = _currProgram;
+            _currProgram = nextProc;
+
+            _currProgram.state = "Running.";
+
+            
+        }
+
+        public roundRobinSwitch(nextProc): any
+        {
+            _Kernel.krnTrace("Current cycle count > quantum of " + this.quantum + ". Switching context.");
+            _CPU.updatePCB();
+            if (_currProgram.state !== "Terminated.")
+            {
+                _currProgram.state = "Ready.";
+                _ReadyQueue.enqueue(_currProgram)
+            }
+            else if (_currProgram.state === "Terminated.") {
+                _MemMan.removeThisFromList();//removeThisFromList is in MemMan
+            }
+        }
     }
 }
 

@@ -27,6 +27,42 @@ var biOShock;
                 return _ReadyQueue.shift();
             }
         };
+
+        cpuScheduler.prototype.needToContextSwitchIf = function () {
+            if (this.scheduleType === this.options[0]) {
+                if (_cycleCounter >= this.quantum) {
+                    return true;
+                }
+            }
+            return true;
+        };
+
+        cpuScheduler.prototype.contextSwitch = function () {
+            var nextProc = this.nextProcess();
+            if (nextProc !== null && nextProc !== undefined) {
+                if (this.scheduleType === this.options[0]) {
+                    this.roundRobinSwitch(nextProc);
+                } else {
+                    _Kernel.krnTrace("Unknown CPU scheduler.");
+                }
+            }
+
+            var lastProc = _currProgram;
+            _currProgram = nextProc;
+
+            _currProgram.state = "Running.";
+        };
+
+        cpuScheduler.prototype.roundRobinSwitch = function (nextProc) {
+            _Kernel.krnTrace("Current cycle count > quantum of " + this.quantum + ". Switching context.");
+            _CPU.updatePCB();
+            if (_currProgram.state !== "Terminated.") {
+                _currProgram.state = "Ready.";
+                _ReadyQueue.enqueue(_currProgram);
+            } else if (_currProgram.state === "Terminated.") {
+                _MemMan.removeThisFromList(); //removeThisFromList is in MemMan
+            }
+        };
         return cpuScheduler;
     })();
     biOShock.cpuScheduler = cpuScheduler;
