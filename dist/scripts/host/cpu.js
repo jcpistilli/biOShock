@@ -27,17 +27,13 @@ var biOShock;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
         }
-        Cpu.prototype.resetCPU = function () {
+        Cpu.prototype.init = function () {
             this.PC = 0;
             this.Acc = 0;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
-        };
-
-        Cpu.prototype.init = function () {
-            this.resetCPU();
         };
 
         Cpu.prototype.setCPU = function (process) {
@@ -150,7 +146,7 @@ var biOShock;
         AD
         */
         Cpu.prototype.loadAccFromMem = function () {
-            this.Acc = this.dataNextTwoBytes();
+            this.Acc = parseInt(this.dataNextTwoBytes(), 16);
         };
 
         /*
@@ -186,7 +182,7 @@ var biOShock;
         AE
         */
         Cpu.prototype.loadXMem = function () {
-            this.Xreg = this.dataNextTwoBytes();
+            this.Xreg = parseInt(this.dataNextTwoBytes(), 16);
         };
 
         /*
@@ -204,7 +200,7 @@ var biOShock;
         AC
         */
         Cpu.prototype.loadYMem = function () {
-            this.Yreg = this.dataNextTwoBytes();
+            this.Yreg = parse(this.dataNextTwoBytes(), 16);
         };
 
         /*
@@ -281,7 +277,7 @@ var biOShock;
             _currProgram.pcb.xReg = this.Xreg;
             _currProgram.pcb.yReg = this.Yreg;
             _currProgram.pcb.zFlag = this.Zflag;
-            //_KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ), params);
+            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(BREAK_IRQ), params);
         };
         return Cpu;
     })();

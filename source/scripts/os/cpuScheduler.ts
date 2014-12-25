@@ -71,7 +71,6 @@ module biOShock
 
             _currProgram.state = "Running.";
 
-            
         }
 
         public roundRobinSwitch(nextProc): any

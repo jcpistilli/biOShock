@@ -47,7 +47,7 @@ var biOShock;
             _OsShell = new biOShock.Shell();
             _OsShell.init();
 
-            _cpuScheduler = new biOShock.cpuScheduler();
+            //_cpuScheduler = new cpuScheduler();
             _ResidentList = new Array();
             _ReadyQueue = new Array();
 
@@ -153,6 +153,8 @@ var biOShock;
                     this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
                     _currProgram.state = "TERMINATED";
                     break;
+
+                case BREAK_IRQ:
 
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");

@@ -23,13 +23,13 @@ var KEYBOARD_IRQ: number = 1;
 
 var SYS_OPCODE_IRQ: number = 2;
 
-var MEM_ACCESS_VIOLATION: number = 3;
+var EXECUTING_IRQ: number = 3;
 
-var EXECUTING_IRQ: number = 4;
+var MEM_ACCESS_VIOLATION: number = 4;
 
 var UNKNOWN_OPERATION_IRQ: number = 5;
 
-var CPU_BREAK_IRQ: number = 6;
+var BREAK_IRQ: number = 6;
 
 
 //

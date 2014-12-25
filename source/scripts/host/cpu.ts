@@ -29,7 +29,7 @@ module biOShock {
 
         }
 
-        public resetCPU(): void
+        public init(): void
         {
             this.PC = 0;
             this.Acc = 0;
@@ -37,11 +37,6 @@ module biOShock {
             this.Yreg = 0;
             this.Zflag = 0;
             this.isExecuting = false;
-        }
-
-        public init(): void
-        {
-            this.resetCPU();
         }
 
         public setCPU(process): void
@@ -197,7 +192,7 @@ module biOShock {
         */
         private loadAccFromMem(): void
         {
-            this.Acc = this.dataNextTwoBytes();
+            this.Acc = parseInt(this.dataNextTwoBytes(), 16);
         }
 
         /*
@@ -237,7 +232,7 @@ module biOShock {
         */
         private loadXMem(): void
         {
-            this.Xreg = this.dataNextTwoBytes();
+            this.Xreg = parseInt(this.dataNextTwoBytes(), 16);
         }
 
         /*
@@ -257,7 +252,7 @@ module biOShock {
         */
         private loadYMem(): void
         {
-            this.Yreg = this.dataNextTwoBytes();
+            this.Yreg = parse(this.dataNextTwoBytes(), 16);
         }
 
         /*
@@ -347,7 +342,7 @@ module biOShock {
             _currProgram.pcb.xReg = this.Xreg;
             _currProgram.pcb.yReg = this.Yreg;
             _currProgram.pcb.zFlag = this.Zflag;
-            //_KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ), params);
+            _KernelInterruptQueue.enqueue(new Interrupt(BREAK_IRQ), params);
         }
         /*
             Print CPU to the screen

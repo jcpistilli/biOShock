@@ -51,7 +51,7 @@ module biOShock {
             _OsShell.init();
 
 
-            _cpuScheduler = new cpuScheduler();
+            //_cpuScheduler = new cpuScheduler();
             _ResidentList = new Array();
             _ReadyQueue = new Array();
 
@@ -131,20 +131,20 @@ module biOShock {
             //       Maybe the hardware simulation will grow to support/require that in the future.
             switch (irq)
             {
-                case TIMER_IRQ:
+                case TIMER_IRQ: //0
                     this.krnTimerISR();              // Kernel built-in routine for timers (not the clock).
                     break;
 
-                case KEYBOARD_IRQ:
+                case KEYBOARD_IRQ: //1
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
 
-                case SYS_OPCODE_IRQ:
+                case SYS_OPCODE_IRQ: //2
                     _StdIn.handleSysOp();
                     break;
 
-                case EXECUTING_IRQ:
+                case EXECUTING_IRQ: //3
                     if(_CPU.isExecuting = true)
                     {
                         _currProgram = _ResidentList[params[0]];
@@ -157,7 +157,7 @@ module biOShock {
                     }
                     break;
 
-                case MEM_ACCESS_VIOLATION:
+                case MEM_ACCESS_VIOLATION: //4
                     debugger;
                     _currProgram.pcb.state = "Terminated.";
                     _MemMan.removeFromList();
@@ -167,10 +167,14 @@ module biOShock {
                     _CPU.init();
                     break;
 
-                case UNKNOWN_OPERATION_IRQ:
+                case UNKNOWN_OPERATION_IRQ: //5
                     this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
                     _currProgram.state = "TERMINATED";
                     break;
+
+                case BREAK_IRQ: //6
+
+
 
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
