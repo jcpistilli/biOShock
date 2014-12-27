@@ -25,6 +25,7 @@ var biOShock;
         };
 
         memoryManager.prototype.openProgLoc = function () {
+            debugger;
             for (var i = 0; i < this.loc.length; i++) {
                 if (this.loc[i].active == false) {
                     //this.eraseSegment(i);
@@ -45,13 +46,14 @@ var biOShock;
         };
 
         memoryManager.prototype.loadProgIntoMemory = function (program, location) {
+            debugger;
             var splitProgram = program.split(' '), offsetLocation = location * _progSize;
 
             for (var i = 0; i < splitProgram.length; i++) {
-                this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
+                this.memory.data[i + offsetLocation] = splitProgram[i];
             }
 
-            document.getElementById("memTable").value = splitProgram.join(" " + " ");
+            document.getElementById("memTable").value = splitProgram.join(" ");
 
             // Set this.loc to active
             this.loc[location].active = true;
@@ -63,13 +65,14 @@ var biOShock;
                 _StdOut.putText("Memory is full.");
                 return null;
             } else {
+                debugger;
                 var thisPCB = new biOShock.pcb();
                 thisPCB.base = ((progLoc + 1) * _progSize) - _progSize;
                 thisPCB.limit = ((progLoc + 1) * _progSize) - 1;
 
                 thisPCB.loc = progLoc;
 
-                this.loadProgIntoMemory(prog, progLoc);
+                this.loadProgIntoMemory(prog, thisPCB.loc);
 
                 _ResidentList[thisPCB.pid] = {
                     pcb: thisPCB,
@@ -82,6 +85,7 @@ var biOShock;
 
         memoryManager.prototype.getMemFromLoc = function (address) {
             address += _currProgram.pcb.base;
+            debugger;
             if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base) {
                 _KernelInterruptQueue.enqueue(new biOShock.Interrupt(MEM_ACCESS_VIOLATION, address));
             }

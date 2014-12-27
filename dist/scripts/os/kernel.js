@@ -49,7 +49,7 @@ var biOShock;
 
             //_cpuScheduler = new cpuScheduler();
             _ResidentList = new Array();
-            _ReadyQueue = new Array();
+            _ReadyQueue = new biOShock.Queue();
 
             // Finally, initiate testing.
             if (_GLaDOS) {
@@ -84,9 +84,10 @@ var biOShock;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
-                if (_cpuScheduler.needToContextSwitchIf()) {
-                    _cpuScheduler.contextSwitch();
-                }
+                /*if (_cpuScheduler.needToContextSwitchIf())
+                {
+                _cpuScheduler.contextSwitch();
+                }*/
                 _CPU.cycle();
             } else {
                 this.krnTrace("Idle");
@@ -155,6 +156,8 @@ var biOShock;
                     break;
 
                 case BREAK_IRQ:
+                    _currProgram.pcb.state = "Terminated";
+                    _cpuScheduler.contextSwitch();
 
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");

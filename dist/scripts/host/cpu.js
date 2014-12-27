@@ -76,6 +76,7 @@ var biOShock;
         };
 
         Cpu.prototype.perform = function (cmd) {
+            debugger;
             cmd = String(cmd);
 
             if (cmd === 'A9') {
@@ -117,8 +118,8 @@ var biOShock;
 
         //returns the location of the next time bytes
         Cpu.prototype.nextTwoBytes = function () {
-            var one = _MemMan.getMemFromLoc(this.PC++);
-            var two = _MemMan.getMemFromLoc(this.PC++);
+            var one = _MemMan.getMemFromLoc(++this.PC);
+            var two = _MemMan.getMemFromLoc(++this.PC);
 
             var hex = (two + one);
 
@@ -200,7 +201,7 @@ var biOShock;
         AC
         */
         Cpu.prototype.loadYMem = function () {
-            this.Yreg = parse(this.dataNextTwoBytes(), 16);
+            this.Yreg = parseInt(this.dataNextTwoBytes(), 16);
         };
 
         /*
@@ -277,7 +278,7 @@ var biOShock;
             _currProgram.pcb.xReg = this.Xreg;
             _currProgram.pcb.yReg = this.Yreg;
             _currProgram.pcb.zFlag = this.Zflag;
-            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(BREAK_IRQ), params);
+            _Kernel.krnTrace("break");
         };
         return Cpu;
     })();

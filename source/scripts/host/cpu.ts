@@ -86,6 +86,8 @@ module biOShock {
         }
 
         public perform(cmd): void {
+
+            debugger;
             cmd = String(cmd);
 
             if (cmd === 'A9')
@@ -159,8 +161,8 @@ module biOShock {
         //returns the location of the next time bytes
         private nextTwoBytes(): number
         {
-            var one = _MemMan.getMemFromLoc(this.PC++);
-            var two = _MemMan.getMemFromLoc(this.PC++);
+            var one = _MemMan.getMemFromLoc(++this.PC);
+            var two = _MemMan.getMemFromLoc(++this.PC);
 
             var hex = (two + one);
 
@@ -252,7 +254,7 @@ module biOShock {
         */
         private loadYMem(): void
         {
-            this.Yreg = parse(this.dataNextTwoBytes(), 16);
+            this.Yreg = parseInt(this.dataNextTwoBytes(), 16);
         }
 
         /*
@@ -342,7 +344,7 @@ module biOShock {
             _currProgram.pcb.xReg = this.Xreg;
             _currProgram.pcb.yReg = this.Yreg;
             _currProgram.pcb.zFlag = this.Zflag;
-            _KernelInterruptQueue.enqueue(new Interrupt(BREAK_IRQ), params);
+            _Kernel.krnTrace("break")
         }
         /*
             Print CPU to the screen

@@ -378,11 +378,11 @@ var biOShock;
             if (args.length <= 0) {
                 _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
                 _StdIn.advanceLine();
-            } else if (!_ResidentList[args[0]]) {
+            } else if (!_ResidentList[parseInt(args[0])]) {
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
             } else {
-                var thisProgram = _ResidentList[args[0]];
+                var thisProgram = _ResidentList[parseInt(args[0])];
                 debugger;
                 if (thisProgram.state !== "Terminated.") {
                     thisProgram.state = "Ready.";
