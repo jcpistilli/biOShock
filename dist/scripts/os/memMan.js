@@ -28,7 +28,7 @@ var biOShock;
             debugger;
             for (var i = 0; i < this.loc.length; i++) {
                 if (this.loc[i].active == false) {
-                    //this.eraseSegment(i);
+                    this.eraseSegment(i);
                     return i;
                 }
             }

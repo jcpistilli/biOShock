@@ -375,6 +375,7 @@ var biOShock;
 
         //Run
         Shell.prototype.shellRun = function (args) {
+            debugger;
             if (args.length <= 0) {
                 _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
                 _StdIn.advanceLine();
@@ -383,7 +384,6 @@ var biOShock;
                 _StdIn.advanceLine();
             } else {
                 var thisProgram = _ResidentList[parseInt(args[0])];
-                debugger;
                 if (thisProgram.state !== "Terminated.") {
                     thisProgram.state = "Ready.";
                     _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));

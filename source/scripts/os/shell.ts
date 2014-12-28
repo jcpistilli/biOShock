@@ -421,6 +421,7 @@ module biOShock {
         //Run
         public shellRun(args)
         {
+            debugger;
             if (args.length <= 0)
             {
                 _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
@@ -435,7 +436,6 @@ module biOShock {
             else
             {
                 var thisProgram = _ResidentList[parseInt(args[0])];
-                debugger;
                 if (thisProgram.state !== "Terminated.")
                 {
                     thisProgram.state = "Ready.";

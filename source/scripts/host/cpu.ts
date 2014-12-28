@@ -126,6 +126,11 @@ module biOShock {
             {
                 this.noOperation();
             }
+            else if (cmd === '00')
+            {
+                debugger;
+                this.breakCall();
+            }
             else if (cmd === 'EC')
             {
                 this.compareToX();
@@ -141,10 +146,6 @@ module biOShock {
             else if (cmd === 'FF')
             {
                 this.sysCall();
-            }
-            else if (cmd === '00')
-            {
-                this.breakCall();
             }
             else
             {

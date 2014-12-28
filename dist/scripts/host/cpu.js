@@ -97,6 +97,9 @@ var biOShock;
                 this.loadYMem();
             } else if (cmd === 'EA') {
                 this.noOperation();
+            } else if (cmd === '00') {
+                debugger;
+                this.breakCall();
             } else if (cmd === 'EC') {
                 this.compareToX();
             } else if (cmd === 'D0') {
@@ -105,8 +108,6 @@ var biOShock;
                 this.incr();
             } else if (cmd === 'FF') {
                 this.sysCall();
-            } else if (cmd === '00') {
-                this.breakCall();
             } else {
                 var num = biOShock.Utils.hexToDec(cmd);
                 var params = [num, 0];

@@ -24,6 +24,7 @@ var biOShock;
 
             // Initialize the console.
             _Console.init();
+            _CPU.init();
 
             // Initialize standard input and output to the _Console.
             _StdIn = _Console;
@@ -38,6 +39,10 @@ var biOShock;
             //
             // ... more?
             //
+            //_cpuScheduler = new cpuScheduler();
+            _ResidentList = new Array();
+            _ReadyQueue = new biOShock.Queue();
+
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();
@@ -46,10 +51,6 @@ var biOShock;
             this.krnTrace("Creating and Launching the shell.");
             _OsShell = new biOShock.Shell();
             _OsShell.init();
-
-            //_cpuScheduler = new cpuScheduler();
-            _ResidentList = new Array();
-            _ReadyQueue = new biOShock.Queue();
 
             // Finally, initiate testing.
             if (_GLaDOS) {
@@ -131,9 +132,10 @@ var biOShock;
                     break;
 
                 case EXECUTING_IRQ:
-                    if (_CPU.isExecuting = true) {
+                    if (!_CPU.isExecuting) {
+                        debugger;
                         _currProgram = _ResidentList[params[0]];
-                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "RUNNING";
+                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
                         _CPU.setCPU(_currProgram);
                     } else {
                         _StdOut.putText("Program already in execution.");
@@ -151,13 +153,15 @@ var biOShock;
                     break;
 
                 case UNKNOWN_OPERATION_IRQ:
+                    _CPU.updateCpu();
                     this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
-                    _currProgram.state = "TERMINATED";
                     break;
 
                 case BREAK_IRQ:
-                    _currProgram.pcb.state = "Terminated";
-                    _cpuScheduler.contextSwitch();
+                    _currProgram.pcb.state = "Terminated.";
+                    _CPU.updateCpu();
+                    _CPU.init();
+                    break;
 
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
