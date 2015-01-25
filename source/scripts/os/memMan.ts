@@ -39,7 +39,6 @@ module biOShock
 
         public openProgLoc(): any
         {
-            debugger;
             for (var i = 0; i < this.loc.length; i++)
             {
                 if (this.loc[i].active == false)
@@ -67,7 +66,6 @@ module biOShock
 
         public loadProgIntoMemory(program, location): void
         {
-            debugger;
             var splitProgram = program.split(' '),
                 offsetLocation = location * _progSize;
 //            this.clearProgSect(location);
@@ -94,7 +92,6 @@ module biOShock
             }
             else
             {
-                debugger;
                 var thisPCB = new pcb();
                 thisPCB.base  = ((progLoc + 1) * _progSize) - _progSize;
                 thisPCB.limit = ((progLoc + 1) * _progSize) - 1;
@@ -118,7 +115,6 @@ module biOShock
         public getMemFromLoc (address)
         {
             address += _currProgram.pcb.base;
-            debugger;
             if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base)
             {
                 _KernelInterruptQueue.enqueue(new Interrupt(MEM_ACCESS_VIOLATION, address));

@@ -421,7 +421,6 @@ module biOShock {
         //Run
         public shellRun(args)
         {
-            debugger;
             if (args.length <= 0)
             {
                 _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
@@ -451,7 +450,6 @@ module biOShock {
         //Clear Memory
         public shellClearMem()
         {
-            debugger;
             _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
         }

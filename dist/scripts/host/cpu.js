@@ -76,7 +76,6 @@ var biOShock;
         };
 
         Cpu.prototype.perform = function (cmd) {
-            debugger;
             cmd = String(cmd);
 
             if (cmd === 'A9') {
@@ -98,7 +97,6 @@ var biOShock;
             } else if (cmd === 'EA') {
                 this.noOperation();
             } else if (cmd === '00') {
-                debugger;
                 this.breakCall();
             } else if (cmd === 'EC') {
                 this.compareToX();
@@ -261,7 +259,7 @@ var biOShock;
             _currProgram.pcb.xReg = this.Xreg;
             _currProgram.pcb.yReg = this.Yreg;
             _currProgram.pcb.zFlag = this.Zflag;
-            _Kernel.krnTrace("break");
+            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(BREAK_IRQ));
         };
 
         /*

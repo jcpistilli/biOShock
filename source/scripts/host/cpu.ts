@@ -87,7 +87,6 @@ module biOShock {
 
         public perform(cmd): void {
 
-            debugger;
             cmd = String(cmd);
 
             if (cmd === 'A9')
@@ -128,7 +127,6 @@ module biOShock {
             }
             else if (cmd === '00')
             {
-                debugger;
                 this.breakCall();
             }
             else if (cmd === 'EC')
@@ -325,7 +323,7 @@ module biOShock {
             _currProgram.pcb.xReg = this.Xreg;
             _currProgram.pcb.yReg = this.Yreg;
             _currProgram.pcb.zFlag = this.Zflag;
-            _Kernel.krnTrace("break")
+            _KernelInterruptQueue.enqueue(new Interrupt(BREAK_IRQ));
         }
         /*
             Print CPU to the screen

@@ -374,7 +374,6 @@ var biOShock;
 
         //Run
         Shell.prototype.shellRun = function (args) {
-            debugger;
             if (args.length <= 0) {
                 _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
                 _StdIn.advanceLine();
@@ -394,7 +393,6 @@ var biOShock;
 
         //Clear Memory
         Shell.prototype.shellClearMem = function () {
-            debugger;
             _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
         };

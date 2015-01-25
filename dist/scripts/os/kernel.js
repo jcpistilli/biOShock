@@ -133,17 +133,17 @@ var biOShock;
 
                 case EXECUTING_IRQ:
                     if (!_CPU.isExecuting) {
-                        debugger;
                         _currProgram = _ResidentList[params[0]];
                         _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
                         _CPU.setCPU(_currProgram);
                     } else {
                         _StdOut.putText("Program already in execution.");
+                        _StdOut.advanceLine();
+                        _StdOut.putText(">");
                     }
                     break;
 
                 case MEM_ACCESS_VIOLATION:
-                    debugger;
                     _currProgram.pcb.state = "Terminated.";
                     _MemMan.removeFromList();
                     this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");
@@ -158,6 +158,7 @@ var biOShock;
                     break;
 
                 case BREAK_IRQ:
+                    debugger;
                     _currProgram.pcb.state = "Terminated.";
                     _CPU.updateCpu();
                     _CPU.init();
