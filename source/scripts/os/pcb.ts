@@ -38,26 +38,5 @@ module biOShock {
             //this.state = 0;
 
         }
-
-        //to print what is put on the PCB
-        /*public printPCB(): void
-        {
-            _StdOut.putText("PCB");
-            _StdOut.advanceLine();
-            _StdOut.putText("PID = " + this.pid);
-            _StdOut.advanceLine();
-            _StdOut.putText("PC = " + this.pc);
-            _StdOut.advanceLine();
-            _StdOut.putText("Accum = " + this.acc);
-            _StdOut.advanceLine();
-            _StdOut.putText("X-Reg = " + this.xReg);
-            _StdOut.advanceLine();
-            _StdOut.putText("Y-Reg = " + this.yReg);
-            _StdOut.advanceLine();
-            _StdOut.putText("Z-Flag = " + this.zFlag);
-            _StdOut.advanceLine();
-            _OsShell.putPrompt();
-        }*/
-
     }
 }

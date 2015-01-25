@@ -182,6 +182,12 @@ module biOShock
             mem.init();
         }
 
+        public MemManInit()
+        {
+            var mem = new biOShock.Memory(this.memory.bytes);
+            mem.init();
+        }
+
 
     }
 

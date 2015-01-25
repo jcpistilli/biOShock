@@ -137,6 +137,11 @@ var biOShock;
             var mem = new biOShock.Memory(this.memory.bytes);
             mem.init();
         };
+
+        memoryManager.prototype.MemManInit = function () {
+            var mem = new biOShock.Memory(this.memory.bytes);
+            mem.init();
+        };
         return memoryManager;
     })();
     biOShock.memoryManager = memoryManager;

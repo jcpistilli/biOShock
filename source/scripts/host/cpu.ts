@@ -19,11 +19,11 @@ module biOShock {
 
     export class Cpu {
 
-        constructor(public PC: number = 0,
-                    public Acc: number = 0,
-                    public Xreg: number = 0,
-                    public Yreg: number = 0,
-                    public Zflag: number = 0,
+        constructor(public PC = 0,
+                    public Acc = 0,
+                    public Xreg = 0,
+                    public Yreg = 0,
+                    public Zflag = 0,
                     public isExecuting: boolean = false)
         {
 
@@ -149,32 +149,12 @@ module biOShock {
             }
             else
             {
-                var num = Utils.hexToDec(cmd);
-                var params = [num, 0];
-                _KernelInterruptQueue.enqueue(new Interrupt(UNKNOWN_OPERATION_IRQ, params));
+                _KernelInterruptQueue.enqueue(new Interrupt(UNKNOWN_OPERATION_IRQ));
             }
 
 
             this.PC++;
 
-        }
-
-        //returns the location of the next time bytes
-        private nextTwoBytes(): number
-        {
-            var one = _MemMan.getMemFromLoc(++this.PC);
-            var two = _MemMan.getMemFromLoc(++this.PC);
-
-            var hex = (two + one);
-
-            var decimal = parseInt(hex, 16); //hard coding it for look-ability
-
-            return decimal;
-        }
-
-        public dataNextTwoBytes(): any
-        {
-            return _MemMan.getMemFromLoc(this.nextTwoBytes());
         }
 
         /*
@@ -195,7 +175,7 @@ module biOShock {
         */
         private loadAccFromMem(): void
         {
-            this.Acc = parseInt(this.dataNextTwoBytes(), 16);
+            this.Acc = this.dataNextTwoBytes();
         }
 
         /*
@@ -235,7 +215,7 @@ module biOShock {
         */
         private loadXMem(): void
         {
-            this.Xreg = parseInt(this.dataNextTwoBytes(), 16);
+            this.Xreg = this.dataNextTwoBytes();
         }
 
         /*
@@ -255,7 +235,7 @@ module biOShock {
         */
         private loadYMem(): void
         {
-            this.Yreg = parseInt(this.dataNextTwoBytes(), 16);
+            this.Yreg = this.dataNextTwoBytes();
         }
 
         /*
@@ -276,7 +256,7 @@ module biOShock {
         private compareToX(): void
         {
             var loc = this.dataNextTwoBytes();
-            if (parseInt(String(this.Xreg)) === parseInt(loc)) //String() stops it from being mad
+            if (parseInt(this.Xreg) === parseInt(loc))
             {
                 this.Zflag = 1;
             }
@@ -294,10 +274,10 @@ module biOShock {
         {
             if (this.Zflag == 0)
             {
-                this.PC += parseInt(_MemMan.getMemFromLoc(this.PC++), 16) + 1;
+                this.PC += parseInt(_MemMan.getMemFromLoc(++this.PC), 16) + 1;
                 if (this.PC >= _progSize)
                 {
-                    this.PC -= _progSize
+                    this.PC -= _progSize;
                 }
             }
             else
@@ -329,8 +309,8 @@ module biOShock {
         */
         private sysCall(): void
         {
-            var params = new Array(this.Xreg, this.Yreg);
-            _KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ, params));
+            //var params = new Array(this.Xreg, this.Yreg);
+            _KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ/*, params*/));
 
         }
         /*
@@ -350,5 +330,24 @@ module biOShock {
         /*
             Print CPU to the screen
         */
+
+
+        //returns the location of the next time bytes
+        private nextTwoBytes()
+        {
+            var one = _MemMan.getMemFromLoc(++this.PC);
+            var two = _MemMan.getMemFromLoc(++this.PC);
+
+            var hex = (two + one);
+
+            var decimal = parseInt(hex, 16); //hard coding it for look-ability
+
+            return decimal;
+        }
+
+        public dataNextTwoBytes()
+        {
+            return _MemMan.getMemFromLoc(this.nextTwoBytes());
+        }
     }
 }

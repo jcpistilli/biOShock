@@ -94,6 +94,7 @@ var biOShock;
 
             //Init mem man
             _MemMan = new biOShock.memoryManager();
+            _MemMan.MemManInit();
             //            this.CPUtoHTML();
             //            this.memTable(1);
         };

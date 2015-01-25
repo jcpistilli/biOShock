@@ -348,15 +348,14 @@ var biOShock;
 
             var removeSpace = retrieveHex.replace(/\s+/g, ' ').toUpperCase();
 
-            var even = removeSpace.length % 2 == 0;
-
+            //var even = removeSpace.length % 2 == 0;
             if (removeSpace.length == 0) {
                 _StdOut.putText("There is no input.");
                 return;
             }
 
             for (var i = 0; i < removeSpace.length; i++) {
-                if (!(removeSpace[i].match(/^[0-9A-F\s]/i) && even)) {
+                if (!(removeSpace[i].match(/^[0-9A-F\s]/i))) {
                     _StdOut.putText("Please enter valid hex codes and an even amount");
                     _StdOut.advanceLine();
                     _StdOut.putText("of characters.");
@@ -379,11 +378,11 @@ var biOShock;
             if (args.length <= 0) {
                 _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
                 _StdIn.advanceLine();
-            } else if (!_ResidentList[parseInt(args[0])]) {
+            } else if (!_ResidentList[args[0]]) {
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
             } else {
-                var thisProgram = _ResidentList[parseInt(args[0])];
+                var thisProgram = _ResidentList[args[0]];
                 if (thisProgram.state !== "Terminated.") {
                     thisProgram.state = "Ready.";
                     _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));

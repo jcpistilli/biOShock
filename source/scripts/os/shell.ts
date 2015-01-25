@@ -387,7 +387,7 @@ module biOShock {
 
             var removeSpace = retrieveHex.replace(/\s+/g, ' ').toUpperCase();
 
-            var even = removeSpace.length % 2 == 0;
+            //var even = removeSpace.length % 2 == 0;
 
             if (removeSpace.length == 0)
             {
@@ -397,7 +397,7 @@ module biOShock {
 
             for (var i = 0; i < removeSpace.length; i++)
             {
-                if (!(removeSpace[i].match(/^[0-9A-F\s]/i) && even))
+                if (!(removeSpace[i].match(/^[0-9A-F\s]/i)))
                 {
                     _StdOut.putText("Please enter valid hex codes and an even amount");
                     _StdOut.advanceLine();
@@ -428,14 +428,14 @@ module biOShock {
                 _StdIn.advanceLine();
 
             }
-            else if (!_ResidentList[parseInt(args[0])])
+            else if (!_ResidentList[args[0]])
             {
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
             }
             else
             {
-                var thisProgram = _ResidentList[parseInt(args[0])];
+                var thisProgram = _ResidentList[args[0]];
                 if (thisProgram.state !== "Terminated.")
                 {
                     thisProgram.state = "Ready.";
