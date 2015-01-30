@@ -12,7 +12,7 @@ var biOShock;
             this.init();
         }
         Memory.prototype.init = function () {
-            for (var i = 0; i < this.bytes; i++) {
+            for (var i = 0; i < 758; i++) {
                 this.data[i] = "00";
             }
             document.getElementById("memTable").value = this.data.join(" ");

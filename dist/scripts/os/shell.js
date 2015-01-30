@@ -81,6 +81,10 @@ var biOShock;
             sc = new biOShock.ShellCommand(this.shellRun, "run", "<PID> - Runs a program from memory");
             this.commandList[this.commandList.length] = sc;
 
+            //Kill <pid>
+            sc = new biOShock.ShellCommand(this.shellKill, "kill", "<PID> - Kills a program with the PID");
+            this.commandList[this.commandList.length] = sc;
+
             //ClearMem
             sc = new biOShock.ShellCommand(this.shellClearMem, "clearmem", "- Clears Memory.");
             this.commandList[this.commandList.length] = sc;
@@ -387,6 +391,21 @@ var biOShock;
                     _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));
                 } else {
                     _StdOut.putText("Already being handled.");
+                }
+            }
+        };
+
+        //Kill
+        Shell.prototype.shellKill = function (args) {
+            if (args.length > 0) {
+                var inputPID = parseInt(args[0]);
+                var proc = null;
+
+                if (_currProgram && _currProgram.pcb.pid === inputPID) {
+                    proc = _currProgram;
+                    _currProgram.state = "Terminated.";
+                    _Kernel.krnTrace("Killed process " + inputPID);
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
                 }
             }
         };

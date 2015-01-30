@@ -88,16 +88,21 @@ var biOShock;
             return this.memory.data[address];
         };
 
-        memoryManager.prototype.removeFromList = function () {
-            this.loc[_currProgram.pcb.location].active = false;
-            this.clearProgSect(_currProgram.pcb.location);
+        memoryManager.prototype.getBase = function (base) {
+            for (var i = 0; i < this.loc.length; i++) {
+                if (this.loc[i].base === base) {
+                    return i;
+                }
+            }
+            return -1;
         };
 
-        memoryManager.prototype.removeThisFromList = function () {
+        memoryManager.prototype.removeFromList = function (pid) {
             var done = false;
 
             for (var i = 0; i < _ResidentList.length; i++) {
                 if (_ResidentList[i] && _ResidentList[i].pcb.pid === _currProgram.pcb.pid) {
+                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
                     if (_currProgram.pcb.loc !== -1) {
                         this.loc[_currProgram.pcb.loc].active = false;
                     }

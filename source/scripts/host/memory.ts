@@ -19,7 +19,7 @@ module biOShock
 
         public init(): void
         {
-            for (var i = 0; i < this.bytes; i++)
+            for (var i = 0; i < 758; i++)
             {
                 this.data[i] = "00";
             }

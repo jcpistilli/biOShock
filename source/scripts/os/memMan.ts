@@ -112,7 +112,7 @@ module biOShock
 
         }
 
-        public getMemFromLoc (address)
+        public getMemFromLoc(address)
         {
             address += _currProgram.pcb.base;
             if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base)
@@ -122,13 +122,17 @@ module biOShock
             return this.memory.data[address];
         }
 
-        public removeFromList (): any
+        public getBase(base)
         {
-            this.loc[_currProgram.pcb.location].active = false;
-            this.clearProgSect(_currProgram.pcb.location);
+            for (var i = 0; i < this.loc.length; i++) {
+                if (this.loc[i].base === base) {
+                    return i;
+                }
+            }
+            return -1;
         }
 
-        public removeThisFromList(): any
+        public removeFromList(pid): any
         {
             var done = false;
 
@@ -136,6 +140,7 @@ module biOShock
             {
                 if(_ResidentList[i] && _ResidentList[i].pcb.pid === _currProgram.pcb.pid)
                 {
+                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
                     if (_currProgram.pcb.loc !== -1)
                     {
                         this.loc[_currProgram.pcb.loc].active = false;

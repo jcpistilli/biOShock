@@ -117,6 +117,12 @@ module biOShock {
                 "<PID> - Runs a program from memory");
             this.commandList[this.commandList.length] = sc;
 
+            //Kill <pid>
+            sc = new ShellCommand(this.shellKill,
+                "kill",
+                "<PID> - Kills a program with the PID");
+            this.commandList[this.commandList.length] = sc;
+
             //ClearMem
             sc = new ShellCommand(this.shellClearMem,
                 "clearmem",
@@ -443,6 +449,25 @@ module biOShock {
                 else
                 {
                     _StdOut.putText("Already being handled.");
+                }
+            }
+        }
+
+        //Kill
+        public shellKill(args)
+        {
+            if (args.length > 0)
+            {
+                var inputPID = parseInt(args[0]);
+                var proc = null;
+
+                if (_currProgram && _currProgram.pcb.pid === inputPID)
+                {
+                    proc = _currProgram;
+                    _currProgram.state = "Terminated.";
+                    _Kernel.krnTrace("Killed process " + inputPID);
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
+
                 }
             }
         }
