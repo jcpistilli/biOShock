@@ -101,7 +101,7 @@ var biOShock;
             var done = false;
 
             for (var i = 0; i < _ResidentList.length; i++) {
-                if (_ResidentList[i] && _ResidentList[i].pcb.pid === _currProgram.pcb.pid) {
+                if (_ResidentList[i] && _ResidentList[i].pcb.pid === pid) {
                     var thisLoc = this.getBase(_ResidentList[i].pcb.base);
                     if (_currProgram.pcb.loc !== -1) {
                         this.loc[_currProgram.pcb.loc].active = false;
