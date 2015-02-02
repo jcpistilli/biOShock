@@ -388,6 +388,7 @@ var biOShock;
                 var thisProgram = _ResidentList[args[0]];
                 if (thisProgram.state !== "Terminated.") {
                     thisProgram.state = "Ready.";
+                    _ReadyQueue.push(thisProgram);
                     _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));
                 } else {
                     _StdOut.putText("Already being handled.");
