@@ -463,12 +463,33 @@ module biOShock {
 
                 if (_currProgram && _currProgram.pcb.pid === inputPID)
                 {
-                    proc = _currProgram;
                     _currProgram.state = "Terminated.";
                     _Kernel.krnTrace("Killed process " + inputPID);
                     _MemMan.removeFromList(_currProgram.pcb.pid);
-
                 }
+                else
+                {
+                    for(var i = 0; i < _ReadyQueue.length; i++)
+                    {
+                        if(_ReadyQueue[i].pcb.pid === inputPID)
+                        {
+                            proc = _ReadyQueue[i];
+                            _ReadyQueue[i].state = "Terminated.";
+                            _ReadyQueue.splice(i, 1);
+                            _MemMan.removeFromList(proc.pcb.pid);
+                            _Kernel.krnTrace("Killed process " + inputPID);
+                            break;
+                        }
+                    }
+                }
+                if (proc === null)
+                {
+                    _StdIn.putText("Please indicate a running PID to kill.");
+                }
+            }
+            else
+            {
+                _StdIn.putText("Usage: kill <pid>  Please supply a PID.");
             }
         }
 

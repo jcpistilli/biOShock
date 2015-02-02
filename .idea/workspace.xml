@@ -53,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="memMan.ts" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="memMan.ts" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/scripts/os/memMan.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.54340476" vertical-offset="1558" max-vertical-offset="3060">
-              <caret line="140" column="72" selection-start-line="140" selection-start-column="72" selection-end-line="140" selection-end-column="72" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1753" max-vertical-offset="3060">
+              <caret line="148" column="32" selection-start-line="148" selection-start-column="32" selection-end-line="148" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -93,11 +93,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="shell.ts" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="shell.ts" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="6223" max-vertical-offset="7680">
-              <caret line="469" column="0" selection-start-line="469" selection-start-column="0" selection-end-line="469" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.78015786" vertical-offset="6613" max-vertical-offset="7995">
+              <caret line="489" column="16" selection-start-line="489" selection-start-column="16" selection-end-line="489" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -142,8 +142,8 @@
         <option value="$PROJECT_DIR$/source/scripts/host/cpu.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/kernel.ts" />
         <option value="$PROJECT_DIR$/source/scripts/host/memory.ts" />
-        <option value="$PROJECT_DIR$/source/scripts/os/shell.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/memMan.ts" />
+        <option value="$PROJECT_DIR$/source/scripts/os/shell.ts" />
       </list>
     </option>
   </component>
@@ -183,6 +183,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -297,7 +298,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -317,14 +317,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
-      <method />
-    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -335,14 +327,12 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="CucumberJavaScriptRunConfigurationType" factoryName="Cucumber.js">
-      <option name="cucumberJsArguments" />
-      <option name="executablePath" />
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
       <option name="filePath" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
-      <envs />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
       <method />
     </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
@@ -350,6 +340,16 @@
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="Chrome" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="CucumberJavaScriptRunConfigurationType" factoryName="Cucumber.js">
+      <option name="cucumberJsArguments" />
+      <option name="executablePath" />
+      <option name="filePath" />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
@@ -373,7 +373,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1920" y="23" width="1920" height="984" extended-state="0" />
+    <frame x="-1920" y="23" width="1920" height="984" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -388,11 +388,11 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32568306" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="UnknownFeatures">
@@ -773,18 +773,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
+    <entry file="file://$PROJECT_DIR$/source/scripts/os/memMan.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6223" max-vertical-offset="7680">
-          <caret line="469" column="0" selection-start-line="469" selection-start-column="0" selection-end-line="469" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1753" max-vertical-offset="3060">
+          <caret line="148" column="32" selection-start-line="148" selection-start-column="32" selection-end-line="148" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/scripts/os/memMan.ts">
+    <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.54340476" vertical-offset="1558" max-vertical-offset="3060">
-          <caret line="140" column="72" selection-start-line="140" selection-start-column="72" selection-end-line="140" selection-end-column="72" />
+        <state vertical-scroll-proportion="0.78015786" vertical-offset="6613" max-vertical-offset="7995">
+          <caret line="489" column="16" selection-start-line="489" selection-start-column="16" selection-end-line="489" selection-end-column="16" />
           <folding />
         </state>
       </provider>
