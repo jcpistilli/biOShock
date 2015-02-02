@@ -444,7 +444,7 @@ module biOShock {
                 if (thisProgram.state !== "Terminated.")
                 {
                     thisProgram.state = "Ready.";
-                    _ReadyQueue.push(thisProgram);
+                    _ReadyQueue.enqueue(thisProgram);
                     _KernelInterruptQueue.enqueue(new Interrupt(EXECUTING_IRQ, args[0]));
                 }
                 else
