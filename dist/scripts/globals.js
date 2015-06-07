@@ -29,6 +29,8 @@ var UNKNOWN_OPERATION_IRQ = 5;
 
 var BREAK_IRQ = 6;
 
+var CONTEXT_SWITCH_IRQ = 7;
+
 //
 // Global Variables
 //

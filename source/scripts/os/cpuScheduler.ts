@@ -7,7 +7,7 @@
 
 module biOShock
 {
-    export class cpuScheduler
+    export class CpuScheduler
     {
         public quantum = 6;
         public options = ['rr', 'fcfs', 'priority'];
@@ -22,7 +22,7 @@ module biOShock
 
         public start(): void
         {
-            if (_ReadyQueue.length > 0)
+            if (_ReadyQueue.length() > 0)
             {
                 _Mode = 1;
                 _currProgram = this.nextProcess();
@@ -35,7 +35,7 @@ module biOShock
         {
             if( this.scheduleType = this.options[0])
             {
-                return _ReadyQueue.shift();
+                return _ReadyQueue.dequeue();
             }
         }
 
@@ -47,11 +47,14 @@ module biOShock
                 {
                     return true;
                 }
+                else
+                {
+                    return false;
+                }
             }
-            return true;
         }
 
-        public contextSwitch(): any
+        public contextSwitch(): void
         {
             var nextProc = this.nextProcess();
             if (nextProc !== null && nextProc !== undefined)
@@ -64,13 +67,18 @@ module biOShock
                 {
                     _Kernel.krnTrace("Unknown CPU scheduler.");
                 }
+                var lastProc = _currProgram;
+                _currProgram = nextProc;
+
+                _currProgram.state = "Running.";
+                _CPU.setCPU(_currProgram);
+            }
+            else if(_currProgram.state === "Terminated.")
+            {
+                this.stop();
             }
 
-            var lastProc = _currProgram;
-            _currProgram = nextProc;
-
-            _currProgram.state = "Running.";
-
+            _cycleCounter = 0;
         }
 
         public roundRobinSwitch(nextProc): any
@@ -82,9 +90,27 @@ module biOShock
                 _currProgram.state = "Ready.";
                 _ReadyQueue.enqueue(_currProgram)
             }
-            else if (_currProgram.state === "Terminated.") {
-                _MemMan.removeThisFromList();//removeThisFromList is in MemMan
+            else if (_currProgram.state === "Terminated.")
+            {
+                _MemMan.removeCurrProgram();//removeThisFromList is in MemMan
             }
+        }
+
+        public stop(): any
+        {
+            _MemMan.removeCurrProgram();
+            _CPU.isExecuting = false;
+
+
+            _Mode = 0;
+            _CPU.updatePCB();
+            _currProgram = null;
+            _cycleCounter = 0;
+        }
+
+        public setQuantum(quantum): any
+        {
+            this.quantum = quantum;
         }
     }
 }

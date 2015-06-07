@@ -31,6 +31,8 @@ var UNKNOWN_OPERATION_IRQ: number = 5;
 
 var BREAK_IRQ: number = 6;
 
+var CONTEXT_SWITCH_IRQ: number = 7;
+
 
 //
 // Global Variables
@@ -78,7 +80,7 @@ var _currPCB = null;
 var _runningPID: number = -1;
 var _currProgram: any = null;
 
-var _cpuScheduler: any = null;
+var _cpuScheduler = null;
 
 // UI
 var _Console: biOShock.Console;

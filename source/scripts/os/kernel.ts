@@ -42,7 +42,9 @@ module biOShock {
             // ... more?
             //
 
-            //_cpuScheduler = new cpuScheduler();
+            debugger;
+
+            _cpuScheduler = new CpuScheduler();
             _ResidentList = new Array();
             _ReadyQueue = new Queue();
 
@@ -89,10 +91,10 @@ module biOShock {
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
-                /*if (_cpuScheduler.needToContextSwitchIf())
+                if (_cpuScheduler.needToContextSwitchIf())
                 {
                     _cpuScheduler.contextSwitch();
-                }*/
+                }
                 _CPU.cycle();
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
                 this.krnTrace("Idle");
@@ -146,15 +148,14 @@ module biOShock {
                 case EXECUTING_IRQ: //3
                     if(!_CPU.isExecuting)
                     {
-                        _currProgram = _ResidentList[params[0]];
-                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
-                        _CPU.setCPU(_currProgram);
+                        _cpuScheduler.start();
                     }
                     else
                     {
-                        _StdOut.putText("Program already in execution.");
-                        _StdOut.advanceLine();
-                        _StdOut.putText(">");
+                        if (_cpuScheduler.determineNeedToContextSwitch())
+                        {
+                            _cpuScheduler.contextSwitch();
+                        }
                     }
                     break;
 
@@ -170,12 +171,18 @@ module biOShock {
                 case UNKNOWN_OPERATION_IRQ: //5
                     _CPU.updateCpu();
                     this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
+                    _currProgram.state = "Terminated";
+                    _cpuScheduler.contextSwitch();
                     break;
 
                 case BREAK_IRQ: //6
                     _currProgram.pcb.state = "Terminated.";
                     _CPU.updateCpu();
                     _CPU.init();
+                    break;
+
+                case CONTEXT_SWITCH_IRQ:
+                    _cpuScheduler.contextSwitch();
                     break;
 
                 default:

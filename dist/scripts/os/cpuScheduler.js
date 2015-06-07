@@ -4,17 +4,17 @@ Jonathan Pistilli
 */
 var biOShock;
 (function (biOShock) {
-    var cpuScheduler = (function () {
+    var CpuScheduler = (function () {
         /*
         I know that for project 4 i need to implement fcfs and non preemptive priority
         */
-        function cpuScheduler() {
+        function CpuScheduler() {
             this.quantum = 6;
             this.options = ['rr', 'fcfs', 'priority'];
             this.scheduleType = this.options[0];
         }
-        cpuScheduler.prototype.start = function () {
-            if (_ReadyQueue.length > 0) {
+        CpuScheduler.prototype.start = function () {
+            if (_ReadyQueue.length() > 0) {
                 _Mode = 1;
                 _currProgram = this.nextProcess();
                 _currProgram.state = "Running.";
@@ -22,22 +22,23 @@ var biOShock;
             }
         };
 
-        cpuScheduler.prototype.nextProcess = function () {
+        CpuScheduler.prototype.nextProcess = function () {
             if (this.scheduleType = this.options[0]) {
-                return _ReadyQueue.shift();
+                return _ReadyQueue.dequeue();
             }
         };
 
-        cpuScheduler.prototype.needToContextSwitchIf = function () {
+        CpuScheduler.prototype.needToContextSwitchIf = function () {
             if (this.scheduleType === this.options[0]) {
                 if (_cycleCounter >= this.quantum) {
                     return true;
+                } else {
+                    return false;
                 }
             }
-            return true;
         };
 
-        cpuScheduler.prototype.contextSwitch = function () {
+        CpuScheduler.prototype.contextSwitch = function () {
             var nextProc = this.nextProcess();
             if (nextProc !== null && nextProc !== undefined) {
                 if (this.scheduleType === this.options[0]) {
@@ -45,25 +46,43 @@ var biOShock;
                 } else {
                     _Kernel.krnTrace("Unknown CPU scheduler.");
                 }
+                var lastProc = _currProgram;
+                _currProgram = nextProc;
+
+                _currProgram.state = "Running.";
+                _CPU.setCPU(_currProgram);
+            } else if (_currProgram.state === "Terminated.") {
+                this.stop();
             }
 
-            var lastProc = _currProgram;
-            _currProgram = nextProc;
-
-            _currProgram.state = "Running.";
+            _cycleCounter = 0;
         };
 
-        cpuScheduler.prototype.roundRobinSwitch = function (nextProc) {
+        CpuScheduler.prototype.roundRobinSwitch = function (nextProc) {
             _Kernel.krnTrace("Current cycle count > quantum of " + this.quantum + ". Switching context.");
             _CPU.updatePCB();
             if (_currProgram.state !== "Terminated.") {
                 _currProgram.state = "Ready.";
                 _ReadyQueue.enqueue(_currProgram);
             } else if (_currProgram.state === "Terminated.") {
-                _MemMan.removeThisFromList(); //removeThisFromList is in MemMan
+                _MemMan.removeCurrProgram(); //removeThisFromList is in MemMan
             }
         };
-        return cpuScheduler;
+
+        CpuScheduler.prototype.stop = function () {
+            _MemMan.removeCurrProgram();
+            _CPU.isExecuting = false;
+
+            _Mode = 0;
+            _CPU.updatePCB();
+            _currProgram = null;
+            _cycleCounter = 0;
+        };
+
+        CpuScheduler.prototype.setQuantum = function (quantum) {
+            this.quantum = quantum;
+        };
+        return CpuScheduler;
     })();
-    biOShock.cpuScheduler = cpuScheduler;
+    biOShock.CpuScheduler = CpuScheduler;
 })(biOShock || (biOShock = {}));
