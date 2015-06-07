@@ -403,16 +403,18 @@ var biOShock;
                 var proc = null;
 
                 if (_currProgram && _currProgram.pcb.pid === inputPID) {
+                    debugger;
+                    proc = _currProgram;
                     _currProgram.state = "Terminated.";
                     _Kernel.krnTrace("Killed process " + inputPID);
-                    _MemMan.removeFromList(_currProgram.pcb.pid);
+                    _MemMan.removeCurrProgram();
                 } else {
                     for (var i = 0; i < _ReadyQueue.length(); i++) {
                         if (_ReadyQueue.q[i].pcb.pid === inputPID) {
                             proc = _ReadyQueue.q[i];
                             _ReadyQueue.q[i].state = "Terminated.";
                             _ReadyQueue.q.splice(i, 1);
-                            _MemMan.removeFromList(proc.pcb.pid);
+                            _MemMan.removeFromList(_ReadyQueue.q[i].pcb);
                             _Kernel.krnTrace("Killed process " + inputPID);
                             break;
                         }

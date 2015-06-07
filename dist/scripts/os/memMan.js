@@ -104,8 +104,27 @@ var biOShock;
                 if (_ResidentList[i] && _ResidentList[i].pcb.pid === pid) {
                     var thisLoc = this.getBase(_ResidentList[i].pcb.base);
                     if (_currProgram.pcb.loc !== -1) {
-                        this.loc[_currProgram.pcb.loc].active = false;
+                        this.loc[thisLoc].active = false;
                     }
+                    _ResidentList.splice(i, 1);
+                    done = true;
+                }
+            }
+            return done;
+        };
+
+        memoryManager.prototype.removeCurrProgram = function () {
+            debugger;
+            var done = false;
+            var thisPID = _currProgram.pcb.pid;
+
+            for (var i = 0; i < _ResidentList.length(); i++) {
+                if (_ResidentList[i] && _ResidentList[i].pcb.pid === thisPID) {
+                    //                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
+                    //                    if (_currProgram.pcb.loc !== -1)
+                    //                    {
+                    //                        this.loc[_currProgram.pcb.loc].active = false;
+                    //                    }
                     _ResidentList.splice(i, 1);
                     done = true;
                 }

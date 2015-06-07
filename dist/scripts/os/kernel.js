@@ -145,7 +145,7 @@ var biOShock;
 
                 case MEM_ACCESS_VIOLATION:
                     _currProgram.pcb.state = "Terminated.";
-                    _MemMan.removeFromList();
+                    _MemMan.removeCurrProgram();
                     this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");
                     this.krnTrace("PID " + _currProgram.pcb.pid + " attempted to access memory location" + params[0]);
 
@@ -158,7 +158,6 @@ var biOShock;
                     break;
 
                 case BREAK_IRQ:
-                    debugger;
                     _currProgram.pcb.state = "Terminated.";
                     _CPU.updateCpu();
                     _CPU.init();
