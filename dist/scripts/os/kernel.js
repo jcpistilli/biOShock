@@ -38,7 +38,7 @@ var biOShock;
 
             debugger;
 
-            _cpuScheduler = new biOShock.CpuScheduler();
+            _CpuScheduler = new biOShock.CpuScheduler();
             _ResidentList = new Array();
             _ReadyQueue = new biOShock.Queue();
 
@@ -84,8 +84,8 @@ var biOShock;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
-                if (_cpuScheduler.needToContextSwitchIf()) {
-                    _cpuScheduler.contextSwitch();
+                if (_CpuScheduler.needToContextSwitchIf()) {
+                    _CpuScheduler.contextSwitch();
                 }
                 _CPU.cycle();
             } else {
@@ -131,10 +131,10 @@ var biOShock;
 
                 case EXECUTING_IRQ:
                     if (!_CPU.isExecuting) {
-                        _cpuScheduler.start();
+                        _CpuScheduler.start();
                     } else {
-                        if (_cpuScheduler.determineNeedToContextSwitch()) {
-                            _cpuScheduler.contextSwitch();
+                        if (_CpuScheduler.needToContextSwitchIf()) {
+                            _CpuScheduler.contextSwitch();
                         }
                     }
                     break;
@@ -152,7 +152,7 @@ var biOShock;
                     _CPU.updateCpu();
                     this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
                     _currProgram.state = "Terminated";
-                    _cpuScheduler.contextSwitch();
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 case BREAK_IRQ:
@@ -162,7 +162,7 @@ var biOShock;
                     break;
 
                 case CONTEXT_SWITCH_IRQ:
-                    _cpuScheduler.contextSwitch();
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 default:

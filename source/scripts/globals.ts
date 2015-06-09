@@ -80,7 +80,7 @@ var _currPCB = null;
 var _runningPID: number = -1;
 var _currProgram: any = null;
 
-var _cpuScheduler = null;
+var _CpuScheduler = null;
 
 // UI
 var _Console: biOShock.Console;

@@ -44,7 +44,7 @@ module biOShock {
 
             debugger;
 
-            _cpuScheduler = new CpuScheduler();
+            _CpuScheduler = new CpuScheduler();
             _ResidentList = new Array();
             _ReadyQueue = new Queue();
 
@@ -91,9 +91,9 @@ module biOShock {
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
-                if (_cpuScheduler.needToContextSwitchIf())
+                if (_CpuScheduler.needToContextSwitchIf())
                 {
-                    _cpuScheduler.contextSwitch();
+                    _CpuScheduler.contextSwitch();
                 }
                 _CPU.cycle();
             } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
@@ -148,13 +148,13 @@ module biOShock {
                 case EXECUTING_IRQ: //3
                     if(!_CPU.isExecuting)
                     {
-                        _cpuScheduler.start();
+                        _CpuScheduler.start();
                     }
                     else
                     {
-                        if (_cpuScheduler.determineNeedToContextSwitch())
+                        if (_CpuScheduler.needToContextSwitchIf())
                         {
-                            _cpuScheduler.contextSwitch();
+                            _CpuScheduler.contextSwitch();
                         }
                     }
                     break;
@@ -172,7 +172,7 @@ module biOShock {
                     _CPU.updateCpu();
                     this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
                     _currProgram.state = "Terminated";
-                    _cpuScheduler.contextSwitch();
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 case BREAK_IRQ: //6
@@ -182,7 +182,7 @@ module biOShock {
                     break;
 
                 case CONTEXT_SWITCH_IRQ:
-                    _cpuScheduler.contextSwitch();
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 default:

@@ -76,7 +76,7 @@ var _currPCB = null;
 var _runningPID = -1;
 var _currProgram = null;
 
-var _cpuScheduler = null;
+var _CpuScheduler = null;
 
 // UI
 var _Console;
