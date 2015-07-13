@@ -9,13 +9,15 @@ var biOShock;
         I know that for project 4 i need to implement fcfs and non preemptive priority
         */
         function CpuScheduler() {
-            this.quantum = 6;
+            //        public quantum = 6;
             this.options = ['rr', 'fcfs', 'priority'];
             this.scheduleType = this.options[0];
         }
         CpuScheduler.prototype.start = function () {
-            if (_ReadyQueue.length() > 0) {
+            if (_ReadyQueue.length > 0) {
                 _Mode = 1;
+
+                //                _currProgram = _ReadyQueue.dequeue();
                 _currProgram = this.nextProcess();
                 _currProgram.state = "Running.";
                 _CPU.setCPU(_currProgram);

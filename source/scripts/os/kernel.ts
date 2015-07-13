@@ -42,8 +42,6 @@ module biOShock {
             // ... more?
             //
 
-            debugger;
-
             _CpuScheduler = new CpuScheduler();
             _ResidentList = new Array();
             _ReadyQueue = new Queue();
@@ -90,13 +88,13 @@ module biOShock {
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
-            } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
-                if (_CpuScheduler.needToContextSwitchIf())
-                {
-                    _CpuScheduler.contextSwitch();
-                }
-                _CPU.cycle();
-            } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
+            }
+            else if (_CPU.isExecuting)
+            { // If there are no interrupts then run one CPU cycle if there is anything being processed.
+//                _CPU.cycle();
+                this.clockPulse();
+            } else
+            {                      // If there are no interrupts and there is nothing being executed then just be idle.
                 this.krnTrace("Idle");
             }
 
@@ -148,16 +146,30 @@ module biOShock {
                 case EXECUTING_IRQ: //3
                     if(!_CPU.isExecuting)
                     {
-                        _CpuScheduler.start();
+                        _currProgram = _ResidentList[params[0]];
+                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
+                        _CPU.setCPU(_currProgram);
                     }
                     else
                     {
-                        if (_CpuScheduler.needToContextSwitchIf())
-                        {
-                            _CpuScheduler.contextSwitch();
-                        }
+                        _StdOut.putText("Program already in execution.");
+                        _StdOut.advanceLine();
+                        _StdOut.putText(">");
                     }
                     break;
+
+//                    if(!_CPU.isExecuting)
+//                    {
+//                        _CpuScheduler.start();
+//                    }
+//                    else
+//                    {
+//                        if (_CpuScheduler.needToContextSwitchIf())
+//                        {
+//                            _CpuScheduler.contextSwitch();
+//                        }
+//                    }
+//                    break;
 
                 case MEM_ACCESS_VIOLATION: //4
                     _currProgram.pcb.state = "Terminated.";
@@ -236,6 +248,16 @@ module biOShock {
             this.krnShutdown();
             var shut = document.getElementById("bsod");
             _DrawingContext.drawImage(shut, 0, 0, 500, 500);
+        }
+
+        public clockPulse()
+        {
+            var needSwitch = _CpuScheduler.needToContextSwitchIf();
+            if (needSwitch)
+            {
+                _CpuScheduler.contextSwitch();
+            }
+            _CPU.cycle();
         }
     }
 }

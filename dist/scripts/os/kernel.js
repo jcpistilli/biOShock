@@ -36,8 +36,9 @@ var biOShock;
             _krnKeyboardDriver.driverEntry(); // Call the driverEntry() initialization routine.
             this.krnTrace(_krnKeyboardDriver.status);
 
-            debugger;
-
+            //
+            // ... more?
+            //
             _CpuScheduler = new biOShock.CpuScheduler();
             _ResidentList = new Array();
             _ReadyQueue = new biOShock.Queue();
@@ -84,10 +85,8 @@ var biOShock;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
-                if (_CpuScheduler.needToContextSwitchIf()) {
-                    _CpuScheduler.contextSwitch();
-                }
-                _CPU.cycle();
+                //                _CPU.cycle();
+                this.clockPulse();
             } else {
                 this.krnTrace("Idle");
             }
@@ -131,11 +130,13 @@ var biOShock;
 
                 case EXECUTING_IRQ:
                     if (!_CPU.isExecuting) {
-                        _CpuScheduler.start();
+                        _currProgram = _ResidentList[params[0]];
+                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
+                        _CPU.setCPU(_currProgram);
                     } else {
-                        if (_CpuScheduler.needToContextSwitchIf()) {
-                            _CpuScheduler.contextSwitch();
-                        }
+                        _StdOut.putText("Program already in execution.");
+                        _StdOut.advanceLine();
+                        _StdOut.putText(">");
                     }
                     break;
 
@@ -215,6 +216,14 @@ var biOShock;
             this.krnShutdown();
             var shut = document.getElementById("bsod");
             _DrawingContext.drawImage(shut, 0, 0, 500, 500);
+        };
+
+        Kernel.prototype.clockPulse = function () {
+            var needSwitch = _CpuScheduler.needToContextSwitchIf();
+            if (needSwitch) {
+                _CpuScheduler.contextSwitch();
+            }
+            _CPU.cycle();
         };
         return Kernel;
     })();

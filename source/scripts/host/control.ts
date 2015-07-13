@@ -82,6 +82,7 @@ module biOShock {
             // .. enable the Halt and Reset buttons ...
             document.getElementById("btnHaltOS").disabled = false;
             document.getElementById("btnReset").disabled = false;
+            document.getElementById("btnEnableStep").disabled = false;
 
             // .. set focus on the OS console display ...
             document.getElementById("display").focus();
@@ -120,6 +121,33 @@ module biOShock {
             // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
+        }
+
+        public static enableStep(btn): void
+        {
+            document.getElementById("btnEnableStep").disabled = true;
+            document.getElementById("btnOneStep").disabled = false;
+            document.getElementById("btnDisableStep").disabled = false;
+            _Step = true;
+        }
+
+        public static oneStep(btn): void {
+            if (_CPU.isExecuting && _Step)
+            {
+                Devices.hostClockPulse();
+            }
+            else
+            {
+                _hardwareClockID = setInterval(Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
+            }
+        }
+
+        public static disableStep(btn): void {
+            document.getElementById("btnEnableStep").disabled = true;
+            document.getElementById("btnOneStep").disabled = false;
+            document.getElementById("btnDisableStep").disabled = false;
+            _Step = false;
+            _hardwareClockID = setInterval(Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
         }
 
         public static scrollCanvas(): void {

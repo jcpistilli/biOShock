@@ -387,24 +387,20 @@ module biOShock {
             }
         }
 
-        public shellLoad()
-        {
+        public shellLoad() {
             var retrieveHex = (<HTMLInputElement> document.getElementById("taProgramInput")).value;
 
             var removeSpace = retrieveHex.replace(/\s+/g, ' ').toUpperCase();
 
             //var even = removeSpace.length % 2 == 0;
 
-            if (removeSpace.length == 0)
-            {
+            if (removeSpace.length == 0) {
                 _StdOut.putText("There is no input.");
                 return;
             }
 
-            for (var i = 0; i < removeSpace.length; i++)
-            {
-                if (!(removeSpace[i].match(/^[0-9A-F\s]/i)))
-                {
+            for (var i = 0; i < removeSpace.length; i++) {
+                if (!(removeSpace[i].match(/^[0-9A-F\s]/i))) {
                     _StdOut.putText("Please enter valid hex codes and an even amount");
                     _StdOut.advanceLine();
                     _StdOut.putText("of characters.");
@@ -415,8 +411,7 @@ module biOShock {
             _StdOut.putText("Please be patient.");
             _StdOut.advanceLine();
             var thisPID = _MemMan.loadProg(removeSpace);
-            if (thisPID !== null)
-            {
+            if (thisPID !== null) {
                 _StdOut.putText("PID: " + thisPID);
             }
 
@@ -425,21 +420,17 @@ module biOShock {
         }
 
         //Run
-        public shellRun(args)
-        {
-            if (args.length <= 0)
-            {
+        public shellRun(args) {
+            if (args.length <= 0) {
                 _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
                 _StdIn.advanceLine();
 
             }
-            else if (!_ResidentList[args[0]])
-            {
+            else if (!_ResidentList[args[0]]) {
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
             }
-            else
-            {
+            else {
                 var thisProgram = _ResidentList[args[0]];
                 if (thisProgram.state !== "Terminated.")
                 {
@@ -447,36 +438,29 @@ module biOShock {
                     _ReadyQueue.enqueue(thisProgram);
                     _KernelInterruptQueue.enqueue(new Interrupt(EXECUTING_IRQ, args[0]));
                 }
-                else
-                {
+                else {
                     _StdOut.putText("Already being handled.");
                 }
             }
         }
 
         //Kill
-        public shellKill(args)
-        {
-            if (args.length > 0)
-            {
+        public shellKill(args) {
+            if (args.length > 0) {
                 var inputPID = parseInt(args[0]);
                 var proc = null;
 
 
-                if (_currProgram && _currProgram.pcb.pid === inputPID)
-                {
+                if (_currProgram && _currProgram.pcb.pid === inputPID) {
                     debugger;
                     proc = _currProgram;
                     _currProgram.state = "Terminated.";
                     _Kernel.krnTrace("Killed process " + inputPID);
                     _MemMan.removeCurrProgram();
                 }
-                else
-                {
-                    for(var i = 0; i < _ReadyQueue.length(); i++)
-                    {
-                        if(_ReadyQueue.q[i].pcb.pid === inputPID)
-                        {
+                else {
+                    for (var i = 0; i < _ReadyQueue.length(); i++) {
+                        if (_ReadyQueue.q[i].pcb.pid === inputPID) {
                             proc = _ReadyQueue.q[i];
                             _ReadyQueue.q[i].state = "Terminated.";
                             _ReadyQueue.q.splice(i, 1);
@@ -486,32 +470,26 @@ module biOShock {
                         }
                     }
                 }
-                if (proc === null)
-                {
+                if (proc === null) {
                     _StdIn.putText("Please indicate a running PID to kill.");
                 }
             }
-            else
-            {
+            else {
                 _StdIn.putText("Please indicate a running PID to kill.");
             }
         }
 
         //Clear Memory
-        public shellClearMem()
-        {
+        public shellClearMem() {
             _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
         }
 
         //Run all
-        public shellRunAll(args)
-        {
-            for (var i = 0; i < _ResidentList.length; i++)
-            {
+        public shellRunAll(args) {
+            for (var i = 0; i < _ResidentList.length; i++) {
                 var thisProgram = _ResidentList[i];
-                if (thisProgram && thisProgram.state !== "Terminated.")
-                {
+                if (thisProgram && thisProgram.state !== "Terminated.") {
                     _ReadyQueue.enqueue(thisProgram);
                 }
             }
@@ -521,12 +499,11 @@ module biOShock {
         //Quantum
         public shellQuantum(args) {
             if (args.length > 0) {
-                _cpuScheduler.setQuantum(parseInt(args[0]));//gonna create the cpu scheduler after this
-                                                            //just implementing the shell commands since
-                                                            //i know how to do this stuff well... haha
+                _CpuScheduler.setQuantum(parseInt(args[0]));//gonna create the cpu scheduler after this
+                //just implementing the shell commands since
+                //i know how to do this stuff well... haha
             }
-            else
-            {
+            else {
                 _StdOut.putText("Please enter a valid integer.");
             }
         }

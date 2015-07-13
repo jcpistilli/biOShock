@@ -37,6 +37,7 @@ var CONTEXT_SWITCH_IRQ = 7;
 var _CPU;
 
 var _OSclock = 0;
+var _Step = false;
 
 var _Mode = 0;
 

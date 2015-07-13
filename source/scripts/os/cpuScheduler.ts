@@ -9,7 +9,7 @@ module biOShock
 {
     export class CpuScheduler
     {
-        public quantum = 6;
+//        public quantum = 6;
         public options = ['rr', 'fcfs', 'priority'];
         public scheduleType = this.options[0]; //default to rr
         /*
@@ -22,9 +22,10 @@ module biOShock
 
         public start(): void
         {
-            if (_ReadyQueue.length() > 0)
+            if (_ReadyQueue.length > 0)
             {
                 _Mode = 1;
+//                _currProgram = _ReadyQueue.dequeue();
                 _currProgram = this.nextProcess();
                 _currProgram.state = "Running.";
                 _CPU.setCPU(_currProgram);

@@ -40,6 +40,7 @@ var CONTEXT_SWITCH_IRQ: number = 7;
 var _CPU: biOShock.Cpu;  // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 
 var _OSclock: number = 0;  // Page 23.
+var _Step = false;
 
 var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
 
