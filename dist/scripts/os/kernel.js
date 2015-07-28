@@ -24,8 +24,8 @@ var biOShock;
 
             // Initialize the console.
             _Console.init();
-            _CPU.init();
 
+            //            _CPU.init();
             // Initialize standard input and output to the _Console.
             _StdIn = _Console;
             _StdOut = _Console;
@@ -51,11 +51,10 @@ var biOShock;
             this.krnTrace("Creating and Launching the shell.");
             _OsShell = new biOShock.Shell();
             _OsShell.init();
-
             // Finally, initiate testing.
-            if (_GLaDOS) {
-                _GLaDOS.afterStartup();
-            }
+            //            if (_GLaDOS) {
+            //                _GLaDOS.afterStartup();
+            //            }
         };
 
         Kernel.prototype.krnShutdown = function () {
@@ -129,11 +128,16 @@ var biOShock;
                     break;
 
                 case EXECUTING_IRQ:
+                    // COME BACK HERE AFTER GETTING THE SCHEDULER WORKING
                     if (!_CPU.isExecuting) {
                         _currProgram = _ResidentList[params[0]];
                         _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
                         _CPU.setCPU(_currProgram);
+                        _CpuScheduler.start();
                     } else {
+                        if ((_CpuScheduler.needToContextSwitchIf())) {
+                            _CpuScheduler.needToContextSwitchIf();
+                        }
                         _StdOut.putText("Program already in execution.");
                         _StdOut.advanceLine();
                         _StdOut.putText(">");
@@ -145,8 +149,8 @@ var biOShock;
                     _MemMan.removeCurrProgram();
                     this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");
                     this.krnTrace("PID " + _currProgram.pcb.pid + " attempted to access memory location" + params[0]);
-
-                    _CPU.init();
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 case UNKNOWN_OPERATION_IRQ:
@@ -157,9 +161,9 @@ var biOShock;
                     break;
 
                 case BREAK_IRQ:
-                    _currProgram.pcb.state = "Terminated.";
-                    _CPU.updateCpu();
-                    _CPU.init();
+                    _currProgram.state = "Terminated.";
+                    _CpuScheduler.contextSwitch();
+
                     break;
 
                 case CONTEXT_SWITCH_IRQ:

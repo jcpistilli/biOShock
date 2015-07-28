@@ -26,7 +26,7 @@ module biOShock {
 
             // Initialize the console.
             _Console.init();
-            _CPU.init();
+//            _CPU.init();
 
             // Initialize standard input and output to the _Console.
             _StdIn  = _Console;
@@ -56,9 +56,9 @@ module biOShock {
             _OsShell.init();
 
             // Finally, initiate testing.
-            if (_GLaDOS) {
-                _GLaDOS.afterStartup();
-            }
+//            if (_GLaDOS) {
+//                _GLaDOS.afterStartup();
+//            }
         }
 
         public krnShutdown() {
@@ -93,7 +93,8 @@ module biOShock {
             { // If there are no interrupts then run one CPU cycle if there is anything being processed.
 //                _CPU.cycle();
                 this.clockPulse();
-            } else
+            }
+            else
             {                      // If there are no interrupts and there is nothing being executed then just be idle.
                 this.krnTrace("Idle");
             }
@@ -144,14 +145,22 @@ module biOShock {
                     break;
 
                 case EXECUTING_IRQ: //3
+
+                    // COME BACK HERE AFTER GETTING THE SCHEDULER WORKING
+
                     if(!_CPU.isExecuting)
                     {
                         _currProgram = _ResidentList[params[0]];
                         _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
                         _CPU.setCPU(_currProgram);
+                        _CpuScheduler.start();
                     }
                     else
                     {
+                        if((_CpuScheduler.needToContextSwitchIf()))
+                        {
+                            _CpuScheduler.needToContextSwitchIf();
+                        }
                         _StdOut.putText("Program already in execution.");
                         _StdOut.advanceLine();
                         _StdOut.putText(">");
@@ -176,8 +185,8 @@ module biOShock {
                     _MemMan.removeCurrProgram();
                     this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");
                     this.krnTrace("PID " + _currProgram.pcb.pid + " attempted to access memory location" + params[0]);
-
-                    _CPU.init();
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 case UNKNOWN_OPERATION_IRQ: //5
@@ -188,9 +197,10 @@ module biOShock {
                     break;
 
                 case BREAK_IRQ: //6
-                    _currProgram.pcb.state = "Terminated.";
-                    _CPU.updateCpu();
-                    _CPU.init();
+                    _currProgram.state = "Terminated.";
+                    _CpuScheduler.contextSwitch();
+//                    _CPU.updateCpu();
+//                    _CPU.init();
                     break;
 
                 case CONTEXT_SWITCH_IRQ:

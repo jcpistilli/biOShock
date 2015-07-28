@@ -29,14 +29,33 @@ module biOShock {
 
         }
 
-        public init(): void
+        public init(process, isExecuting): void
         {
-            this.PC = 0;
-            this.Acc = 0;
-            this.Xreg = 0;
-            this.Yreg = 0;
-            this.Zflag = 0;
-            this.isExecuting = false;
+            if (process)
+            {
+                this.PC     = process.pcb.PC;
+                this.Acc    = process.pcb.Acc;
+                this.Xreg   = process.pcb.Xreg;
+                this.Yreg   = process.pcb.Yreg;
+                this.Zflag  = process.pcb.Zflag;
+            }
+            else
+            {
+                this.PC    = 0;
+                this.Acc   = 0;
+                this.Xreg  = 0;
+                this.Yreg  = 0;
+                this.Zflag = 0;
+            }
+
+            if (isExecuting)
+            {
+                this.isExecuting = isExecuting;
+            }
+            else
+            {
+                this.isExecuting = false;
+            }
         }
 
         public setCPU(process): void

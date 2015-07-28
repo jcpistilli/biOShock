@@ -103,9 +103,12 @@ var biOShock;
             for (var i = 0; i < _ResidentList.length; i++) {
                 if (_ResidentList[i] && _ResidentList[i].pcb.pid === pid) {
                     var thisLoc = this.getBase(_ResidentList[i].pcb.base);
-                    if (_currProgram.pcb.loc !== -1) {
-                        this.loc[thisLoc].active = false;
-                    }
+
+                    //                    if (_currProgram.pcb.loc !== -1)
+                    //                    {
+                    this.loc[thisLoc].active = false;
+
+                    //                    }
                     _ResidentList.splice(i, 1);
                     done = true;
                 }
@@ -116,10 +119,10 @@ var biOShock;
         memoryManager.prototype.removeCurrProgram = function () {
             debugger;
             var done = false;
-            var thisPID = _currProgram.pcb.pid;
+            var thisProg = _currProgram;
 
             for (var i = 0; i < _ResidentList.length(); i++) {
-                if (_ResidentList[i] && _ResidentList[i].pcb.pid === thisPID) {
+                if (_ResidentList[i] && _ResidentList[i].pcb.pid === thisProg.pcb.pid) {
                     //                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
                     //                    if (_currProgram.pcb.loc !== -1)
                     //                    {

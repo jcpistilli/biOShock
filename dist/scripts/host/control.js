@@ -84,8 +84,8 @@ var biOShock;
 
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new biOShock.Cpu();
-            _CPU.init();
 
+            //            _CPU.init();
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(biOShock.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
 

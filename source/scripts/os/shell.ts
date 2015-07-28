@@ -431,6 +431,7 @@ module biOShock {
                 _StdIn.advanceLine();
             }
             else {
+//                debugger;
                 var thisProgram = _ResidentList[args[0]];
                 if (thisProgram.state !== "Terminated.")
                 {
@@ -498,10 +499,9 @@ module biOShock {
 
         //Quantum
         public shellQuantum(args) {
-            if (args.length > 0) {
-                _CpuScheduler.setQuantum(parseInt(args[0]));//gonna create the cpu scheduler after this
-                //just implementing the shell commands since
-                //i know how to do this stuff well... haha
+            if (args.length > 0)
+            {
+                _Quantum = parseInt(args[0]);
             }
             else {
                 _StdOut.putText("Please enter a valid integer.");

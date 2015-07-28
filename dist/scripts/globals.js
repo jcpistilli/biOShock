@@ -72,6 +72,7 @@ var _Memory = null;
 var _currMemSpot = -1;
 var _ResidentList = null;
 var _ReadyQueue = null;
+var _Quantum = 6;
 
 var _currPCB = null;
 var _runningPID = -1;

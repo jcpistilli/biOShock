@@ -385,6 +385,7 @@ var biOShock;
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
             } else {
+                //                debugger;
                 var thisProgram = _ResidentList[args[0]];
                 if (thisProgram.state !== "Terminated.") {
                     thisProgram.state = "Ready.";
@@ -448,9 +449,7 @@ var biOShock;
         //Quantum
         Shell.prototype.shellQuantum = function (args) {
             if (args.length > 0) {
-                _CpuScheduler.setQuantum(parseInt(args[0])); //gonna create the cpu scheduler after this
-                //just implementing the shell commands since
-                //i know how to do this stuff well... haha
+                _Quantum = parseInt(args[0]);
             } else {
                 _StdOut.putText("Please enter a valid integer.");
             }
