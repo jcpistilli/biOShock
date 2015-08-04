@@ -27,23 +27,24 @@ var biOShock;
         memoryManager.prototype.openProgLoc = function () {
             for (var i = 0; i < this.loc.length; i++) {
                 if (this.loc[i].active == false) {
-                    this.eraseSegment(i);
+                    //                    this.eraseSegment(i);
                     return i;
                 }
             }
             return null;
         };
 
-        memoryManager.prototype.clearProgSect = function (location) {
-            var offsetLocation = location * _progSize;
-
-            for (var i = 0; i < _progSize; i++) {
-                this.memory.data[i + offsetLocation] = "00";
-            }
-
-            this.loc[location].active = false;
-        };
-
+        //        public clearProgSect (location)
+        //        {
+        //            var offsetLocation = location * _progSize;
+        //
+        //            for (var i = 0; i < _progSize; i++)
+        //            {
+        //                this.memory.data[i + offsetLocation] = "00";
+        //            }
+        //
+        //            this.loc[location].active = false;
+        //        }
         memoryManager.prototype.loadProgIntoMemory = function (program, location) {
             var splitProgram = program.split(' '), offsetLocation = location * _progSize;
 
@@ -157,11 +158,6 @@ var biOShock;
                 this.loc[i].active = false;
             }
 
-            var mem = new biOShock.Memory(this.memory.bytes);
-            mem.init();
-        };
-
-        memoryManager.prototype.MemManInit = function () {
             var mem = new biOShock.Memory(this.memory.bytes);
             mem.init();
         };

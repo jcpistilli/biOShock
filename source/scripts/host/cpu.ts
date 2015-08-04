@@ -78,8 +78,8 @@ module biOShock {
             _currProgram.pcb.zFlag = this.Zflag;
         }
 
-        public updateCpu(): void {
-
+        public updateCpu(): void
+        {
             if (this.isExecuting)
             {
                 this.updatePCB();

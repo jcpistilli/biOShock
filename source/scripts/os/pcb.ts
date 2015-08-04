@@ -38,5 +38,7 @@ module biOShock {
             //this.state = 0;
 
         }
+
     }
+
 }

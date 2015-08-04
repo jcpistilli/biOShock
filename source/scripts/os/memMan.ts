@@ -43,7 +43,7 @@ module biOShock
             {
                 if (this.loc[i].active == false)
                 {
-                    this.eraseSegment(i);
+//                    this.eraseSegment(i);
                     return i;
                 }
             }
@@ -51,17 +51,17 @@ module biOShock
         }
 
 
-        public clearProgSect (location)
-        {
-            var offsetLocation = location * _progSize;
-
-            for (var i = 0; i < _progSize; i++)
-            {
-                this.memory.data[i + offsetLocation] = "00";
-            }
-
-            this.loc[location].active = false;
-        }
+//        public clearProgSect (location)
+//        {
+//            var offsetLocation = location * _progSize;
+//
+//            for (var i = 0; i < _progSize; i++)
+//            {
+//                this.memory.data[i + offsetLocation] = "00";
+//            }
+//
+//            this.loc[location].active = false;
+//        }
 
 
         public loadProgIntoMemory(program, location): void
@@ -205,11 +205,11 @@ module biOShock
             mem.init();
         }
 
-        public MemManInit()
-        {
-            var mem = new biOShock.Memory(this.memory.bytes);
-            mem.init();
-        }
+//        public MemManInit()
+//        {
+//            var mem = new biOShock.Memory(this.memory.bytes);
+//            mem.init();
+//        }
 
 
     }

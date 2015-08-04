@@ -435,13 +435,13 @@ module biOShock {
                 var thisProgram = _ResidentList[args[0]];
                 if (thisProgram.state !== "Terminated.")
                 {
-                    thisProgram.state = "Ready.";
+//                    thisProgram.state = "Ready.";
                     _ReadyQueue.enqueue(thisProgram);
                     _KernelInterruptQueue.enqueue(new Interrupt(EXECUTING_IRQ, args[0]));
                 }
-                else {
-                    _StdOut.putText("Already being handled.");
-                }
+//                else {
+//                    _StdOut.putText("Already being handled.");
+//                }
             }
         }
 
@@ -456,16 +456,20 @@ module biOShock {
                     debugger;
                     proc = _currProgram;
                     _currProgram.state = "Terminated.";
+                    _CPU.updatePCB();
                     _Kernel.krnTrace("Killed process " + inputPID);
-                    _MemMan.removeCurrProgram();
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
+                    _CpuScheduler.contextSwitch();
                 }
-                else {
+                else
+                {
                     for (var i = 0; i < _ReadyQueue.length(); i++) {
                         if (_ReadyQueue.q[i].pcb.pid === inputPID) {
                             proc = _ReadyQueue.q[i];
                             _ReadyQueue.q[i].state = "Terminated.";
+                            _CPU.updatePCB();
                             _ReadyQueue.q.splice(i, 1);
-                            _MemMan.removeFromList(_ReadyQueue.q[i].pcb);
+                            _MemMan.removeFromList(proc.pcb);
                             _Kernel.krnTrace("Killed process " + inputPID);
                             break;
                         }
