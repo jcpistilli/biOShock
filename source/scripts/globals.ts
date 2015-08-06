@@ -23,13 +23,15 @@ var KEYBOARD_IRQ: number = 1;
 
 var SYS_OPCODE_IRQ: number = 2;
 
-var MEM_ACCESS_VIOLATION: number = 3;
+var EXECUTING_IRQ: number = 3;
 
-var EXECUTING_IRQ: number = 4;
+var MEM_ACCESS_VIOLATION: number = 4;
 
 var UNKNOWN_OPERATION_IRQ: number = 5;
 
-var CPU_BREAK_IRQ: number = 6;
+var BREAK_IRQ: number = 6;
+
+var CONTEXT_SWITCH_IRQ: number = 7;
 
 
 //
@@ -38,6 +40,7 @@ var CPU_BREAK_IRQ: number = 6;
 var _CPU: biOShock.Cpu;  // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 
 var _OSclock: number = 0;  // Page 23.
+var _Step = false;
 
 var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
 
@@ -73,10 +76,13 @@ var _Memory: any = null;
 var _currMemSpot: number = -1;
 var _ResidentList: any = null;
 var _ReadyQueue: any = null;
+var _Quantum: number = 6;
 
 var _currPCB = null;
 var _runningPID: number = -1;
 var _currProgram: any = null;
+
+var _CpuScheduler = null;
 
 // UI
 var _Console: biOShock.Console;

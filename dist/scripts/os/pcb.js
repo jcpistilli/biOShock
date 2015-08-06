@@ -5,6 +5,7 @@ Jonathan Pistilli
 var biOShock;
 (function (biOShock) {
     var pcb = (function () {
+        //state: number;
         function pcb() {
             this.pid = _GlobPid++;
             this.pc = 0;
@@ -19,7 +20,7 @@ var biOShock;
             this.limit = 0;
 
             this.loc = 0;
-            this.state = 0;
+            //this.state = 0;
         }
         return pcb;
     })();

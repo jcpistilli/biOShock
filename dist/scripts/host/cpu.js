@@ -27,17 +27,26 @@ var biOShock;
             this.Zflag = Zflag;
             this.isExecuting = isExecuting;
         }
-        Cpu.prototype.resetCPU = function () {
-            this.PC = 0;
-            this.Acc = 0;
-            this.Xreg = 0;
-            this.Yreg = 0;
-            this.Zflag = 0;
-            this.isExecuting = false;
-        };
+        Cpu.prototype.init = function (process, isExecuting) {
+            if (process) {
+                this.PC = process.pcb.PC;
+                this.Acc = process.pcb.Acc;
+                this.Xreg = process.pcb.Xreg;
+                this.Yreg = process.pcb.Yreg;
+                this.Zflag = process.pcb.Zflag;
+            } else {
+                this.PC = 0;
+                this.Acc = 0;
+                this.Xreg = 0;
+                this.Yreg = 0;
+                this.Zflag = 0;
+            }
 
-        Cpu.prototype.init = function () {
-            this.resetCPU();
+            if (isExecuting) {
+                this.isExecuting = isExecuting;
+            } else {
+                this.isExecuting = false;
+            }
         };
 
         Cpu.prototype.setCPU = function (process) {
@@ -100,6 +109,8 @@ var biOShock;
                 this.loadYMem();
             } else if (cmd === 'EA') {
                 this.noOperation();
+            } else if (cmd === '00') {
+                this.breakCall();
             } else if (cmd === 'EC') {
                 this.compareToX();
             } else if (cmd === 'D0') {
@@ -108,31 +119,11 @@ var biOShock;
                 this.incr();
             } else if (cmd === 'FF') {
                 this.sysCall();
-            } else if (cmd === '00') {
-                this.breakCall();
             } else {
-                var num = biOShock.Utils.hexToDec(cmd);
-                var params = [num, 0];
-                _KernelInterruptQueue.enqueue(new biOShock.Interrupt(UNKNOWN_OPERATION_IRQ, params));
+                _KernelInterruptQueue.enqueue(new biOShock.Interrupt(UNKNOWN_OPERATION_IRQ));
             }
 
             this.PC++;
-        };
-
-        //returns the location of the next time bytes
-        Cpu.prototype.nextTwoBytes = function () {
-            var one = _MemMan.getMemFromLoc(this.PC++);
-            var two = _MemMan.getMemFromLoc(this.PC++);
-
-            var hex = (two + one);
-
-            var decimal = parseInt(hex, 16);
-
-            return decimal;
-        };
-
-        Cpu.prototype.dataNextTwoBytes = function () {
-            return _MemMan.getMemFromLoc(this.nextTwoBytes());
         };
 
         /*
@@ -223,7 +214,7 @@ var biOShock;
         */
         Cpu.prototype.compareToX = function () {
             var loc = this.dataNextTwoBytes();
-            if (parseInt(String(this.Xreg)) === parseInt(loc)) {
+            if (parseInt(this.Xreg) === parseInt(loc)) {
                 this.Zflag = 1;
             } else {
                 this.Zflag = 0;
@@ -236,7 +227,7 @@ var biOShock;
         */
         Cpu.prototype.branchNotEqual = function () {
             if (this.Zflag == 0) {
-                this.PC += parseInt(_MemMan.getMemFromLoc(this.PC++), 16) + 1;
+                this.PC += parseInt(_MemMan.getMemFromLoc(++this.PC), 16) + 1;
                 if (this.PC >= _progSize) {
                     this.PC -= _progSize;
                 }
@@ -266,8 +257,8 @@ var biOShock;
         FF
         */
         Cpu.prototype.sysCall = function () {
-            var params = new Array(this.Xreg, this.Yreg);
-            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(SYS_OPCODE_IRQ, params));
+            //var params = new Array(this.Xreg, this.Yreg);
+            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(SYS_OPCODE_IRQ));
         };
 
         /*
@@ -281,7 +272,26 @@ var biOShock;
             _currProgram.pcb.xReg = this.Xreg;
             _currProgram.pcb.yReg = this.Yreg;
             _currProgram.pcb.zFlag = this.Zflag;
-            //_KernelInterruptQueue.enqueue(new Interrupt(SYS_OPCODE_IRQ), params);
+            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(BREAK_IRQ));
+        };
+
+        /*
+        Print CPU to the screen
+        */
+        //returns the location of the next time bytes
+        Cpu.prototype.nextTwoBytes = function () {
+            var one = _MemMan.getMemFromLoc(++this.PC);
+            var two = _MemMan.getMemFromLoc(++this.PC);
+
+            var hex = (two + one);
+
+            var decimal = parseInt(hex, 16);
+
+            return decimal;
+        };
+
+        Cpu.prototype.dataNextTwoBytes = function () {
+            return _MemMan.getMemFromLoc(this.nextTwoBytes());
         };
         return Cpu;
     })();

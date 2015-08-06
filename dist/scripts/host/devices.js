@@ -23,6 +23,10 @@ var biOShock;
         // Hardware/Host Clock Pulse
         //
         Devices.hostClockPulse = function () {
+            if (_CPU.isExecuting && _Step) {
+                clearInterval(_hardwareClockID);
+            }
+
             // Increment the hardware (host) clock.
             _OSclock++;
 

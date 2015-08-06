@@ -117,10 +117,28 @@ module biOShock {
                 "<PID> - Runs a program from memory");
             this.commandList[this.commandList.length] = sc;
 
+            //Kill <pid>
+            sc = new ShellCommand(this.shellKill,
+                "kill",
+                "<PID> - Kills a program with the PID");
+            this.commandList[this.commandList.length] = sc;
+
             //ClearMem
             sc = new ShellCommand(this.shellClearMem,
                 "clearmem",
                 "- Clears Memory.");
+            this.commandList[this.commandList.length] = sc;
+
+            //ClearMem
+            sc = new ShellCommand(this.shellRunAll,
+                "runall",
+                "- Runs all programs in memory.");
+            this.commandList[this.commandList.length] = sc;
+
+            //Quantum
+            sc = new ShellCommand(this.shellQuantum,
+                "quantum",
+                "<INT> - Changes the value of the quantum.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -369,24 +387,20 @@ module biOShock {
             }
         }
 
-        public shellLoad()
-        {
+        public shellLoad() {
             var retrieveHex = (<HTMLInputElement> document.getElementById("taProgramInput")).value;
 
             var removeSpace = retrieveHex.replace(/\s+/g, ' ').toUpperCase();
 
-            var even = removeSpace.length % 2 == 0;
+            //var even = removeSpace.length % 2 == 0;
 
-            if (removeSpace.length == 0)
-            {
+            if (removeSpace.length == 0) {
                 _StdOut.putText("There is no input.");
                 return;
             }
 
-            for (var i = 0; i < removeSpace.length; i++)
-            {
-                if (!(removeSpace[i].match(/^[0-9A-F\s]/i) && even))
-                {
+            for (var i = 0; i < removeSpace.length; i++) {
+                if (!(removeSpace[i].match(/^[0-9A-F\s]/i))) {
                     _StdOut.putText("Please enter valid hex codes and an even amount");
                     _StdOut.advanceLine();
                     _StdOut.putText("of characters.");
@@ -397,8 +411,7 @@ module biOShock {
             _StdOut.putText("Please be patient.");
             _StdOut.advanceLine();
             var thisPID = _MemMan.loadProg(removeSpace);
-            if (thisPID !== null)
-            {
+            if (thisPID !== null) {
                 _StdOut.putText("PID: " + thisPID);
             }
 
@@ -407,40 +420,96 @@ module biOShock {
         }
 
         //Run
-        public shellRun(args)
-        {
-            if (args.length <= 0)
-            {
+        public shellRun(args) {
+            if (args.length <= 0) {
                 _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
                 _StdIn.advanceLine();
 
             }
-            else if (!_ResidentList[args[0]])
-            {
+            else if (!_ResidentList[args[0]]) {
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
             }
-            else
-            {
-                var requestedProgram = _ResidentList[args[0]];
-                if (requestedProgram.state !== "Terminated.")
+            else {
+//                debugger;
+                var thisProgram = _ResidentList[args[0]];
+                if (thisProgram.state !== "Terminated.")
                 {
-                    requestedProgram.state = "Ready.";
+//                    thisProgram.state = "Ready.";
+                    _ReadyQueue.enqueue(thisProgram);
                     _KernelInterruptQueue.enqueue(new Interrupt(EXECUTING_IRQ, args[0]));
+                }
+//                else {
+//                    _StdOut.putText("Already being handled.");
+//                }
+            }
+        }
+
+        //Kill
+        public shellKill(args) {
+            if (args.length > 0) {
+                var inputPID = parseInt(args[0]);
+                var proc = null;
+
+
+                if (_currProgram && _currProgram.pcb.pid === inputPID) {
+                    debugger;
+                    proc = _currProgram;
+                    _currProgram.state = "Terminated.";
+                    _CPU.updatePCB();
+                    _Kernel.krnTrace("Killed process " + inputPID);
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
+                    _CpuScheduler.contextSwitch();
                 }
                 else
                 {
-                    _StdOut.putText("Already being handled.");
+                    for (var i = 0; i < _ReadyQueue.length(); i++) {
+                        if (_ReadyQueue.q[i].pcb.pid === inputPID) {
+                            proc = _ReadyQueue.q[i];
+                            _ReadyQueue.q[i].state = "Terminated.";
+                            _CPU.updatePCB();
+                            _ReadyQueue.q.splice(i, 1);
+                            _MemMan.removeFromList(proc.pcb);
+                            _Kernel.krnTrace("Killed process " + inputPID);
+                            break;
+                        }
+                    }
                 }
+                if (proc === null) {
+                    _StdIn.putText("Please indicate a running PID to kill.");
+                }
+            }
+            else {
+                _StdIn.putText("Please indicate a running PID to kill.");
             }
         }
 
         //Clear Memory
-        public shellClearMem()
-        {
-            debugger;
+        public shellClearMem() {
             _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
+        }
+
+        //Run all
+        public shellRunAll(args) {
+            for (var i = 0; i < _ResidentList.length; i++) {
+                var thisProgram = _ResidentList[i];
+                if (thisProgram && thisProgram.state !== "Terminated.") {
+                    _ReadyQueue.enqueue(thisProgram);
+                }
+            }
+            _KernelInterruptQueue.enqueue(new Interrupt(EXECUTING_IRQ, args[0]));
+        }
+
+        //Quantum
+        public shellQuantum(args) {
+            if (args.length > 0)
+            {
+                _Quantum = parseInt(args[0]);
+            }
+            else {
+                _StdOut.putText("Please enter a valid integer.");
+            }
         }
     }
 }

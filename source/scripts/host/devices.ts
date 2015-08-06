@@ -31,6 +31,11 @@ module biOShock {
         // Hardware/Host Clock Pulse
         //
         public static hostClockPulse(): void {
+            if (_CPU.isExecuting && _Step)
+            {
+                clearInterval(_hardwareClockID);
+            }
+
             // Increment the hardware (host) clock.
             _OSclock++;
             // Call the kernel clock pulse event handler.

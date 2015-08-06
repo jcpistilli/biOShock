@@ -21,13 +21,15 @@ var KEYBOARD_IRQ = 1;
 
 var SYS_OPCODE_IRQ = 2;
 
-var MEM_ACCESS_VIOLATION = 3;
+var EXECUTING_IRQ = 3;
 
-var EXECUTING_IRQ = 4;
+var MEM_ACCESS_VIOLATION = 4;
 
 var UNKNOWN_OPERATION_IRQ = 5;
 
-var CPU_BREAK_IRQ = 6;
+var BREAK_IRQ = 6;
+
+var CONTEXT_SWITCH_IRQ = 7;
 
 //
 // Global Variables
@@ -35,6 +37,7 @@ var CPU_BREAK_IRQ = 6;
 var _CPU;
 
 var _OSclock = 0;
+var _Step = false;
 
 var _Mode = 0;
 
@@ -69,10 +72,13 @@ var _Memory = null;
 var _currMemSpot = -1;
 var _ResidentList = null;
 var _ReadyQueue = null;
+var _Quantum = 6;
 
 var _currPCB = null;
 var _runningPID = -1;
 var _currProgram = null;
+
+var _CpuScheduler = null;
 
 // UI
 var _Console;

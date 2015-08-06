@@ -26,6 +26,7 @@ module biOShock {
 
             // Initialize the console.
             _Console.init();
+//            _CPU.init();
 
             // Initialize standard input and output to the _Console.
             _StdIn  = _Console;
@@ -41,6 +42,10 @@ module biOShock {
             // ... more?
             //
 
+            _CpuScheduler = new CpuScheduler();
+            _ResidentList = new Array();
+            _ReadyQueue = new Queue();
+
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();
@@ -50,14 +55,10 @@ module biOShock {
             _OsShell = new Shell();
             _OsShell.init();
 
-            _ResidentList = new Array();
-            _ReadyQueue = new Array();
-
-
             // Finally, initiate testing.
-            if (_GLaDOS) {
-                _GLaDOS.afterStartup();
-            }
+//            if (_GLaDOS) {
+//                _GLaDOS.afterStartup();
+//            }
         }
 
         public krnShutdown() {
@@ -87,9 +88,14 @@ module biOShock {
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
-            } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
-                _CPU.cycle();
-            } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
+            }
+            else if (_CPU.isExecuting)
+            { // If there are no interrupts then run one CPU cycle if there is anything being processed.
+//                _CPU.cycle();
+                this.clockPulse();
+            }
+            else
+            {                      // If there are no interrupts and there is nothing being executed then just be idle.
                 this.krnTrace("Idle");
             }
 
@@ -125,45 +131,80 @@ module biOShock {
             //       Maybe the hardware simulation will grow to support/require that in the future.
             switch (irq)
             {
-                case TIMER_IRQ:
+                case TIMER_IRQ: //0
                     this.krnTimerISR();              // Kernel built-in routine for timers (not the clock).
                     break;
 
-                case KEYBOARD_IRQ:
+                case KEYBOARD_IRQ: //1
                     _krnKeyboardDriver.isr(params);   // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
 
-                case SYS_OPCODE_IRQ:
+                case SYS_OPCODE_IRQ: //2
                     _StdIn.handleSysOp();
                     break;
 
-                case EXECUTING_IRQ:
-                    if(_CPU.isExecuting = true)
+                case EXECUTING_IRQ: //3
+
+                    // COME BACK HERE AFTER GETTING THE SCHEDULER WORKING
+
+                    if(!_CPU.isExecuting)
                     {
                         _currProgram = _ResidentList[params[0]];
-                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "RUNNING";
+                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
                         _CPU.setCPU(_currProgram);
+                        _CpuScheduler.start();
                     }
                     else
                     {
+                        if((_CpuScheduler.needToContextSwitchIf()))
+                        {
+                            _CpuScheduler.needToContextSwitchIf();
+                        }
                         _StdOut.putText("Program already in execution.");
+                        _StdOut.advanceLine();
+                        _StdOut.putText(">");
                     }
                     break;
 
-                case MEM_ACCESS_VIOLATION:
-                    debugger;
+//                    if(!_CPU.isExecuting)
+//                    {
+//                        _CpuScheduler.start();
+//                    }
+//                    else
+//                    {
+//                        if (_CpuScheduler.needToContextSwitchIf())
+//                        {
+//                            _CpuScheduler.contextSwitch();
+//                        }
+//                    }
+//                    break;
+
+                case MEM_ACCESS_VIOLATION: //4
                     _currProgram.pcb.state = "Terminated.";
-                    _MemMan.removeFromList();
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
                     this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");
                     this.krnTrace("PID " + _currProgram.pcb.pid + " attempted to access memory location" + params[0]);
-
-                    _CPU.init();
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
+                    _CpuScheduler.contextSwitch();
                     break;
 
-                case UNKNOWN_OPERATION_IRQ:
+                case UNKNOWN_OPERATION_IRQ: //5
+                    _CPU.updateCpu();
                     this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
-                    _currProgram.state = "TERMINATED";
+                    _currProgram.state = "Terminated";
+                    _CpuScheduler.contextSwitch();
+                    break;
+
+                case BREAK_IRQ: //6
+                    _currProgram.state = "Terminated.";
+                    _CpuScheduler.contextSwitch();
+//                    _CPU.updateCpu();
+//                    _CPU.init();
+                    break;
+
+                case CONTEXT_SWITCH_IRQ:
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 default:
@@ -217,6 +258,16 @@ module biOShock {
             this.krnShutdown();
             var shut = document.getElementById("bsod");
             _DrawingContext.drawImage(shut, 0, 0, 500, 500);
+        }
+
+        public clockPulse()
+        {
+            var needSwitch = _CpuScheduler.needToContextSwitchIf();
+            if (needSwitch)
+            {
+                _CpuScheduler.contextSwitch();
+            }
+            _CPU.cycle();
         }
     }
 }

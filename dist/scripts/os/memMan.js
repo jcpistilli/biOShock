@@ -27,31 +27,32 @@ var biOShock;
         memoryManager.prototype.openProgLoc = function () {
             for (var i = 0; i < this.loc.length; i++) {
                 if (this.loc[i].active == false) {
-                    //this.eraseSegment(i);
+                    //                    this.eraseSegment(i);
                     return i;
                 }
             }
             return null;
         };
 
-        memoryManager.prototype.clearProgSect = function (location) {
-            var offsetLocation = location * _progSize;
-
-            for (var i = 0; i < _progSize; i++) {
-                this.memory.data[i + offsetLocation] = "00";
-            }
-
-            this.loc[location].active = false;
-        };
-
+        //        public clearProgSect (location)
+        //        {
+        //            var offsetLocation = location * _progSize;
+        //
+        //            for (var i = 0; i < _progSize; i++)
+        //            {
+        //                this.memory.data[i + offsetLocation] = "00";
+        //            }
+        //
+        //            this.loc[location].active = false;
+        //        }
         memoryManager.prototype.loadProgIntoMemory = function (program, location) {
             var splitProgram = program.split(' '), offsetLocation = location * _progSize;
 
             for (var i = 0; i < splitProgram.length; i++) {
-                this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
+                this.memory.data[i + offsetLocation] = splitProgram[i];
             }
 
-            document.getElementById("memTable").value = splitProgram.join(" " + " ");
+            document.getElementById("memTable").value = splitProgram.join(" ");
 
             // Set this.loc to active
             this.loc[location].active = true;
@@ -69,7 +70,7 @@ var biOShock;
 
                 thisPCB.loc = progLoc;
 
-                this.loadProgIntoMemory(prog, progLoc);
+                this.loadProgIntoMemory(prog, thisPCB.loc);
 
                 _ResidentList[thisPCB.pid] = {
                     pcb: thisPCB,
@@ -88,9 +89,51 @@ var biOShock;
             return this.memory.data[address];
         };
 
-        memoryManager.prototype.removeFromList = function () {
-            this.loc[_currProgram.pcb.location].active = false;
-            this.clearProgSect(_currProgram.pcb.location);
+        memoryManager.prototype.getBase = function (base) {
+            for (var i = 0; i < this.loc.length; i++) {
+                if (this.loc[i].base === base) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+
+        memoryManager.prototype.removeFromList = function (pid) {
+            var done = false;
+
+            for (var i = 0; i < _ResidentList.length; i++) {
+                if (_ResidentList[i] && _ResidentList[i].pcb.pid === pid) {
+                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
+
+                    //                    if (_currProgram.pcb.loc !== -1)
+                    //                    {
+                    this.loc[thisLoc].active = false;
+
+                    //                    }
+                    _ResidentList.splice(i, 1);
+                    done = true;
+                }
+            }
+            return done;
+        };
+
+        memoryManager.prototype.removeCurrProgram = function () {
+            debugger;
+            var done = false;
+            var thisProg = _currProgram;
+
+            for (var i = 0; i < _ResidentList.length(); i++) {
+                if (_ResidentList[i] && _ResidentList[i].pcb.pid === thisProg.pcb.pid) {
+                    //                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
+                    //                    if (_currProgram.pcb.loc !== -1)
+                    //                    {
+                    //                        this.loc[_currProgram.pcb.loc].active = false;
+                    //                    }
+                    _ResidentList.splice(i, 1);
+                    done = true;
+                }
+            }
+            return done;
         };
 
         memoryManager.prototype.updateMemoryAt = function (data, address) {

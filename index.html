@@ -29,6 +29,7 @@
    <script type="text/javascript" src="dist/scripts/os/shell.js"></script>
    <script type="text/javascript" src="dist/scripts/os/shellCommand.js"></script>
    <script type="text/javascript" src="dist/scripts/os/userCommand.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/cpuScheduler.js"></script>
    <script type="text/javascript" src="dist/scripts/os/kernel.js"></script>
 
    <!-- Other Routines -->
@@ -67,6 +68,33 @@
              value="Reset"
              tabindex="2"
              onclick="biOShock.Control.hostBtnReset_click(this);">
+
+       <input type="button"
+              id = "btnEnableStep"
+              name="brnEnableStep"
+              class="normal_button"
+              disabled="disabled"
+              value="Enable Step"
+              tabindex="2"
+              onclick="biOShock.Control.enableStep(this);">
+
+       <input type="button"
+              id = "btnOneStep"
+              name="brnOneStep"
+              class="normal_button"
+              disabled="disabled"
+              value="One Step"
+              tabindex="2"
+              onclick="biOShock.Control.oneStep(this);">
+
+       <input type="button"
+              id = "btnDisableStep"
+              name="brnDisableStep"
+              class="normal_button"
+              disabled="disabled"
+              value="Disable Step"
+              tabindex="2"
+              onclick="biOShock.Control.disableStep(this);">
    </div>
 
     <div id="divStatusBar" style="margin: 4px; width: 100%; height: 15px; margin-top: 5px;">

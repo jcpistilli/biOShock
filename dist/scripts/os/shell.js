@@ -81,8 +81,20 @@ var biOShock;
             sc = new biOShock.ShellCommand(this.shellRun, "run", "<PID> - Runs a program from memory");
             this.commandList[this.commandList.length] = sc;
 
+            //Kill <pid>
+            sc = new biOShock.ShellCommand(this.shellKill, "kill", "<PID> - Kills a program with the PID");
+            this.commandList[this.commandList.length] = sc;
+
             //ClearMem
             sc = new biOShock.ShellCommand(this.shellClearMem, "clearmem", "- Clears Memory.");
+            this.commandList[this.commandList.length] = sc;
+
+            //ClearMem
+            sc = new biOShock.ShellCommand(this.shellRunAll, "runall", "- Runs all programs in memory.");
+            this.commandList[this.commandList.length] = sc;
+
+            //Quantum
+            sc = new biOShock.ShellCommand(this.shellQuantum, "quantum", "<INT> - Changes the value of the quantum.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -340,15 +352,14 @@ var biOShock;
 
             var removeSpace = retrieveHex.replace(/\s+/g, ' ').toUpperCase();
 
-            var even = removeSpace.length % 2 == 0;
-
+            //var even = removeSpace.length % 2 == 0;
             if (removeSpace.length == 0) {
                 _StdOut.putText("There is no input.");
                 return;
             }
 
             for (var i = 0; i < removeSpace.length; i++) {
-                if (!(removeSpace[i].match(/^[0-9A-F\s]/i) && even)) {
+                if (!(removeSpace[i].match(/^[0-9A-F\s]/i))) {
                     _StdOut.putText("Please enter valid hex codes and an even amount");
                     _StdOut.advanceLine();
                     _StdOut.putText("of characters.");
@@ -374,21 +385,78 @@ var biOShock;
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
             } else {
-                var requestedProgram = _ResidentList[args[0]];
-                if (requestedProgram.state !== "Terminated.") {
-                    requestedProgram.state = "Ready.";
+                //                debugger;
+                var thisProgram = _ResidentList[args[0]];
+                if (thisProgram.state !== "Terminated.") {
+                    //                    thisProgram.state = "Ready.";
+                    _ReadyQueue.enqueue(thisProgram);
                     _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));
-                } else {
-                    _StdOut.putText("Already being handled.");
                 }
+                //                else {
+                //                    _StdOut.putText("Already being handled.");
+                //                }
+            }
+        };
+
+        //Kill
+        Shell.prototype.shellKill = function (args) {
+            if (args.length > 0) {
+                var inputPID = parseInt(args[0]);
+                var proc = null;
+
+                if (_currProgram && _currProgram.pcb.pid === inputPID) {
+                    debugger;
+                    proc = _currProgram;
+                    _currProgram.state = "Terminated.";
+                    _CPU.updatePCB();
+                    _Kernel.krnTrace("Killed process " + inputPID);
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
+                    _CpuScheduler.contextSwitch();
+                } else {
+                    for (var i = 0; i < _ReadyQueue.length(); i++) {
+                        if (_ReadyQueue.q[i].pcb.pid === inputPID) {
+                            proc = _ReadyQueue.q[i];
+                            _ReadyQueue.q[i].state = "Terminated.";
+                            _CPU.updatePCB();
+                            _ReadyQueue.q.splice(i, 1);
+                            _MemMan.removeFromList(proc.pcb);
+                            _Kernel.krnTrace("Killed process " + inputPID);
+                            break;
+                        }
+                    }
+                }
+                if (proc === null) {
+                    _StdIn.putText("Please indicate a running PID to kill.");
+                }
+            } else {
+                _StdIn.putText("Please indicate a running PID to kill.");
             }
         };
 
         //Clear Memory
         Shell.prototype.shellClearMem = function () {
-            debugger;
             _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
+        };
+
+        //Run all
+        Shell.prototype.shellRunAll = function (args) {
+            for (var i = 0; i < _ResidentList.length; i++) {
+                var thisProgram = _ResidentList[i];
+                if (thisProgram && thisProgram.state !== "Terminated.") {
+                    _ReadyQueue.enqueue(thisProgram);
+                }
+            }
+            _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));
+        };
+
+        //Quantum
+        Shell.prototype.shellQuantum = function (args) {
+            if (args.length > 0) {
+                _Quantum = parseInt(args[0]);
+            } else {
+                _StdOut.putText("Please enter a valid integer.");
+            }
         };
         return Shell;
     })();

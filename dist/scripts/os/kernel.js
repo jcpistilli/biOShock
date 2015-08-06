@@ -25,6 +25,7 @@ var biOShock;
             // Initialize the console.
             _Console.init();
 
+            //            _CPU.init();
             // Initialize standard input and output to the _Console.
             _StdIn = _Console;
             _StdOut = _Console;
@@ -38,6 +39,10 @@ var biOShock;
             //
             // ... more?
             //
+            _CpuScheduler = new biOShock.CpuScheduler();
+            _ResidentList = new Array();
+            _ReadyQueue = new biOShock.Queue();
+
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();
@@ -46,14 +51,10 @@ var biOShock;
             this.krnTrace("Creating and Launching the shell.");
             _OsShell = new biOShock.Shell();
             _OsShell.init();
-
-            _ResidentList = new Array();
-            _ReadyQueue = new Array();
-
             // Finally, initiate testing.
-            if (_GLaDOS) {
-                _GLaDOS.afterStartup();
-            }
+            //            if (_GLaDOS) {
+            //                _GLaDOS.afterStartup();
+            //            }
         };
 
         Kernel.prototype.krnShutdown = function () {
@@ -83,7 +84,8 @@ var biOShock;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
-                _CPU.cycle();
+                //                _CPU.cycle();
+                this.clockPulse();
             } else {
                 this.krnTrace("Idle");
             }
@@ -126,28 +128,46 @@ var biOShock;
                     break;
 
                 case EXECUTING_IRQ:
-                    if (_CPU.isExecuting = true) {
+                    // COME BACK HERE AFTER GETTING THE SCHEDULER WORKING
+                    if (!_CPU.isExecuting) {
                         _currProgram = _ResidentList[params[0]];
-                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "RUNNING";
+                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
                         _CPU.setCPU(_currProgram);
+                        _CpuScheduler.start();
                     } else {
+                        if ((_CpuScheduler.needToContextSwitchIf())) {
+                            _CpuScheduler.needToContextSwitchIf();
+                        }
                         _StdOut.putText("Program already in execution.");
+                        _StdOut.advanceLine();
+                        _StdOut.putText(">");
                     }
                     break;
 
                 case MEM_ACCESS_VIOLATION:
-                    debugger;
                     _currProgram.pcb.state = "Terminated.";
-                    _MemMan.removeFromList();
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
                     this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");
                     this.krnTrace("PID " + _currProgram.pcb.pid + " attempted to access memory location" + params[0]);
-
-                    _CPU.init();
+                    _MemMan.removeFromList(_currProgram.pcb.pid);
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 case UNKNOWN_OPERATION_IRQ:
+                    _CPU.updateCpu();
                     this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
-                    _currProgram.state = "TERMINATED";
+                    _currProgram.state = "Terminated";
+                    _CpuScheduler.contextSwitch();
+                    break;
+
+                case BREAK_IRQ:
+                    _currProgram.state = "Terminated.";
+                    _CpuScheduler.contextSwitch();
+
+                    break;
+
+                case CONTEXT_SWITCH_IRQ:
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 default:
@@ -200,6 +220,14 @@ var biOShock;
             this.krnShutdown();
             var shut = document.getElementById("bsod");
             _DrawingContext.drawImage(shut, 0, 0, 500, 500);
+        };
+
+        Kernel.prototype.clockPulse = function () {
+            var needSwitch = _CpuScheduler.needToContextSwitchIf();
+            if (needSwitch) {
+                _CpuScheduler.contextSwitch();
+            }
+            _CPU.cycle();
         };
         return Kernel;
     })();

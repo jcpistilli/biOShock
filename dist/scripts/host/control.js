@@ -77,14 +77,15 @@ var biOShock;
             // .. enable the Halt and Reset buttons ...
             document.getElementById("btnHaltOS").disabled = false;
             document.getElementById("btnReset").disabled = false;
+            document.getElementById("btnEnableStep").disabled = false;
 
             // .. set focus on the OS console display ...
             document.getElementById("display").focus();
 
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new biOShock.Cpu();
-            _CPU.init();
 
+            //            _CPU.init();
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(biOShock.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
 
@@ -94,6 +95,7 @@ var biOShock;
 
             //Init mem man
             _MemMan = new biOShock.memoryManager();
+            //            _MemMan.MemManInit();
             //            this.CPUtoHTML();
             //            this.memTable(1);
         };
@@ -116,6 +118,29 @@ var biOShock;
             // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
+        };
+
+        Control.enableStep = function (btn) {
+            document.getElementById("btnEnableStep").disabled = true;
+            document.getElementById("btnOneStep").disabled = false;
+            document.getElementById("btnDisableStep").disabled = false;
+            _Step = true;
+        };
+
+        Control.oneStep = function (btn) {
+            if (_CPU.isExecuting && _Step) {
+                biOShock.Devices.hostClockPulse();
+            } else {
+                _hardwareClockID = setInterval(biOShock.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
+            }
+        };
+
+        Control.disableStep = function (btn) {
+            document.getElementById("btnEnableStep").disabled = true;
+            document.getElementById("btnOneStep").disabled = false;
+            document.getElementById("btnDisableStep").disabled = false;
+            _Step = false;
+            _hardwareClockID = setInterval(biOShock.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
         };
 
         Control.scrollCanvas = function () {

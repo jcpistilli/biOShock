@@ -43,24 +43,26 @@ module biOShock
             {
                 if (this.loc[i].active == false)
                 {
-                    //this.eraseSegment(i);
+//                    this.eraseSegment(i);
                     return i;
                 }
             }
             return null;
         }
 
-        public clearProgSect (location)
-        {
-            var offsetLocation = location * _progSize;
 
-            for (var i = 0; i < _progSize; i++)
-            {
-                this.memory.data[i + offsetLocation] = "00";
-            }
+//        public clearProgSect (location)
+//        {
+//            var offsetLocation = location * _progSize;
+//
+//            for (var i = 0; i < _progSize; i++)
+//            {
+//                this.memory.data[i + offsetLocation] = "00";
+//            }
+//
+//            this.loc[location].active = false;
+//        }
 
-            this.loc[location].active = false;
-        }
 
         public loadProgIntoMemory(program, location): void
         {
@@ -70,11 +72,11 @@ module biOShock
 
             for (var i = 0; i < splitProgram.length; i++)
             {
-                this.memory.data[i + offsetLocation] = splitProgram[i].toUpperCase();
+                this.memory.data[i + offsetLocation] = splitProgram[i];
             }
 
 
-            (<HTMLInputElement>document.getElementById("memTable")).value = splitProgram.join(" " + " ");
+            (<HTMLInputElement>document.getElementById("memTable")).value = splitProgram.join(" ");
 
             // Set this.loc to active
             this.loc[location].active = true;
@@ -96,7 +98,7 @@ module biOShock
 
                 thisPCB.loc = progLoc;
 
-                this.loadProgIntoMemory(prog, progLoc);
+                this.loadProgIntoMemory(prog, thisPCB.loc);
 
                 _ResidentList[thisPCB.pid] =
                 {
@@ -110,7 +112,7 @@ module biOShock
 
         }
 
-        public getMemFromLoc (address)
+        public getMemFromLoc(address)
         {
             address += _currProgram.pcb.base;
             if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base)
@@ -120,10 +122,56 @@ module biOShock
             return this.memory.data[address];
         }
 
-        public removeFromList (): any
+        public getBase(base)
         {
-            this.loc[_currProgram.pcb.location].active = false;
-            this.clearProgSect(_currProgram.pcb.location);
+            for (var i = 0; i < this.loc.length; i++) {
+                if (this.loc[i].base === base) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public removeFromList(pid): any
+        {
+            var done = false;
+
+            for (var i = 0; i < _ResidentList.length; i++)
+            {
+                if(_ResidentList[i] && _ResidentList[i].pcb.pid === pid)
+                {
+                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
+//                    if (_currProgram.pcb.loc !== -1)
+//                    {
+                        this.loc[thisLoc].active = false;
+//                    }
+                    _ResidentList.splice(i, 1);
+                    done = true;
+                }
+            }
+            return done;
+        }
+
+        public removeCurrProgram(): any
+        {
+            debugger;
+            var done = false;
+            var thisProg = _currProgram;
+
+            for (var i = 0; i < _ResidentList.length(); i++)
+            {
+                if(_ResidentList[i] && _ResidentList[i].pcb.pid === thisProg.pcb.pid)
+                {
+//                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
+//                    if (_currProgram.pcb.loc !== -1)
+//                    {
+//                        this.loc[_currProgram.pcb.loc].active = false;
+//                    }
+                    _ResidentList.splice(i, 1);
+                    done = true;
+                }
+            }
+            return done;
         }
 
         public updateMemoryAt(data, address): void
@@ -141,7 +189,7 @@ module biOShock
 //            this.updateScreen(address);       Use this for printing to the screen
         }
 
-        public resetMemory (): void
+        public resetMemory(): void
         {
             for (var i = 0; i < this.memory.bytes; i++)
             {
@@ -156,6 +204,12 @@ module biOShock
             var mem = new biOShock.Memory(this.memory.bytes);
             mem.init();
         }
+
+//        public MemManInit()
+//        {
+//            var mem = new biOShock.Memory(this.memory.bytes);
+//            mem.init();
+//        }
 
 
     }
