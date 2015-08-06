@@ -1,6 +1,5 @@
 /*
  Memory Manager
-
  Jonathan Pistilli
  */
 
@@ -26,7 +25,7 @@ module biOShock
             }
         }
 
-            //print memory array out to the screen??
+        //print memory array out to the screen??
 
         public eraseSegment(location): void
         {
@@ -143,7 +142,7 @@ module biOShock
                     var thisLoc = this.getBase(_ResidentList[i].pcb.base);
 //                    if (_currProgram.pcb.loc !== -1)
 //                    {
-                        this.loc[thisLoc].active = false;
+                    this.loc[thisLoc].active = false;
 //                    }
                     _ResidentList.splice(i, 1);
                     done = true;
@@ -214,11 +213,10 @@ module biOShock
 
     }
 
-        //Going to have to display memory at some point
+    //Going to have to display memory at some point
 
-/*        public displayMem(): void
-        {
-
-        }
-*/
+    /*        public displayMem(): void
+     {
+     }
+     */
 }

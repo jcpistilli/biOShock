@@ -1,12 +1,10 @@
 /* ------------
-   Queue.ts
-
-   A simple Queue, which is really just a dressed-up JavaScript Array.
-   See the Javascript Array documentation at
-   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
-   Look at the push and shift methods, as they are the least obvious here.
-
-   ------------ */
+ Queue.ts
+ A simple Queue, which is really just a dressed-up JavaScript Array.
+ See the Javascript Array documentation at
+ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+ Look at the push and shift methods, as they are the least obvious here.
+ ------------ */
 
 module biOShock {
     export class Queue {

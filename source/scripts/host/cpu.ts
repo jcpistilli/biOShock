@@ -1,19 +1,16 @@
 ///<reference path="../globals.ts" />
 
 /* ------------
-     CPU.ts
-
-     Requires global.ts.
-
-     Routines for the host CPU simulation, NOT for the OS itself.
-     In this manner, it's A LITTLE BIT like a hypervisor,
-     in that the Document environment inside a browser is the "bare metal" (so to speak) for which we write code
-     that hosts our client OS. But that analogy only goes so far, and the lines are blurred, because we are using
-     TypeScript/JavaScript in both the host and client environments.
-
-     This code references page numbers in the text book:
-     Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
-     ------------ */
+ CPU.ts
+ Requires global.ts.
+ Routines for the host CPU simulation, NOT for the OS itself.
+ In this manner, it's A LITTLE BIT like a hypervisor,
+ in that the Document environment inside a browser is the "bare metal" (so to speak) for which we write code
+ that hosts our client OS. But that analogy only goes so far, and the lines are blurred, because we are using
+ TypeScript/JavaScript in both the host and client environments.
+ This code references page numbers in the text book:
+ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
+ ------------ */
 
 module biOShock {
 
@@ -175,10 +172,10 @@ module biOShock {
         }
 
         /*
-            LDA
-            Load constant into the accumulator
-            A9
-        */
+         LDA
+         Load constant into the accumulator
+         A9
+         */
 
         private constToAcc(): void
         {
@@ -186,90 +183,90 @@ module biOShock {
         }
 
         /*
-            LDA
-            Load accumulator from the memory
-            AD
-        */
+         LDA
+         Load accumulator from the memory
+         AD
+         */
         private loadAccFromMem(): void
         {
             this.Acc = this.dataNextTwoBytes();
         }
 
         /*
-            STA
-            Store accumulator into the memory
-            8D
-        */
+         STA
+         Store accumulator into the memory
+         8D
+         */
         private storeAccToMem(): void
         {
             _MemMan.updateMemoryAt(this.Acc.toString(16), this.nextTwoBytes());
         }
 
         /*
-            ADC
-            Add memory location to accumulator then store into accumulator
-            6D
-        */
+         ADC
+         Add memory location to accumulator then store into accumulator
+         6D
+         */
         private addStoreIntoAcc(): void
         {
             this.Acc += parseInt(this.dataNextTwoBytes(), 16);
         }
 
         /*
-            LDX
-            Load constant into xreg
-            A2
-        */
+         LDX
+         Load constant into xreg
+         A2
+         */
         private constToX(): void
         {
             this.Xreg = parseInt(_MemMan.getMemFromLoc(++this.PC), 16);
         }
 
         /*
-            LDX
-            Load xreg from memory
-            AE
-        */
+         LDX
+         Load xreg from memory
+         AE
+         */
         private loadXMem(): void
         {
             this.Xreg = this.dataNextTwoBytes();
         }
 
         /*
-            LDY
-            Load constant into y-reg
-            A0
-        */
+         LDY
+         Load constant into y-reg
+         A0
+         */
         private loadConstToY(): void
         {
             this.Yreg = parseInt(_MemMan.getMemFromLoc(++this.PC), 16)
         }
 
         /*
-            LDY
-            Load yreg from memory
-            AC
-        */
+         LDY
+         Load yreg from memory
+         AC
+         */
         private loadYMem(): void
         {
             this.Yreg = this.dataNextTwoBytes();
         }
 
         /*
-            NOP
-            No operation
-            EA
-        */
+         NOP
+         No operation
+         EA
+         */
         private noOperation(): void
         {
             // There ain't be nothin round here
         }
 
         /*
-            CPX
-            Compare xreg to contents of memory
-            EC
-        */
+         CPX
+         Compare xreg to contents of memory
+         EC
+         */
         private compareToX(): void
         {
             var loc = this.dataNextTwoBytes();
@@ -284,9 +281,9 @@ module biOShock {
         }
 
         /*
-            BNE
-            D0
-        */
+         BNE
+         D0
+         */
         private branchNotEqual(): void
         {
             if (this.Zflag == 0)
@@ -304,10 +301,10 @@ module biOShock {
         }
 
         /*
-            INC
-            Increment the next value by one
-            EE
-        */
+         INC
+         Increment the next value by one
+         EE
+         */
         private incr(): void
         {
             var loc = this.nextTwoBytes();
@@ -320,10 +317,10 @@ module biOShock {
         }
 
         /*
-            SYS
-            System call:
-            FF
-        */
+         SYS
+         System call:
+         FF
+         */
         private sysCall(): void
         {
             //var params = new Array(this.Xreg, this.Yreg);
@@ -331,10 +328,10 @@ module biOShock {
 
         }
         /*
-            BRK
-            Break
-            00
-        */
+         BRK
+         Break
+         00
+         */
         private breakCall(): void
         {
             _currProgram.pcb.pc = this.PC;
@@ -345,8 +342,8 @@ module biOShock {
             _KernelInterruptQueue.enqueue(new Interrupt(BREAK_IRQ));
         }
         /*
-            Print CPU to the screen
-        */
+         Print CPU to the screen
+         */
 
 
         //returns the location of the next time bytes

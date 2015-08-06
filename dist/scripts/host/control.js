@@ -1,5 +1,3 @@
-///<reference path="../globals.ts" />
-///<reference path="../os/canvastext.ts" />
 /* ------------
 Control.ts
 Requires globals.ts.
@@ -157,7 +155,6 @@ var biOShock;
         /*public static grabInput(): string {
         var progIn = <HTMLInputElement> document.getElementById("taProgramInput");
         var progIn2 = progIn.value;
-        
         return progIn2;
         }*/
         Control.dateTime = function () {

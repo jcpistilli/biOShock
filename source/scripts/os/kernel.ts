@@ -1,13 +1,10 @@
 /* ------------
-     Kernel.ts
-
-     Requires globals.ts
-
-     Routines for the Operating System, NOT the host.
-
-     This code references page numbers in the text book:
-     Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
-     ------------ */
+ Kernel.ts
+ Requires globals.ts
+ Routines for the Operating System, NOT the host.
+ This code references page numbers in the text book:
+ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
+ ------------ */
 
 module biOShock {
 
@@ -78,9 +75,9 @@ module biOShock {
         public krnOnCPUClockPulse()
         {
             /* This gets called from the host hardware sim every time there is a hardware clock pulse.
-               This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
-               This, on the other hand, is the clock pulse from the hardware (or host) that tells the kernel
-               that it has to look for interrupts and process them if it finds any.                           */
+             This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
+             This, on the other hand, is the clock pulse from the hardware (or host) that tells the kernel
+             that it has to look for interrupts and process them if it finds any.                           */
 
             // Check for an interrupt, are any. Page 560
             if (_KernelInterruptQueue.getSize() > 0) {
@@ -237,8 +234,8 @@ module biOShock {
         // OS Utility Routines
         //
         public krnTrace(msg: string) {
-             // Check globals to see if trace is set ON.  If so, then (maybe) log the message.
-             if (_Trace) {
+            // Check globals to see if trace is set ON.  If so, then (maybe) log the message.
+            if (_Trace) {
                 if (msg === "Idle") {
                     // We can't log every idle clock pulse because it would lag the browser very quickly.
                     if (_OSclock % 10 == 0) {
@@ -249,7 +246,7 @@ module biOShock {
                 } else {
                     Control.hostLog(msg, "OS");
                 }
-             }
+            }
         }
 
         public krnTrapError(msg) {

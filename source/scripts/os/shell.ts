@@ -1,12 +1,7 @@
-///<reference path="shellCommand.ts" />
-///<reference path="userCommand.ts" />
-///<reference path="../utils.ts" />
-
 /* ------------
-   Shell.ts
-
-   The OS Shell - The "command line interface" (CLI) for the console.
-   ------------ */
+ Shell.ts
+ The OS Shell - The "command line interface" (CLI) for the console.
+ ------------ */
 
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
 

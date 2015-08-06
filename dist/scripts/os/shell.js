@@ -1,6 +1,3 @@
-///<reference path="shellCommand.ts" />
-///<reference path="userCommand.ts" />
-///<reference path="../utils.ts" />
 /* ------------
 Shell.ts
 The OS Shell - The "command line interface" (CLI) for the console.
