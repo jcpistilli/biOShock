@@ -1,12 +1,12 @@
 /* ------------
-   Globals.ts
+ Globals.ts
 
-   Global CONSTANTS and _Variables.
-   (Global over both the OS and Hardware Simulation / Host.)
+ Global CONSTANTS and _Variables.
+ (Global over both the OS and Hardware Simulation / Host.)
 
-   This code references page numbers in the text book:
-   Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
-   ------------ */
+ This code references page numbers in the text book:
+ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
+ ------------ */
 
 //
 // Global "CONSTANTS" (There is currently no const or final or readonly type annotation in TypeScript.)
@@ -18,7 +18,7 @@ var APP_VERSION: string = "21.12";   // What did you expect?
 var CPU_CLOCK_INTERVAL: number = 100;   // This is in ms, or milliseconds, so 1000 = 1 second.
 
 var TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
-                            // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
+// NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 var KEYBOARD_IRQ: number = 1;
 
 var SYS_OPCODE_IRQ: number = 2;
@@ -84,6 +84,8 @@ var _currProgram: any = null;
 
 var _CpuScheduler = null;
 
+var _FileSystem = null;
+
 // UI
 var _Console: biOShock.Console;
 var _OsShell: biOShock.Shell;
@@ -101,5 +103,5 @@ var _GLaDOS: any = null;
 var Glados: any = null;
 
 var onDocumentLoad = function() {
-	biOShock.Control.hostInit();
+    biOShock.Control.hostInit();
 };

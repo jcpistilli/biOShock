@@ -1,4 +1,3 @@
-///<reference path="../globals.ts" />
 /* ------------
 CPU.ts
 Requires global.ts.
@@ -70,7 +69,7 @@ var biOShock;
         Cpu.prototype.updateCpu = function () {
             if (this.isExecuting) {
                 this.updatePCB();
-                document.getElementById("pcb").value = "PCB: " + _currProgram.pcb.pid + " PC: " + this.PC + " Acc: " + this.Acc + " Xreg: " + this.Xreg + " Yreg: " + this.Yreg + " Zflag: " + this.Zflag;
+                document.getElementById("cpu").value = "PCB: " + _currProgram.pcb.pid + " PC: " + this.PC + " Acc: " + this.Acc + " Xreg: " + this.Xreg + " Yreg: " + this.Yreg + " Zflag: " + this.Zflag;
             }
         };
 

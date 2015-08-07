@@ -1,5 +1,3 @@
-///<reference path="../globals.ts" />
-
 /* ------------
  CPU.ts
  Requires global.ts.
@@ -80,7 +78,7 @@ module biOShock {
             if (this.isExecuting)
             {
                 this.updatePCB();
-                (<HTMLInputElement>document.getElementById("pcb")).value = "PCB: " + _currProgram.pcb.pid + " PC: " + this.PC + " Acc: " + this.Acc + " Xreg: " + this.Xreg + " Yreg: " + this.Yreg + " Zflag: " + this.Zflag;
+                (<HTMLInputElement>document.getElementById("cpu")).value = "PCB: " + _currProgram.pcb.pid + " PC: " + this.PC + " Acc: " + this.Acc + " Xreg: " + this.Xreg + " Yreg: " + this.Yreg + " Zflag: " + this.Zflag;
             }
 
         }
