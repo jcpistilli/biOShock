@@ -82,6 +82,7 @@ var biOShock;
 
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new biOShock.Cpu();
+            _MemMan = new biOShock.memoryManager();
 
             //            _CPU.init();
             // ... then set the host clock pulse ...
@@ -90,9 +91,7 @@ var biOShock;
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new biOShock.Kernel();
             _Kernel.krnBootstrap();
-
             //Init mem man
-            _MemMan = new biOShock.memoryManager();
             //            _MemMan.MemManInit();
             //            this.CPUtoHTML();
             //            this.memTable(1);

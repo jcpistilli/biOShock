@@ -130,17 +130,16 @@ var biOShock;
                 case EXECUTING_IRQ:
                     // COME BACK HERE AFTER GETTING THE SCHEDULER WORKING
                     if (!_CPU.isExecuting) {
-                        _currProgram = _ResidentList[params[0]];
-                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
-                        _CPU.setCPU(_currProgram);
+                        debugger;
+
+                        //                        _currProgram = _ResidentList[params[0]];
+                        //                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
+                        //                        _CPU.setCPU(_currProgram);
                         _CpuScheduler.start();
                     } else {
                         if ((_CpuScheduler.needToContextSwitchIf())) {
                             _CpuScheduler.needToContextSwitchIf();
                         }
-                        _StdOut.putText("Program already in execution.");
-                        _StdOut.advanceLine();
-                        _StdOut.putText(">");
                     }
                     break;
 

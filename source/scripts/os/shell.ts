@@ -458,7 +458,7 @@ module biOShock {
                 }
                 else
                 {
-                    for (var i = 0; i < _ReadyQueue.length(); i++) {
+                    for (var i = 0; i < _ReadyQueue.length; i++) {
                         if (_ReadyQueue.q[i].pcb.pid === inputPID) {
                             proc = _ReadyQueue.q[i];
                             _ReadyQueue.q[i].state = "Terminated.";

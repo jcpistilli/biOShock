@@ -147,9 +147,10 @@ module biOShock {
 
                     if(!_CPU.isExecuting)
                     {
-                        _currProgram = _ResidentList[params[0]];
-                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
-                        _CPU.setCPU(_currProgram);
+                        debugger;
+//                        _currProgram = _ResidentList[params[0]];
+//                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
+//                        _CPU.setCPU(_currProgram);
                         _CpuScheduler.start();
                     }
                     else
@@ -158,24 +159,8 @@ module biOShock {
                         {
                             _CpuScheduler.needToContextSwitchIf();
                         }
-                        _StdOut.putText("Program already in execution.");
-                        _StdOut.advanceLine();
-                        _StdOut.putText(">");
                     }
                     break;
-
-//                    if(!_CPU.isExecuting)
-//                    {
-//                        _CpuScheduler.start();
-//                    }
-//                    else
-//                    {
-//                        if (_CpuScheduler.needToContextSwitchIf())
-//                        {
-//                            _CpuScheduler.contextSwitch();
-//                        }
-//                    }
-//                    break;
 
                 case MEM_ACCESS_VIOLATION: //4
                     _currProgram.pcb.state = "Terminated.";

@@ -82,6 +82,7 @@ module biOShock {
 
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new Cpu();
+            _MemMan = new biOShock.memoryManager();
 //            _CPU.init();
 
             // ... then set the host clock pulse ...
@@ -91,7 +92,7 @@ module biOShock {
             _Kernel.krnBootstrap();
 
             //Init mem man
-            _MemMan = new biOShock.memoryManager();
+
 //            _MemMan.MemManInit();
 
 //            this.CPUtoHTML();
@@ -101,8 +102,10 @@ module biOShock {
         public static hostBtnHaltOS_click(btn): void {
             Control.hostLog("Emergency halt", "host");
             Control.hostLog("Attempting Kernel shutdown.", "host");
+
             // Call the OS shutdown routine.
             _Kernel.krnShutdown();
+
             // Stop the interval that's simulating our clock pulse.
             clearInterval(_hardwareClockID);
             // TODO: Is there anything else we need to do here?

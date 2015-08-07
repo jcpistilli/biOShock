@@ -14,18 +14,20 @@ var biOShock;
             this.scheduleType = this.options[0];
         }
         CpuScheduler.prototype.start = function () {
-            if (_ReadyQueue.length > 0) {
+            debugger;
+            if (_ReadyQueue.getSize() > 0) {
+                debugger;
                 _Mode = 1;
 
                 //                _currProgram = _ReadyQueue.dequeue();
                 _currProgram = this.nextProcess();
                 _currProgram.state = "Running.";
-                var executing = !_Step;
-                _CPU.init(_currProgram, executing);
+                _CPU.setCPU(_currProgram);
             }
         };
 
         CpuScheduler.prototype.nextProcess = function () {
+            debugger;
             if (this.scheduleType === this.options[0] || this.scheduleType === this.options[1]) {
                 return _ReadyQueue.dequeue();
             } else if (this.scheduleType === this.options[2]) {
@@ -46,6 +48,7 @@ var biOShock;
         };
 
         CpuScheduler.prototype.needToContextSwitchIf = function () {
+            debugger;
             if (this.scheduleType === this.options[0]) {
                 if (_cycleCounter >= _Quantum) {
                     return true;
@@ -64,7 +67,7 @@ var biOShock;
         };
 
         CpuScheduler.prototype.contextSwitch = function () {
-            //            debugger;
+            debugger;
             var nextProc = this.nextProcess();
             if (nextProc !== null && nextProc !== undefined) {
                 if (this.scheduleType === this.options[0]) {
@@ -76,14 +79,14 @@ var biOShock;
                 } else {
                     _Kernel.krnTrace("Unknown CPU scheduler.");
                 }
-                _CPU.updatePCB();
 
+                //                _CPU.updatePCB();
                 var lastProc = _currProgram;
                 _currProgram = nextProc;
 
                 _currProgram.state = "Running.";
-                var executing = !_Step;
-                _CPU.init(_currProgram, executing);
+
+                _CPU.setCPU(_currProgram);
             } else if (_currProgram.state === "Terminated.") {
                 debugger;
                 this.stop();
@@ -93,23 +96,30 @@ var biOShock;
         };
 
         CpuScheduler.prototype.roundRobinSwitch = function (nextProc) {
-            //            debugger;
+            debugger;
             var thisPID = _currProgram.pcb.pid;
             _Kernel.krnTrace("Current cycle count > quantum of " + _Quantum + ". Switching context.");
 
-            _currProgram.updatePCB(); //this is IMPORTANT
+            debugger;
+            _CPU.updatePCB(); //this is IMPORTANT
 
+            //            console.debug(_currProgram);
+            //            _currProgram.pcb.pc     = _CPU.PC;
+            //            _currProgram.pcb.acc    = _CPU.Acc;
+            //            _currProgram.pcb.xReg   = _CPU.Xreg;
+            //            _currProgram.pcb.yReg   = _CPU.Yreg;
+            //            _currProgram.pcb.pc     = _CPU.Zflag;
             if (_currProgram.state !== "Terminated.") {
                 _currProgram.state = "Ready.";
                 _ReadyQueue.enqueue(_currProgram);
             } else if (_currProgram.state === "Terminated.") {
                 _MemMan.removeFromList(thisPID); //removeThisFromList is in MemMan
             }
-            var prevProcess = _currProgram;
-            _currProgram = nextProc;
-            _currProgram.state = "Running.";
-            var shouldBeExecuting = !_Step;
-            _CPU.init(_currProgram, shouldBeExecuting);
+            //            var prevProcess = _currProgram;
+            //            _currProgram = nextProc;
+            //            _currProgram.state = "Running.";
+            //            var shouldBeExecuting = !_Step;
+            //            _CPU.init(_currProgram, shouldBeExecuting);
         };
 
         CpuScheduler.prototype.fcfsContextSwitch = function (nextProc) {
