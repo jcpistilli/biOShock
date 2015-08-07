@@ -1,169 +1,169 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-   <meta name="author"             content="Jonathan C. Pistilli" />
-   <link rel="stylesheet" href="dist/styles/biOShock.css" type="text/css" media="screen" />
-   <title>
-      biOShock - a browser-based virtual Operating System in TypeScript
-   </title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="author"             content="Jonathan C. Pistilli" />
+    <link rel="stylesheet" href="dist/styles/biOShock.css" type="text/css" media="screen" />
+    <title>
+        biOShock - a browser-based virtual Operating System in TypeScript
+    </title>
 
-   <!-- Globals CONSTANTS and _Variables. Must included be first. -->
-   <script type="text/javascript" src="dist/scripts/globals.js"></script>
+    <!-- Globals CONSTANTS and _Variables. Must included be first. -->
+    <script type="text/javascript" src="dist/scripts/globals.js"></script>
 
-   <!-- Host (Hardware Simulation) Routines -->
-   <script type="text/javascript" src="dist/scripts/host/control.js"></script>
-   <script type="text/javascript" src="dist/scripts/host/devices.js"></script>
-   <script type="text/javascript" src="dist/scripts/host/cpu.js"></script>
-   <script type="text/javascript" src="dist/scripts/host/memory.js"></script>
+    <!-- Host (Hardware Simulation) Routines -->
+    <script type="text/javascript" src="dist/scripts/host/control.js"></script>
+    <script type="text/javascript" src="dist/scripts/host/devices.js"></script>
+    <script type="text/javascript" src="dist/scripts/host/cpu.js"></script>
+    <script type="text/javascript" src="dist/scripts/host/memory.js"></script>
 
-   <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
-   <script type="text/javascript" src="dist/scripts/os/interrupt.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/canvastext.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/console.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/deviceDriver.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/deviceDriverKeyboard.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/memMan.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/pcb.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/queue.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/shell.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/shellCommand.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/userCommand.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/cpuScheduler.js"></script>
-   <script type="text/javascript" src="dist/scripts/os/kernel.js"></script>
+    <!-- Virtual OS Routines: Make sure Kernel code is last, since it needs those above it. -->
+    <script type="text/javascript" src="dist/scripts/os/interrupt.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/canvastext.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/console.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/deviceDriver.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/deviceDriverKeyboard.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/memMan.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/pcb.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/queue.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/shell.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/shellCommand.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/userCommand.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/cpuScheduler.js"></script>
+    <script type="text/javascript" src="dist/scripts/os/kernel.js"></script>
 
-   <!-- Other Routines -->
-   <script type="text/javascript" src="dist/scripts/utils.js"></script>
-   <!-- Uncomment this line below to enable Glados testing -->
-   <!-- <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script> -->
+    <!-- Other Routines -->
+    <script type="text/javascript" src="dist/scripts/utils.js"></script>
+    <!-- Uncomment this line below to enable Glados testing -->
+    <!-- <script type="text/javascript" src="http://www.labouseur.com/courses/os/projects/glados.js"></script> -->
 </head>
 
 <body onload="onDocumentLoad();">
 
 <div id="divMain" style="width:100%;">
 
-   <div id="divButtonBar" style="margin:4px;">
-      <input type="button"
-             id = "btnStartOS"
-             name="brnStartOS"
-             class="normal_button"
-             value="Start"
-             tabindex="0"
-             onclick="biOShock.Control.hostBtnStartOS_click(this);">
+    <div id="divButtonBar" style="margin:4px;">
+        <input type="button"
+               id = "btnStartOS"
+               name="brnStartOS"
+               class="normal_button"
+               value="Start"
+               tabindex="0"
+               onclick="biOShock.Control.hostBtnStartOS_click(this);">
 
-      <input type="button"
-             id = "btnHaltOS"
-             name="brnHaltOS"
-             class="normal_button"
-             disabled="disabled"
-             value="Halt"
-             tabindex="1"
-             onclick="biOShock.Control.hostBtnHaltOS_click(this);">
+        <input type="button"
+               id = "btnHaltOS"
+               name="brnHaltOS"
+               class="normal_button"
+               disabled="disabled"
+               value="Halt"
+               tabindex="1"
+               onclick="biOShock.Control.hostBtnHaltOS_click(this);">
 
-      <input type="button"
-             id = "btnReset"
-             name="brnReset"
-             class="normal_button"
-             disabled="disabled"
-             value="Reset"
-             tabindex="2"
-             onclick="biOShock.Control.hostBtnReset_click(this);">
+        <input type="button"
+               id = "btnReset"
+               name="brnReset"
+               class="normal_button"
+               disabled="disabled"
+               value="Reset"
+               tabindex="2"
+               onclick="biOShock.Control.hostBtnReset_click(this);">
 
-       <input type="button"
-              id = "btnEnableStep"
-              name="brnEnableStep"
-              class="normal_button"
-              disabled="disabled"
-              value="Enable Step"
-              tabindex="2"
-              onclick="biOShock.Control.enableStep(this);">
+        <input type="button"
+               id = "btnEnableStep"
+               name="brnEnableStep"
+               class="normal_button"
+               disabled="disabled"
+               value="Enable Step"
+               tabindex="2"
+               onclick="biOShock.Control.enableStep(this);">
 
-       <input type="button"
-              id = "btnOneStep"
-              name="brnOneStep"
-              class="normal_button"
-              disabled="disabled"
-              value="One Step"
-              tabindex="2"
-              onclick="biOShock.Control.oneStep(this);">
+        <input type="button"
+               id = "btnOneStep"
+               name="brnOneStep"
+               class="normal_button"
+               disabled="disabled"
+               value="One Step"
+               tabindex="2"
+               onclick="biOShock.Control.oneStep(this);">
 
-       <input type="button"
-              id = "btnDisableStep"
-              name="brnDisableStep"
-              class="normal_button"
-              disabled="disabled"
-              value="Disable Step"
-              tabindex="2"
-              onclick="biOShock.Control.disableStep(this);">
-   </div>
+        <input type="button"
+               id = "btnDisableStep"
+               name="brnDisableStep"
+               class="normal_button"
+               disabled="disabled"
+               value="Disable Step"
+               tabindex="2"
+               onclick="biOShock.Control.disableStep(this);">
+    </div>
 
     <div id="divStatusBar" style="margin: 4px; width: 100%; height: 15px; margin-top: 5px;">
         <label>
             date and time: <span id="spanDaT"></span>
-        &nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;
 
             status: <span id="message"></span>
         </label>
     </div>
 
-   <div id="divConsole" style="margin:4px; width:519px; height:500px; float:left; overflow-y: auto">
-      <canvas id="display"
-              width="500px"
-              height="500px"
-              tabindex="3">
-      </canvas>
-   </div>
+    <div id="divConsole" style="margin:4px; width:519px; height:500px; float:left; overflow-y: auto">
+        <canvas id="display"
+                width="500px"
+                height="500px"
+                tabindex="3">
+        </canvas>
+    </div>
 
-   <div id="divLog" style="margin-left:520px;">
-      <label>
-         host log
-         <br>
-         <textarea name="taHostLog"
-                   id  ="taHostLog"
-                   rows="9"
-                   cols="67"
-         ></textarea>
-      </label>
-   </div>
+    <div id="divLog" style="margin-left:520px;">
+        <label>
+            host log
+            <br>
+            <textarea name="taHostLog"
+                      id  ="taHostLog"
+                      rows="9"
+                      cols="67"
+                    ></textarea>
+        </label>
+    </div>
 
-   <div id="divUserProgramInput" style="margin-left:520px;">
-      <label style="float: left;">
-         user program input
-         <br>
-         <textarea name="taProgramInput"
-                   id  ="taProgramInput"
-                   rows="9"
-                   cols="67"
-         ></textarea>
-      </label>
-      <label style="float: left;">
-           memory
-          <br>
-          <textarea name="memTable"
-                    id  ="memTable"
-                    rows="11"
-                    cols="67"
-          ></textarea>
-      </label>
-       <label style="float: left;">
-           cpu
-           <br>
-           <textarea name="pcb"
-                     id  ="pcb"
-                     rows="1"
-                     cols="67"
-                   ></textarea>
-       </label>
+    <div id="divUserProgramInput" style="margin-left:520px;">
+        <label style="float: left;">
+            user program input
+            <br>
+            <textarea name="taProgramInput"
+                      id  ="taProgramInput"
+                      rows="9"
+                      cols="67"
+                    ></textarea>
+        </label>
+        <label style="float: left;">
+            memory
+            <br>
+            <textarea name="memTable"
+                      id  ="memTable"
+                      rows="11"
+                      cols="67"
+                    ></textarea>
+        </label>
+        <label style="float: left;">
+            cpu
+            <br>
+            <textarea name="pcb"
+                      id  ="pcb"
+                      rows="1"
+                      cols="67"
+                    ></textarea>
+        </label>
     </div>
 
 </div>
 
 <p class="footerText" style="clear:both;">
-   <br>
-   Copyright &copy; 2008 - 2014 No Rights Reserved.
-   <br>
-   Reproduction is prohibited without the express written consent of
-   Geddy Lee, Alex Lifeson, and Neil Peart.
+    <br>
+    Copyright &copy; 2008 - 2014 No Rights Reserved.
+    <br>
+    Reproduction is prohibited without the express written consent of
+    Geddy Lee, Alex Lifeson, and Neil Peart.
 </p>
 
 
