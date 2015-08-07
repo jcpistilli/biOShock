@@ -136,6 +136,12 @@ module biOShock {
                 "<INT> - Changes the value of the quantum.");
             this.commandList[this.commandList.length] = sc;
 
+            //PS
+            sc = new ShellCommand(this.shellPS,
+                "ps",
+                "List of the running processes' PIDs.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -504,6 +510,28 @@ module biOShock {
             }
             else {
                 _StdOut.putText("Please enter a valid integer.");
+            }
+        }
+
+        public shellPS(args)
+        {
+            var PIDs = "";
+            for (var i = 0; i < _ReadyQueue.getSize(); i++)
+            {
+                var theProcess = _ReadyQueue.q[i];
+
+                if (theProcess.pcb.state !== "Terminated.")
+                {
+                    PIDs += ("PID: " + theProcess.pcb.pid + ", ");
+                }
+            }
+            if (_currProgram !== null) {
+                PIDs += ("PID: " + _currProgram.pcb.pid);
+            }
+            if (PIDs.length) {
+                _StdIn.putText(PIDs);
+            } else {
+                _StdIn.putText("No running processes.");
             }
         }
     }

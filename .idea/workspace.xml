@@ -118,8 +118,8 @@
       <file leaf-file-name="shell.ts" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.0564516" vertical-offset="7229" max-vertical-offset="7725">
-              <caret line="447" column="0" selection-start-line="447" selection-start-column="0" selection-end-line="447" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.63709676" vertical-offset="7649" max-vertical-offset="8145">
+              <caret line="531" column="37" selection-start-line="531" selection-start-column="37" selection-end-line="531" selection-end-column="37" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -172,12 +172,12 @@
         <option value="$PROJECT_DIR$/source/scripts/globals.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/memMan.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/queue.ts" />
-        <option value="$PROJECT_DIR$/source/scripts/os/shell.ts" />
         <option value="$PROJECT_DIR$/source/scripts/host/control.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/pcb.ts" />
         <option value="$PROJECT_DIR$/source/scripts/host/cpu.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/cpuScheduler.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/kernel.ts" />
+        <option value="$PROJECT_DIR$/source/scripts/os/shell.ts" />
       </list>
     </option>
   </component>
@@ -795,8 +795,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.0564516" vertical-offset="7229" max-vertical-offset="7725">
-          <caret line="447" column="0" selection-start-line="447" selection-start-column="0" selection-end-line="447" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.63709676" vertical-offset="7649" max-vertical-offset="8145">
+          <caret line="531" column="37" selection-start-line="531" selection-start-column="37" selection-end-line="531" selection-end-column="37" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
