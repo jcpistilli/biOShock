@@ -183,45 +183,6 @@ var biOShock;
 
             return month + "/" + day + "/" + year + " " + hrs + ":" + min + ":" + sec;
         };
-
-        Control.printReadyQueue = function () {
-            //            var PCBs = "";
-            //            for (var i = 0; i < _ReadyQueue.getSize(); i++)
-            //            {
-            //                PCBs += "pid: " + _currProgram.pid + " Base address: " + _currProgram.base + " PC: " + _currProgram.PC + /*" IR: " +  +*/ " Acc: " + _currProgram.Acc + " Xreg: " + _currProgram.Xreg + " Yreg: " + _currProgram.Yreg + " Z Flag: " + _currProgram.Zflag + "\n";
-            //            }
-            //            (<HTMLInputElement>document.getElementById("pcb")).value = PCBs;
-            var PCBs = "";
-            var active = new Array();
-
-            if (_currProgram && _currProgram.state !== "Terminated.") {
-                active[_currProgram.pcb.pid] = _currProgram;
-            }
-
-            for (var i = 0; i < _ReadyQueue.getSize(); i++) {
-                active[_ReadyQueue.q[i].pcb.pid] = _ReadyQueue.q[i];
-            }
-
-            // Because this changes within for loop, keep the original here
-            var length = active.length;
-
-            for (var i = 0; i < length; i++) {
-                var process = active.shift();
-                if (process) {
-                    PCBs += "PID: " + process.pcb.pid;
-                    PCBs += " State: " + process.state;
-                    PCBs += " PC: " + process.pcb.pc;
-                    PCBs += " Acc: " + process.pcb.acc;
-                    PCBs += " Xreg: " + process.pcb.xReg;
-                    "<tr></tr>";
-                    PCBs += " Yreg: " + process.pcb.yReg;
-                    PCBs += " Zflag: " + process.pcb.zFlag;
-                    PCBs += " Base: " + process.pcb.base;
-                    PCBs += " Limit: " + process.pcb.limit;
-                }
-            }
-            document.getElementById("pcb").innerHTML = PCBs;
-        };
         return Control;
     })();
     biOShock.Control = Control;

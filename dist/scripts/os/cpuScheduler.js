@@ -80,8 +80,7 @@ var biOShock;
                     _Kernel.krnTrace("Unknown CPU scheduler.");
                 }
 
-                biOShock.Control.printReadyQueue();
-
+                //                _CPU.updatePCB();
                 var lastProc = _currProgram;
                 _currProgram = nextProc;
 
@@ -102,14 +101,25 @@ var biOShock;
             _Kernel.krnTrace("Current cycle count > quantum of " + _Quantum + ". Switching context.");
 
             debugger;
-            _CPU.updatePCB();
+            _CPU.updatePCB(); //this is IMPORTANT
 
+            //            console.debug(_currProgram);
+            //            _currProgram.pcb.pc     = _CPU.PC;
+            //            _currProgram.pcb.acc    = _CPU.Acc;
+            //            _currProgram.pcb.xReg   = _CPU.Xreg;
+            //            _currProgram.pcb.yReg   = _CPU.Yreg;
+            //            _currProgram.pcb.pc     = _CPU.Zflag;
             if (_currProgram.state !== "Terminated.") {
                 _currProgram.state = "Ready.";
                 _ReadyQueue.enqueue(_currProgram);
             } else if (_currProgram.state === "Terminated.") {
                 _MemMan.removeFromList(thisPID); //removeThisFromList is in MemMan
             }
+            //            var prevProcess = _currProgram;
+            //            _currProgram = nextProc;
+            //            _currProgram.state = "Running.";
+            //            var shouldBeExecuting = !_Step;
+            //            _CPU.init(_currProgram, shouldBeExecuting);
         };
 
         CpuScheduler.prototype.fcfsContextSwitch = function (nextProc) {
@@ -127,7 +137,6 @@ var biOShock;
             _CPU.isExecuting = false;
             _Mode = 0;
             _CPU.updatePCB();
-            biOShock.Control.printReadyQueue();
             _currProgram = null;
             _cycleCounter = 0;
         };

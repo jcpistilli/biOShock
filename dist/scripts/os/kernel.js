@@ -86,7 +86,6 @@ var biOShock;
             } else if (_CPU.isExecuting) {
                 //                _CPU.cycle();
                 this.clockPulse();
-                biOShock.Control.printReadyQueue();
             } else {
                 this.krnTrace("Idle");
             }

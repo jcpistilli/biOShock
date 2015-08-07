@@ -70,7 +70,7 @@ var biOShock;
         Cpu.prototype.updateCpu = function () {
             if (this.isExecuting) {
                 this.updatePCB();
-                document.getElementById("cpu").value = "PCB: " + _currProgram.pcb.pid + " PC: " + this.PC + " Acc: " + this.Acc + " Xreg: " + this.Xreg + " Yreg: " + this.Yreg + " Zflag: " + this.Zflag;
+                document.getElementById("pcb").value = "PCB: " + _currProgram.pcb.pid + " PC: " + this.PC + " Acc: " + this.Acc + " Xreg: " + this.Xreg + " Yreg: " + this.Yreg + " Zflag: " + this.Zflag;
             }
         };
 

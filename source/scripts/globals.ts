@@ -84,8 +84,6 @@ var _currProgram: any = null;
 
 var _CpuScheduler = null;
 
-var _FileSystem = null;
-
 // UI
 var _Console: biOShock.Console;
 var _OsShell: biOShock.Shell;

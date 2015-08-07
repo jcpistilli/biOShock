@@ -90,8 +90,6 @@ module biOShock {
             { // If there are no interrupts then run one CPU cycle if there is anything being processed.
 //                _CPU.cycle();
                 this.clockPulse();
-                biOShock.Control.printReadyQueue();
-
             }
             else
             {                      // If there are no interrupts and there is nothing being executed then just be idle.

@@ -80,8 +80,6 @@ var _currProgram = null;
 
 var _CpuScheduler = null;
 
-var _FileSystem = null;
-
 // UI
 var _Console;
 var _OsShell;
