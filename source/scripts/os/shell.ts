@@ -142,6 +142,13 @@ module biOShock {
                 "List of the running processes' PIDs.");
             this.commandList[this.commandList.length] = sc;
 
+            //SetSchedule
+            sc = new ShellCommand(this.shellSetSchedule,
+                "setschedule",
+                "Set the CPU scheduling algorithm");
+            this.commandList[this.commandList.length] = sc;
+
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -388,7 +395,7 @@ module biOShock {
             }
         }
 
-        public shellLoad() {
+        public shellLoad(args) {
             var retrieveHex = (<HTMLInputElement> document.getElementById("taProgramInput")).value;
 
             var removeSpace = retrieveHex.replace(/\s+/g, ' ').toUpperCase();
@@ -409,14 +416,24 @@ module biOShock {
                 }
             }
 
+            debugger;
+            var priority = 10;
+
+            if (args.length > 0)
+            {
+                priority = parseInt(args[0]);
+            }
+
             _StdOut.putText("Please be patient.");
             _StdOut.advanceLine();
-            var thisPID = _MemMan.loadProg(removeSpace);
-            if (thisPID !== null) {
+
+            var thisPID = _MemMan.loadProg(removeSpace, priority);
+            if (thisPID !== null)
+            {
                 _StdOut.putText("PID: " + thisPID);
             }
 
-//           _MemMan.memoryTable();     //for displaying the memory
+//           _MemMan.printMemory();
 
         }
 
@@ -489,6 +506,8 @@ module biOShock {
         public shellClearMem() {
             _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
+            var mem = new biOShock.Memory(_MemMan.memory.bytes);
+            mem.init();
         }
 
         //Run all
@@ -533,6 +552,38 @@ module biOShock {
             } else {
                 _StdIn.putText("No running processes.");
             }
+        }
+
+        public shellSetSchedule(args) {
+
+            if (args.length > 0)
+            {
+                var scheduler = -1;
+
+                // Check to ensure that given scheduling argument is valid
+                for (var i = 0; i < _CpuScheduler.options.length; i++)
+                {
+                    if (args[0] === _CpuScheduler.options[i])
+                    {
+                        scheduler = i;
+                    }
+                }
+
+                // If it wasn't found, yell at user
+                if (scheduler === -1) {
+                    _StdOut.putText("Please enter a valid scheduler");
+                }
+                else
+                {
+                    _CpuScheduler.scheduleType = _CpuScheduler.options[scheduler];
+                    _StdOut.putText("CPU scheduler set to " + _CpuScheduler.options[scheduler]);
+                }
+            }
+            else
+            {
+                _StdOut.putText("Please enter a scheduler");
+            }
+
         }
     }
 }

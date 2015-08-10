@@ -16,7 +16,7 @@ module biOShock {
         base: number;
         limit: number;
         loc: number;
-        //state: number;
+        priority: number;
 
 
         constructor()
@@ -34,7 +34,7 @@ module biOShock {
             this.limit = 0;
 
             this.loc   = 0;
-            //this.state = 0;
+            this.priority = 10;
 
         }
 

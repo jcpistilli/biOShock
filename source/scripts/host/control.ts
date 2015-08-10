@@ -227,33 +227,19 @@ module biOShock {
                 var process = active.shift();
                 if (process)
                 {
-                    PCBs += "PID: "     + process.pcb.pid;
+                    PCBs += "PID: "      + process.pcb.pid;
                     PCBs += " State: "   + process.state;
                     PCBs += " PC: "      + process.pcb.pc;
                     PCBs += " Acc: "     + process.pcb.acc;
-                    PCBs += " Xreg: "    + process.pcb.xReg; "<tr></tr>"
+                    PCBs += " Xreg: "    + process.pcb.xReg;
                     PCBs += " Yreg: "    + process.pcb.yReg;
                     PCBs += " Zflag: "   + process.pcb.zFlag;
                     PCBs += " Base: "    + process.pcb.base;
-                    PCBs += " Limit: "   + process.pcb.limit;
+                    PCBs += " Limit: "   + process.pcb.limit + " ";
                 }
             }
             document.getElementById("pcb").innerHTML = PCBs;
         }
 
-        //HTML stuff
-        //resets HTML elements of the CPU
-        /*public static CPUtoHTML(): void
-         {
-         document.getElementById("tdPC").innerHTML = "0";
-         document.getElementById("tdAccum").innerHTML = "0";
-         document.getElementById("tdXReg").innerHTML = "0";
-         document.getElementById("tdYReg").innerHTML = "0";
-         document.getElementById("tdZFlag").innerHTML = "0";
-         }
-         public static CPUid(id, value): void
-         {
-         document.getElementById(id).innerHTML = value;
-         }*/
     }
 }

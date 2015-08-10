@@ -91,6 +91,7 @@ module biOShock {
 //                _CPU.cycle();
                 this.clockPulse();
                 biOShock.Control.printReadyQueue();
+//                _MemMan.printMemory();
 
             }
             else

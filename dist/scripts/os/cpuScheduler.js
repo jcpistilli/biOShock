@@ -5,18 +5,13 @@ Jonathan Pistilli
 var biOShock;
 (function (biOShock) {
     var CpuScheduler = (function () {
-        /*
-        I know that for project 4 i need to implement fcfs and non preemptive priority
-        */
         function CpuScheduler() {
-            //        public quantum = 6;
             this.options = ['rr', 'fcfs', 'priority'];
             this.scheduleType = this.options[0];
         }
         CpuScheduler.prototype.start = function () {
-            debugger;
+            //            console.debug(_ReadyQueue.getSize());
             if (_ReadyQueue.getSize() > 0) {
-                debugger;
                 _Mode = 1;
 
                 //                _currProgram = _ReadyQueue.dequeue();
@@ -27,21 +22,21 @@ var biOShock;
         };
 
         CpuScheduler.prototype.nextProcess = function () {
-            debugger;
             if (this.scheduleType === this.options[0] || this.scheduleType === this.options[1]) {
                 return _ReadyQueue.dequeue();
             } else if (this.scheduleType === this.options[2]) {
-                var lowest = Infinity;
+                var lowest = 999;
                 var lowestIndex = -1;
 
-                for (var i = 0; i < _ReadyQueue.length; i++) {
-                    if (_ReadyQueue[i].priority < lowest) {
-                        lowest = _ReadyQueue[i].priority;
+                for (var i = 0; i < _ReadyQueue.getSize(); i++) {
+                    if (_ReadyQueue.q[i].pcb.priority < lowest) {
+                        lowest = _ReadyQueue.q[i].pcb.priority;
                         lowestIndex = i;
                     }
                 }
-
-                return _ReadyQueue.splice(lowestIndex, 1)[0];
+                var nextProc = _ReadyQueue.q[lowestIndex];
+                _ReadyQueue.q.splice(lowestIndex, 1);
+                return nextProc;
             }
 
             return null;
@@ -67,7 +62,6 @@ var biOShock;
         };
 
         CpuScheduler.prototype.contextSwitch = function () {
-            debugger;
             var nextProc = this.nextProcess();
             if (nextProc !== null && nextProc !== undefined) {
                 if (this.scheduleType === this.options[0]) {
@@ -89,7 +83,6 @@ var biOShock;
 
                 _CPU.setCPU(_currProgram);
             } else if (_currProgram.state === "Terminated.") {
-                debugger;
                 this.stop();
             }
 
@@ -97,11 +90,9 @@ var biOShock;
         };
 
         CpuScheduler.prototype.roundRobinSwitch = function (nextProc) {
-            debugger;
             var thisPID = _currProgram.pcb.pid;
             _Kernel.krnTrace("Current cycle count > quantum of " + _Quantum + ". Switching context.");
 
-            debugger;
             _CPU.updatePCB();
 
             if (_currProgram.state !== "Terminated.") {
@@ -117,12 +108,11 @@ var biOShock;
         };
 
         CpuScheduler.prototype.priorityContextSwitch = function (nextProc) {
-            //            _currProgram.updateCpu(); //check this
+            _CPU.updatePCB(); //check this
             _MemMan.removeFromList(_currProgram.pcb.pid);
         };
 
         CpuScheduler.prototype.stop = function () {
-            debugger;
             _MemMan.removeFromList(_currProgram.pcb.pid);
             _CPU.isExecuting = false;
             _Mode = 0;

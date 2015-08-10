@@ -58,17 +58,22 @@ var biOShock;
             this.loc[location].active = true;
         };
 
-        memoryManager.prototype.loadProg = function (prog) {
+        memoryManager.prototype.loadProg = function (prog, priority) {
             var progLoc = this.openProgLoc();
             if (progLoc === null) {
+                var thisPCB = new biOShock.pcb();
                 _StdOut.putText("Memory is full.");
                 return null;
+
+                thisPCB.priority = priority;
             } else {
                 var thisPCB = new biOShock.pcb();
                 thisPCB.base = ((progLoc + 1) * _progSize) - _progSize;
                 thisPCB.limit = ((progLoc + 1) * _progSize) - 1;
 
                 thisPCB.loc = progLoc;
+
+                thisPCB.priority = priority;
 
                 this.loadProgIntoMemory(prog, thisPCB.loc);
 
@@ -117,25 +122,6 @@ var biOShock;
             return done;
         };
 
-        memoryManager.prototype.removeCurrProgram = function () {
-            debugger;
-            var done = false;
-            var thisProg = _currProgram;
-
-            for (var i = 0; i < _ResidentList.length(); i++) {
-                if (_ResidentList[i] && _ResidentList[i].pcb.pid === thisProg.pcb.pid) {
-                    //                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
-                    //                    if (_currProgram.pcb.loc !== -1)
-                    //                    {
-                    //                        this.loc[_currProgram.pcb.loc].active = false;
-                    //                    }
-                    _ResidentList.splice(i, 1);
-                    done = true;
-                }
-            }
-            return done;
-        };
-
         memoryManager.prototype.updateMemoryAt = function (data, address) {
             address += _currProgram.pcb.base;
             if (address >= _currProgram.pcb.limit || address < _currProgram.pcb.base) {
@@ -157,9 +143,6 @@ var biOShock;
             for (var i = 0; i < this.loc.length; i++) {
                 this.loc[i].active = false;
             }
-
-            var mem = new biOShock.Memory(this.memory.bytes);
-            mem.init();
         };
         return memoryManager;
     })();

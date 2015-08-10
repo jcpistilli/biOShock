@@ -8,12 +8,9 @@ module biOShock
 {
     export class CpuScheduler
     {
-//        public quantum = 6;
         public options = ['rr', 'fcfs', 'priority'];
         public scheduleType = this.options[0]; //default to rr
-        /*
-         I know that for project 4 i need to implement fcfs and non preemptive priority
-         */
+
         constructor()
         {
 
@@ -22,10 +19,9 @@ module biOShock
         public start(): void
         {
 //            console.debug(_ReadyQueue.getSize());
-            debugger;
             if (_ReadyQueue.getSize() > 0)
             {
-                debugger;
+
                 _Mode = 1;
 //                _currProgram = _ReadyQueue.dequeue();
                 _currProgram = this.nextProcess();
@@ -36,26 +32,28 @@ module biOShock
 
         public nextProcess(): any
         {
-            debugger;
+
             if( this.scheduleType === this.options[0] || this.scheduleType === this.options[1])
             {
                 return _ReadyQueue.dequeue();
             }
             else if (this.scheduleType === this.options[2])
             {
-                var lowest = Infinity;
+
+                var lowest = 999;
                 var lowestIndex =  -1;
 
-                for (var i = 0; i < _ReadyQueue.length; i++)
+                for (var i = 0; i < _ReadyQueue.getSize(); i++)
                 {
-                    if (_ReadyQueue[i].priority < lowest)
+                    if (_ReadyQueue.q[i].pcb.priority < lowest)
                     {
-                        lowest = _ReadyQueue[i].priority;
+                        lowest = _ReadyQueue.q[i].pcb.priority;
                         lowestIndex = i;
                     }
                 }
-
-                return _ReadyQueue.splice(lowestIndex, 1)[0];
+                var nextProc = _ReadyQueue.q[lowestIndex];
+                _ReadyQueue.q.splice(lowestIndex, 1);
+                return nextProc;
             }
 
             return null;
@@ -71,6 +69,7 @@ module biOShock
                     return true;
                 }
             }
+
             else if (this.scheduleType === this.options[1])
             {
                 if(_currProgram.state === "Terminated.")
@@ -91,7 +90,7 @@ module biOShock
 
         public contextSwitch(): void
         {
-            debugger;
+
             var nextProc = this.nextProcess();
             if (nextProc !== null && nextProc !== undefined)
             {
@@ -123,7 +122,7 @@ module biOShock
             }
             else if(_currProgram.state === "Terminated.")
             {
-                debugger;
+
                 this.stop();
             }
 
@@ -132,11 +131,11 @@ module biOShock
 
         public roundRobinSwitch(nextProc): any
         {
-            debugger;
+
             var thisPID = _currProgram.pcb.pid;
             _Kernel.krnTrace("Current cycle count > quantum of " + _Quantum + ". Switching context.");
 
-            debugger;
+
             _CPU.updatePCB();
 
 
@@ -159,13 +158,13 @@ module biOShock
 
         public priorityContextSwitch(nextProc)
         {
-//            _currProgram.updateCpu(); //check this
+            _CPU.updatePCB(); //check this
             _MemMan.removeFromList(_currProgram.pcb.pid);
         }
 
         public stop(): any
         {
-            debugger;
+
             _MemMan.removeFromList(_currProgram.pcb.pid);
             _CPU.isExecuting = false;
             _Mode = 0;

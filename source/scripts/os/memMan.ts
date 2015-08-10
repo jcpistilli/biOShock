@@ -81,13 +81,16 @@ module biOShock
             this.loc[location].active = true;
         }
 
-        public loadProg (prog)
+        public loadProg (prog, priority)
         {
             var progLoc = this.openProgLoc();
             if (progLoc === null)
             {
+                var thisPCB = new pcb();
                 _StdOut.putText("Memory is full.");
                 return null;
+
+                thisPCB.priority = priority;
             }
             else
             {
@@ -96,6 +99,8 @@ module biOShock
                 thisPCB.limit = ((progLoc + 1) * _progSize) - 1;
 
                 thisPCB.loc = progLoc;
+
+                thisPCB.priority = priority;
 
                 this.loadProgIntoMemory(prog, thisPCB.loc);
 
@@ -151,27 +156,6 @@ module biOShock
             return done;
         }
 
-        public removeCurrProgram(): any
-        {
-            debugger;
-            var done = false;
-            var thisProg = _currProgram;
-
-            for (var i = 0; i < _ResidentList.length(); i++)
-            {
-                if(_ResidentList[i] && _ResidentList[i].pcb.pid === thisProg.pcb.pid)
-                {
-//                    var thisLoc = this.getBase(_ResidentList[i].pcb.base);
-//                    if (_currProgram.pcb.loc !== -1)
-//                    {
-//                        this.loc[_currProgram.pcb.loc].active = false;
-//                    }
-                    _ResidentList.splice(i, 1);
-                    done = true;
-                }
-            }
-            return done;
-        }
 
         public updateMemoryAt(data, address): void
         {
@@ -199,15 +183,20 @@ module biOShock
             {
                 this.loc[i].active = false;
             }
-
-            var mem = new biOShock.Memory(this.memory.bytes);
-            mem.init();
         }
 
-//        public MemManInit()
+//        public printMemory()
 //        {
-//            var mem = new biOShock.Memory(this.memory.bytes);
-//            mem.init();
+//            var display = "";
+//
+//            for (var i = 0; i < this.memory.bytes; i++)
+//            display += '<p>';
+//            {
+//                display += this.memory.data[i];
+//            }
+//            display += '</p>';
+//
+//            document.getElementById("memTable").innerHTML = display;
 //        }
 
 

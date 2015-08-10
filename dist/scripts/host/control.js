@@ -213,11 +213,10 @@ var biOShock;
                     PCBs += " PC: " + process.pcb.pc;
                     PCBs += " Acc: " + process.pcb.acc;
                     PCBs += " Xreg: " + process.pcb.xReg;
-                    "<tr></tr>";
                     PCBs += " Yreg: " + process.pcb.yReg;
                     PCBs += " Zflag: " + process.pcb.zFlag;
                     PCBs += " Base: " + process.pcb.base;
-                    PCBs += " Limit: " + process.pcb.limit;
+                    PCBs += " Limit: " + process.pcb.limit + " ";
                 }
             }
             document.getElementById("pcb").innerHTML = PCBs;
