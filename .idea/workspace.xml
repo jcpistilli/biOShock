@@ -97,11 +97,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="shell.ts" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="shell.ts" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.3846154" vertical-offset="7469" max-vertical-offset="8910">
-              <caret line="509" column="23" selection-start-line="509" selection-start-column="23" selection-end-line="509" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.60685486" vertical-offset="1949" max-vertical-offset="9075">
+              <caret line="150" column="15" selection-start-line="150" selection-start-column="15" selection-end-line="150" selection-end-column="15" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -119,10 +119,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="console.ts" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="console.ts" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/scripts/os/console.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.88408643" vertical-offset="2445" max-vertical-offset="4395">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2700" max-vertical-offset="4395">
               <caret line="193" column="65" selection-start-line="193" selection-start-column="65" selection-end-line="193" selection-end-column="65" />
               <folding />
             </state>
@@ -181,8 +181,8 @@
         <option value="$PROJECT_DIR$/source/scripts/os/cpuScheduler.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/kernel.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/memMan.ts" />
-        <option value="$PROJECT_DIR$/source/scripts/os/shell.ts" />
         <option value="$PROJECT_DIR$/source/scripts/os/console.ts" />
+        <option value="$PROJECT_DIR$/source/scripts/os/shell.ts" />
       </list>
     </option>
   </component>
@@ -824,21 +824,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
+    <entry file="file://$PROJECT_DIR$/source/scripts/os/console.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.3846154" vertical-offset="7469" max-vertical-offset="8910">
-          <caret line="509" column="23" selection-start-line="509" selection-start-column="23" selection-end-line="509" selection-end-column="23" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="2700" max-vertical-offset="4395">
+          <caret line="193" column="65" selection-start-line="193" selection-start-column="65" selection-end-line="193" selection-end-column="65" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/scripts/os/console.ts">
+    <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.88408643" vertical-offset="2445" max-vertical-offset="4395">
-          <caret line="193" column="65" selection-start-line="193" selection-start-column="65" selection-end-line="193" selection-end-column="65" />
-          <folding />
+        <state vertical-scroll-proportion="0.60685486" vertical-offset="1949" max-vertical-offset="9075">
+          <caret line="150" column="15" selection-start-line="150" selection-start-column="15" selection-end-line="150" selection-end-column="15" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

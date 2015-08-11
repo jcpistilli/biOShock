@@ -102,6 +102,10 @@ var biOShock;
             sc = new biOShock.ShellCommand(this.shellSetSchedule, "setschedule", "Set the CPU scheduling algorithm");
             this.commandList[this.commandList.length] = sc;
 
+            //GetSchedule
+            sc = new biOShock.ShellCommand(this.shellGetSchedule, "getschedule", "View the current CPU scheduling algorithm");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -513,6 +517,10 @@ var biOShock;
             } else {
                 _StdOut.putText("Please enter a scheduler");
             }
+        };
+
+        Shell.prototype.shellGetSchedule = function () {
+            _StdIn.putText(_CpuScheduler.scheduleType);
         };
         return Shell;
     })();
