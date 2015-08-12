@@ -84,17 +84,12 @@ var biOShock;
             _CPU = new biOShock.Cpu();
             _MemMan = new biOShock.memoryManager();
 
-            //            _CPU.init();
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(biOShock.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
 
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new biOShock.Kernel();
             _Kernel.krnBootstrap();
-            //Init mem man
-            //            _MemMan.MemManInit();
-            //            this.CPUtoHTML();
-            //            this.memTable(1);
         };
 
         Control.hostBtnHaltOS_click = function (btn) {
@@ -117,6 +112,7 @@ var biOShock;
             // page from its cache, which is not what we want.
         };
 
+        //Single-Step execution
         Control.enableStep = function (btn) {
             document.getElementById("btnEnableStep").disabled = true;
             document.getElementById("btnOneStep").disabled = false;
@@ -151,11 +147,6 @@ var biOShock;
             btmPos.scrollTop = btmPos.scrollHeight;
         };
 
-        /*public static grabInput(): string {
-        var progIn = <HTMLInputElement> document.getElementById("taProgramInput");
-        var progIn2 = progIn.value;
-        return progIn2;
-        }*/
         Control.dateTime = function () {
             var theDate = new Date();
             var month = (theDate.getMonth() + 1).toString();
@@ -184,13 +175,8 @@ var biOShock;
             return month + "/" + day + "/" + year + " " + hrs + ":" + min + ":" + sec;
         };
 
+        //Printing for the Ready Queue
         Control.printReadyQueue = function () {
-            //            var PCBs = "";
-            //            for (var i = 0; i < _ReadyQueue.getSize(); i++)
-            //            {
-            //                PCBs += "pid: " + _currProgram.pid + " Base address: " + _currProgram.base + " PC: " + _currProgram.PC + /*" IR: " +  +*/ " Acc: " + _currProgram.Acc + " Xreg: " + _currProgram.Xreg + " Yreg: " + _currProgram.Yreg + " Z Flag: " + _currProgram.Zflag + "\n";
-            //            }
-            //            (<HTMLInputElement>document.getElementById("pcb")).value = PCBs;
             var PCBs = "";
             var active = new Array();
 
@@ -202,7 +188,6 @@ var biOShock;
                 active[_ReadyQueue.q[i].pcb.pid] = _ReadyQueue.q[i];
             }
 
-            // Because this changes within for loop, keep the original here
             var length = active.length;
 
             for (var i = 0; i < length; i++) {

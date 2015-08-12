@@ -25,7 +25,6 @@ var biOShock;
             // Initialize the console.
             _Console.init();
 
-            //            _CPU.init();
             // Initialize standard input and output to the _Console.
             _StdIn = _Console;
             _StdOut = _Console;
@@ -39,6 +38,7 @@ var biOShock;
             //
             // ... more?
             //
+            //initialize the scheduler, the resident list and ready queue
             _CpuScheduler = new biOShock.CpuScheduler();
             _ResidentList = new Array();
             _ReadyQueue = new biOShock.Queue();
@@ -51,10 +51,11 @@ var biOShock;
             this.krnTrace("Creating and Launching the shell.");
             _OsShell = new biOShock.Shell();
             _OsShell.init();
-            // Finally, initiate testing.
-            //            if (_GLaDOS) {
-            //                _GLaDOS.afterStartup();
-            //            }
+
+            //            Finally, initiate testing.
+            if (_GLaDOS) {
+                _GLaDOS.afterStartup();
+            }
         };
 
         Kernel.prototype.krnShutdown = function () {
@@ -84,11 +85,11 @@ var biOShock;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
-                //                _CPU.cycle();
+                // If there are no interrupts then run one CPU cycle if there is anything being processed.
                 this.clockPulse();
                 biOShock.Control.printReadyQueue();
-                //                _MemMan.printMemory();
             } else {
+                // If there are no interrupts and there is nothing being executed then just be idle.
                 this.krnTrace("Idle");
             }
 
@@ -130,13 +131,8 @@ var biOShock;
                     break;
 
                 case EXECUTING_IRQ:
-                    // COME BACK HERE AFTER GETTING THE SCHEDULER WORKING
+                    //Utilize the CPU scheduler to run the program, since there is always some kind of schedule
                     if (!_CPU.isExecuting) {
-                        debugger;
-
-                        //                        _currProgram = _ResidentList[params[0]];
-                        //                        _ResidentList[params[0]].pcb.state, _currProgram.pcb.state = "Running.";
-                        //                        _CPU.setCPU(_currProgram);
                         _CpuScheduler.start();
                     } else {
                         if ((_CpuScheduler.needToContextSwitchIf())) {
@@ -146,28 +142,41 @@ var biOShock;
                     break;
 
                 case MEM_ACCESS_VIOLATION:
+                    //terminate the program
                     _currProgram.pcb.state = "Terminated.";
+
+                    //remove it from the resident list
                     _MemMan.removeFromList(_currProgram.pcb.pid);
+
+                    //print it in the host log
                     this.krnTrace("PID " + _currProgram.pcb.pid + " terminated.");
                     this.krnTrace("PID " + _currProgram.pcb.pid + " attempted to access memory location" + params[0]);
-                    _MemMan.removeFromList(_currProgram.pcb.pid);
+
+                    //context switch
                     _CpuScheduler.contextSwitch();
                     break;
 
                 case UNKNOWN_OPERATION_IRQ:
-                    _CPU.updateCpu();
+                    //print the location of the unknown opcode in the host log
                     this.krnTrace("Unknown opcode: " + _MemMan.getMemFromLoc(_CPU.PC - 1));
+
+                    //set the program state to terminated
                     _currProgram.state = "Terminated";
+
+                    //context switch
                     _CpuScheduler.contextSwitch();
                     break;
 
                 case BREAK_IRQ:
+                    //Set the program to terminated
                     _currProgram.state = "Terminated.";
-                    _CpuScheduler.contextSwitch();
 
+                    //Context switch
+                    _CpuScheduler.contextSwitch();
                     break;
 
                 case CONTEXT_SWITCH_IRQ:
+                    //CONTEXT SWITCH
                     _CpuScheduler.contextSwitch();
                     break;
 
@@ -224,10 +233,13 @@ var biOShock;
         };
 
         Kernel.prototype.clockPulse = function () {
+            //on every clock pulse, see if we need to context switch and perform what needs to be done
             var needSwitch = _CpuScheduler.needToContextSwitchIf();
             if (needSwitch) {
                 _CpuScheduler.contextSwitch();
             }
+
+            //cpu cycle every clock pulse
             _CPU.cycle();
         };
         return Kernel;

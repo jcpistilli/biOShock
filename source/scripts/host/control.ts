@@ -83,20 +83,12 @@ module biOShock {
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new Cpu();
             _MemMan = new biOShock.memoryManager();
-//            _CPU.init();
 
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new Kernel();
             _Kernel.krnBootstrap();
-
-            //Init mem man
-
-//            _MemMan.MemManInit();
-
-//            this.CPUtoHTML();
-//            this.memTable(1);
         }
 
         public static hostBtnHaltOS_click(btn): void {
@@ -119,6 +111,7 @@ module biOShock {
             // page from its cache, which is not what we want.
         }
 
+        //Single-Step execution
         public static enableStep(btn): void
         {
             document.getElementById("btnEnableStep").disabled = true;
@@ -158,12 +151,6 @@ module biOShock {
             btmPos.scrollTop = btmPos.scrollHeight;
         }
 
-        /*public static grabInput(): string {
-         var progIn = <HTMLInputElement> document.getElementById("taProgramInput");
-         var progIn2 = progIn.value;
-         return progIn2;
-         }*/
-
         public static dateTime(): string
         {
             var theDate = new Date();
@@ -200,29 +187,25 @@ module biOShock {
         }
 
 
+        //Printing for the Ready Queue
         public static printReadyQueue()
         {
-//            var PCBs = "";
-//            for (var i = 0; i < _ReadyQueue.getSize(); i++)
-//            {
-//                PCBs += "pid: " + _currProgram.pid + " Base address: " + _currProgram.base + " PC: " + _currProgram.PC + /*" IR: " +  +*/ " Acc: " + _currProgram.Acc + " Xreg: " + _currProgram.Xreg + " Yreg: " + _currProgram.Yreg + " Z Flag: " + _currProgram.Zflag + "\n";
-//            }
-//            (<HTMLInputElement>document.getElementById("pcb")).value = PCBs;
+            var PCBs = "";              //ready to print the PCBs
+            var active = new Array();   //list of active processes
 
-            var PCBs = "";
-            var active = new Array();
-
-            if (_currProgram && _currProgram.state !== "Terminated.") {
+            if (_currProgram && _currProgram.state !== "Terminated.")
+            {
                 active[_currProgram.pcb.pid] = _currProgram;
             }
 
-            for (var i = 0; i < _ReadyQueue.getSize(); i++) {
+            for (var i = 0; i < _ReadyQueue.getSize(); i++)
+            {
                 active[_ReadyQueue.q[i].pcb.pid] = _ReadyQueue.q[i];
             }
 
-            // Because this changes within for loop, keep the original here
             var length = active.length;
 
+            //change when the process is active
             for (var i = 0; i < length; i++) {
                 var process = active.shift();
                 if (process)

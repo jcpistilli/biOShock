@@ -357,11 +357,13 @@ var biOShock;
         };
 
         Shell.prototype.shellLoad = function (args) {
+            //obtain the hex codes from the user input
             var retrieveHex = document.getElementById("taProgramInput").value;
 
+            //remove the spaces
             var removeSpace = retrieveHex.replace(/\s+/g, ' ').toUpperCase();
 
-            //var even = removeSpace.length % 2 == 0;
+            //if there is nothing to load, output error
             if (removeSpace.length == 0) {
                 _StdOut.putText("There is no input.");
                 return;
@@ -369,16 +371,15 @@ var biOShock;
 
             for (var i = 0; i < removeSpace.length; i++) {
                 if (!(removeSpace[i].match(/^[0-9A-F\s]/i))) {
-                    _StdOut.putText("Please enter valid hex codes and an even amount");
-                    _StdOut.advanceLine();
-                    _StdOut.putText("of characters.");
+                    _StdOut.putText("Please enter valid hex codes and an even amount of characters.");
                     return;
                 }
             }
 
-            debugger;
+            //default priority
             var priority = 10;
 
+            //if a priority is input, make that the priority
             if (args.length > 0) {
                 priority = parseInt(args[0]);
             }
@@ -386,15 +387,16 @@ var biOShock;
             _StdOut.putText("Please be patient.");
             _StdOut.advanceLine();
 
+            //load the program and output the pid
             var thisPID = _MemMan.loadProg(removeSpace, priority);
             if (thisPID !== null) {
                 _StdOut.putText("PID: " + thisPID);
             }
-            //           _MemMan.printMemory();
         };
 
         //Run
         Shell.prototype.shellRun = function (args) {
+            //if there are no pids input
             if (args.length <= 0) {
                 _StdIn.putText("Usage: run <PID>  Please specify a valid PID.");
                 _StdIn.advanceLine();
@@ -402,16 +404,14 @@ var biOShock;
                 _StdIn.putText("Please enter a valid PID.");
                 _StdIn.advanceLine();
             } else {
-                //                debugger;
+                //program specified
                 var thisProgram = _ResidentList[args[0]];
+
+                //if its not terminated, put it on the ready queue and run it
                 if (thisProgram.state !== "Terminated.") {
-                    //                    thisProgram.state = "Ready.";
                     _ReadyQueue.enqueue(thisProgram);
                     _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));
                 }
-                //                else {
-                //                    _StdOut.putText("Already being handled.");
-                //                }
             }
         };
 
@@ -421,39 +421,64 @@ var biOShock;
                 var inputPID = parseInt(args[0]);
                 var proc = null;
 
+                //current program
                 if (_currProgram && _currProgram.pcb.pid === inputPID) {
-                    debugger;
                     proc = _currProgram;
+
+                    //terminate the program specified
                     _currProgram.state = "Terminated.";
+
+                    //update the PCB
                     _CPU.updatePCB();
+
+                    //print it in the host log
                     _Kernel.krnTrace("Killed process " + inputPID);
+
+                    //remove it from the resident list
                     _MemMan.removeFromList(_currProgram.pcb.pid);
+
+                    //switch
                     _CpuScheduler.contextSwitch();
                 } else {
                     for (var i = 0; i < _ReadyQueue.length; i++) {
                         if (_ReadyQueue.q[i].pcb.pid === inputPID) {
                             proc = _ReadyQueue.q[i];
+
+                            //terminate the program
                             _ReadyQueue.q[i].state = "Terminated.";
+
+                            //update the PCB
                             _CPU.updatePCB();
+
+                            //remove it from the ready queue
                             _ReadyQueue.q.splice(i, 1);
+
+                            //remove it from the resident list
                             _MemMan.removeFromList(proc.pcb);
+
+                            //print it in the host log
                             _Kernel.krnTrace("Killed process " + inputPID);
                             break;
                         }
                     }
                 }
+
+                //if the pid was not correct
                 if (proc === null) {
-                    _StdIn.putText("Please indicate a running PID to kill.");
+                    _StdIn.putText("Please indicate a valid PID to kill.");
                 }
             } else {
-                _StdIn.putText("Please indicate a running PID to kill.");
+                _StdIn.putText("Please indicate a valid PID to kill.");
             }
         };
 
         //Clear Memory
         Shell.prototype.shellClearMem = function () {
+            //erase the programs in memory
             _MemMan.resetMemory();
             _StdOut.putText("All memory locations cleared.");
+
+            //for reprinting the 00s
             var mem = new biOShock.Memory(_MemMan.memory.bytes);
             mem.init();
         };
@@ -462,10 +487,14 @@ var biOShock;
         Shell.prototype.shellRunAll = function (args) {
             for (var i = 0; i < _ResidentList.length; i++) {
                 var thisProgram = _ResidentList[i];
+
+                //for every program in the resident list that isn't terminated, add it to the ready queue
                 if (thisProgram && thisProgram.state !== "Terminated.") {
                     _ReadyQueue.enqueue(thisProgram);
                 }
             }
+
+            //run all the processes, which will kick off the scheduler
             _KernelInterruptQueue.enqueue(new biOShock.Interrupt(EXECUTING_IRQ, args[0]));
         };
 
@@ -478,6 +507,7 @@ var biOShock;
             }
         };
 
+        //Lists the processes in the ready queue
         Shell.prototype.shellPS = function (args) {
             var PIDs = "";
             for (var i = 0; i < _ReadyQueue.getSize(); i++) {
@@ -497,6 +527,7 @@ var biOShock;
             }
         };
 
+        //set the scheduling algorithm
         Shell.prototype.shellSetSchedule = function (args) {
             if (args.length > 0) {
                 var scheduler = -1;
@@ -507,18 +538,18 @@ var biOShock;
                     }
                 }
 
-                // If it wasn't found, yell at user
                 if (scheduler === -1) {
-                    _StdOut.putText("Please enter a valid scheduler");
+                    _StdOut.putText("Please enter a valid scheduler.");
                 } else {
                     _CpuScheduler.scheduleType = _CpuScheduler.options[scheduler];
-                    _StdOut.putText("CPU scheduler set to " + _CpuScheduler.options[scheduler]);
+                    _StdOut.putText("CPU scheduler is set to " + _CpuScheduler.options[scheduler]);
                 }
             } else {
-                _StdOut.putText("Please enter a scheduler");
+                _StdOut.putText("Please enter a valid scheduler");
             }
         };
 
+        //returns the currently assigned scheduling algorithm
         Shell.prototype.shellGetSchedule = function () {
             _StdIn.putText(_CpuScheduler.scheduleType);
         };

@@ -24,35 +24,6 @@ module biOShock {
 
         }
 
-        public init(process, isExecuting): void
-        {
-            if (process)
-            {
-                this.PC     = process.pcb.PC;
-                this.Acc    = process.pcb.Acc;
-                this.Xreg   = process.pcb.Xreg;
-                this.Yreg   = process.pcb.Yreg;
-                this.Zflag  = process.pcb.Zflag;
-            }
-            else
-            {
-                this.PC    = 0;
-                this.Acc   = 0;
-                this.Xreg  = 0;
-                this.Yreg  = 0;
-                this.Zflag = 0;
-            }
-
-            if (isExecuting)
-            {
-                this.isExecuting = isExecuting;
-            }
-            else
-            {
-                this.isExecuting = false;
-            }
-        }
-
         public setCPU(process): void
         {
             this.PC = process.pcb.pc;
@@ -63,7 +34,7 @@ module biOShock {
             this.isExecuting = true;
         }
 
-//        For the screen
+
         public updatePCB(): void
         {
             _currProgram.pcb.pc = this.PC;

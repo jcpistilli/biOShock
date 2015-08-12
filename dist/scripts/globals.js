@@ -63,23 +63,30 @@ var _StdOut = null;
 var _GlobPid = 0;
 var _MemMan = null;
 
+//Memory parts
 var _progSize = 256;
 var _progNum = 3;
 var _memSize = _progSize * _progNum;
 
+//Cycle counter
 var _cycleCounter = 0;
-var _Memory = null;
-var _currMemSpot = -1;
+
+//Resident List
 var _ResidentList = null;
+
+//Ready Queue
 var _ReadyQueue = null;
+
+//Quantum
 var _Quantum = 6;
 
-var _currPCB = null;
-var _runningPID = -1;
+//Current Program
 var _currProgram = null;
 
+//Scheduler
 var _CpuScheduler = null;
 
+//File System
 var _FileSystem = null;
 
 // UI

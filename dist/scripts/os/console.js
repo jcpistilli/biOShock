@@ -1,4 +1,3 @@
-///<reference path="../globals.ts" />
 /* ------------
 Console.ts
 Requires globals.ts
