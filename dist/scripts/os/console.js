@@ -142,7 +142,7 @@ var biOShock;
 
             if (text !== "") {
                 for (var char in text) {
-                    if (this.currentXPosition > 500) {
+                    if (this.currentXPosition > 490) {
                         this.advanceLine();
                     }
                     _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text[char]);
