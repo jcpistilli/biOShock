@@ -128,8 +128,8 @@
       <file leaf-file-name="shell.ts" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.36006826" vertical-offset="6104" max-vertical-offset="9915">
-              <caret line="421" column="78" selection-start-line="421" selection-start-column="78" selection-end-line="421" selection-end-column="78" />
+            <state vertical-scroll-proportion="0.82081914" vertical-offset="6104" max-vertical-offset="9915">
+              <caret line="439" column="0" selection-start-line="439" selection-start-column="0" selection-end-line="439" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -845,8 +845,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/source/scripts/os/shell.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36006826" vertical-offset="6104" max-vertical-offset="9915">
-          <caret line="421" column="78" selection-start-line="421" selection-start-column="78" selection-end-line="421" selection-end-column="78" />
+        <state vertical-scroll-proportion="0.82081914" vertical-offset="6104" max-vertical-offset="9915">
+          <caret line="439" column="0" selection-start-line="439" selection-start-column="0" selection-end-line="439" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
