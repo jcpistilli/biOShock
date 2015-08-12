@@ -371,7 +371,9 @@ var biOShock;
 
             for (var i = 0; i < removeSpace.length; i++) {
                 if (!(removeSpace[i].match(/^[0-9A-F\s]/i))) {
-                    _StdOut.putText("Please enter valid hex codes and an even amount of characters.");
+                    _StdOut.putText("Please enter valid hex codes and an even ");
+                    _StdOut.advanceLine();
+                    _StdOut.putText("amount of characters.");
                     return;
                 }
             }
